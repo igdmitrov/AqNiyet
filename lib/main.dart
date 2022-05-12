@@ -1,10 +1,11 @@
+import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'login/login_page.dart';
-import 'login/splash_page.dart';
-import 'main/main_page.dart';
+import 'pages/login_page.dart';
+import 'pages/main_page.dart';
+import 'pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,14 @@ Future<void> main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrYWZyd3pwdm54aW5zbmdicGl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTE1ODMwNjgsImV4cCI6MTk2NzE1OTA2OH0.y0hW774bZKHBFhYDaK_87cmNNNvb1O14tDb769ED5Jg',
   );
 
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AppService>(
+        create: (_) => AppService(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
