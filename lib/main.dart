@@ -1,3 +1,5 @@
+import 'package:aqniyet/pages/add_page.dart';
+import 'package:aqniyet/pages/signup_page.dart';
 import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +44,9 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           SplashPage.routeName: (_) => const SplashPage(),
           LoginPage.routeName: (_) => const LoginPage(),
+          SignUpPage.routeName: (_) => const SignUpPage(),
           MainPage.routeName: (_) => const MainPage(),
+          AddPage.routeName: (_) => const AddPage(),
         },
       );
     });

@@ -1,5 +1,8 @@
 import 'package:aqniyet/model/category.dart';
+import 'package:aqniyet/pages/add_page.dart';
 import 'package:aqniyet/services/app_service.dart';
+import 'package:aqniyet/utils/constants.dart';
+import 'package:aqniyet/widgets/greeting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +22,28 @@ class _MainPageState extends State<MainPage> {
         title: const Text('AqNiyet'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
             icon: const Icon(Icons.add),
           )
         ],
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            AppBar(title: Greeting(dateTime: DateTime.now())),
+            const Divider(),
+            if (isAuthenticated())
+              ListTile(
+                leading: const Icon(Icons.exit_to_app),
+                title: Text('Log off (${getCurrentUserEmail()})'),
+                onTap: () {
+                  setState(() {
+                    supabase.auth.signOut();
+                  });
+                },
+              ),
+          ],
+        ),
       ),
       body: FutureBuilder<List<Category>>(
         future: context.read<AppService>().getCategory(null),

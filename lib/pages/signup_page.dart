@@ -1,35 +1,36 @@
-import 'package:aqniyet/pages/main_page.dart';
-import 'package:aqniyet/pages/signup_page.dart';
+import 'package:aqniyet/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../components/auth_state.dart';
 import '../utils/constants.dart';
 
-class LoginPage extends StatefulWidget {
-  static String routeName = '/login';
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  static String routeName = '/signup';
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends AuthState<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  Future<void> _signIn() async {
+  Future<void> _signUp() async {
     setState(() {
       _isLoading = true;
     });
-    final response = await supabase.auth.signIn(
-        email: _emailController.text, password: _passwordController.text);
+    final response = await supabase.auth
+        .signUp(_emailController.text, _passwordController.text);
     final error = response.error;
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     } else {
-      Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+      context.showSnackBar(message: 'User was created');
+      Navigator.of(context).pushNamed(LoginPage.routeName);
     }
 
     setState(() {
@@ -41,6 +42,7 @@ class _LoginPageState extends AuthState<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -52,16 +54,6 @@ class _LoginPageState extends AuthState<LoginPage> {
         children: [
           Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(MainPage.routeName),
-                    child: const Text('Back'),
-                  ),
-                ],
-              ),
               Image.asset(
                 'assets/images/login.png',
                 height: 30.h,
@@ -79,31 +71,35 @@ class _LoginPageState extends AuthState<LoginPage> {
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
-                enabled: !_isLoading,
               ),
               const SizedBox(height: 18),
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
-                enabled: !_isLoading,
+              ),
+              const SizedBox(height: 18),
+              TextFormField(
+                controller: _confirmPasswordController,
+                decoration:
+                    const InputDecoration(labelText: 'Confirm Password'),
+                obscureText: true,
               ),
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _signIn,
-                    child: Text(_isLoading ? 'Loading' : 'Sign In'),
+                    onPressed: _isLoading ? null : _signUp,
+                    child: Text(_isLoading ? 'Loading' : 'Sign Up'),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
                   TextButton(
-                    onPressed: () => _isLoading
-                        ? null
-                        : Navigator.of(context).pushNamed(SignUpPage.routeName),
-                    child: const Text('Sign Up'),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(LoginPage.routeName),
+                    child: const Text('Sign In'),
                   ),
                 ],
               ),
