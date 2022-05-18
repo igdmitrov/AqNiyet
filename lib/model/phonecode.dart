@@ -12,4 +12,6 @@ class PhoneCode {
       countryName: json['countryname'],
     );
   }
+
+  String getName() => '$code $countryName';
 }

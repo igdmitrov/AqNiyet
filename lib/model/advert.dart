@@ -42,7 +42,6 @@ class Advert {
 
   Map toMap() {
     return {
-      'id': id,
       'category_id': categoryId,
       'name': name,
       'description': description,
