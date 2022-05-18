@@ -46,6 +46,7 @@ class Advert {
       'name': name,
       'description': description,
       'country_id': countryId,
+      'city_id': cityId,
       'address': address,
       'phonecode_id': phoneCodeId,
       'phone': phone,

@@ -1,4 +1,5 @@
 import 'package:aqniyet/components/auth_required_state.dart';
+import 'package:aqniyet/components/model_validator.dart';
 import 'package:aqniyet/model/advert.dart';
 import 'package:aqniyet/model/category.dart';
 import 'package:aqniyet/model/city.dart';
@@ -8,6 +9,7 @@ import 'package:aqniyet/utils/constants.dart';
 import 'package:aqniyet/widgets/checkbox_from_input.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
 import '../services/app_service.dart';
@@ -38,33 +40,32 @@ class _AddPageState extends AuthRequiredState<AddPage> {
     });
 
     if (_formKey.currentState != null &&
-        _category != null &&
-        _city != null &&
-        _phoneCode != null &&
         _formKey.currentState!.validate() &&
         isAuthenticated()) {
       _formKey.currentState!.save();
 
-      final model = Advert(
-        id: '',
-        categoryId: _category!.id,
-        name: _nameController.text,
-        description: _descriptionController.text,
-        cityId: _city!.id,
-        address: _addressController.text,
-        phoneCodeId: _phoneCode!.id,
-        phone: _phoneController.text,
-        enabled: _enabled,
-        createdBy: getCurrentUserId(),
-      );
+      if (_category != null && _city != null && _phoneCode != null) {
+        final model = Advert(
+          id: '',
+          categoryId: _category!.id,
+          name: _nameController.text,
+          description: _descriptionController.text,
+          cityId: _city!.id,
+          address: _addressController.text,
+          phoneCodeId: _phoneCode!.id,
+          phone: _phoneController.text,
+          enabled: _enabled,
+          createdBy: getCurrentUserId(),
+        );
 
-      final response = await context.read<AppService>().createAdvert(model);
-      final error = response.error;
-      if (response.hasError) {
-        context.showErrorSnackBar(message: error!.message);
-      } else {
-        context.showSnackBar(message: 'You created a new item');
-        Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+        final response = await context.read<AppService>().createAdvert(model);
+        final error = response.error;
+        if (response.hasError) {
+          context.showErrorSnackBar(message: error!.message);
+        } else {
+          context.showSnackBar(message: 'You created a new item');
+          Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+        }
       }
     }
 
@@ -98,7 +99,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name'),
                 autocorrect: false,
-                validator: (val) => null,
+                validator: RequiredValidator(errorText: 'Name is required'),
                 enabled: !_isLoading,
               ),
               const SizedBox(height: 20),
@@ -116,13 +117,15 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 dropdownBuilder: (ctx, Category? model) =>
                     model == null ? const Text('') : Text(model.name),
                 onSaved: (val) => _category = val,
+                validator: ModelValidator(errorText: 'Category is required'),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),
                 autocorrect: false,
-                validator: (val) => null,
+                validator:
+                    RequiredValidator(errorText: 'Description is required'),
                 enabled: !_isLoading,
                 minLines: 3,
                 maxLines: 5,
@@ -143,6 +146,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 dropdownBuilder: (ctx, City? model) =>
                     model == null ? const Text('') : Text(model.name),
                 onSaved: (val) => _city = val,
+                validator: ModelValidator(errorText: 'City is required'),
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -171,6 +175,8 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                       dropdownBuilder: (ctx, PhoneCode? model) =>
                           model == null ? const Text('') : Text(model.code),
                       onSaved: (val) => _phoneCode = val,
+                      validator:
+                          ModelValidator(errorText: 'Phone code is required'),
                     ),
                   ),
                   Expanded(
@@ -179,7 +185,8 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                       controller: _phoneController,
                       decoration: const InputDecoration(labelText: 'Phone'),
                       autocorrect: false,
-                      validator: (val) => null,
+                      validator:
+                          RequiredValidator(errorText: 'Phone is required'),
                       enabled: !_isLoading,
                       keyboardType: TextInputType.phone,
                     ),
@@ -192,6 +199,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 onSaved: (val) => _enabled = val ?? false,
                 validator: (c) => null,
                 enabled: !_isLoading,
+                initialValue: true,
               ),
               const SizedBox(height: 20),
               ElevatedButton(

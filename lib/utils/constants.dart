@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -32,4 +33,20 @@ extension ShowSnackBar on BuildContext {
   void showErrorSnackBar({required String message}) {
     showSnackBar(message: message, backgroundColor: Colors.red);
   }
+}
+
+MultiValidator passwordValidator() {
+  const _minLengthPassword = 8;
+  return MultiValidator([
+    RequiredValidator(errorText: 'Password is required'),
+    MinLengthValidator(_minLengthPassword,
+        errorText: 'Password must be at least $_minLengthPassword digits long')
+  ]);
+}
+
+MultiValidator emailValidator() {
+  return MultiValidator([
+    RequiredValidator(errorText: 'Email is required'),
+    EmailValidator(errorText: 'Enter a valid email address'),
+  ]);
 }
