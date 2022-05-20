@@ -1,5 +1,7 @@
 import 'package:aqniyet/model/category.dart';
 import 'package:aqniyet/pages/add_page.dart';
+import 'package:aqniyet/pages/city_page.dart';
+import 'package:aqniyet/pages/my_adverts_page.dart';
 import 'package:aqniyet/services/app_service.dart';
 import 'package:aqniyet/utils/constants.dart';
 import 'package:aqniyet/widgets/greeting.dart';
@@ -34,6 +36,14 @@ class _MainPageState extends State<MainPage> {
             const Divider(),
             if (isAuthenticated())
               ListTile(
+                leading: const Icon(Icons.my_library_books),
+                title: const Text('My items'),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(MyAdvertsPages.routeName),
+              ),
+            const Divider(),
+            if (isAuthenticated())
+              ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: Text('Log off (${getCurrentUserEmail()})'),
                 onTap: () {
@@ -59,6 +69,8 @@ class _MainPageState extends State<MainPage> {
                     child: Card(
                       child: ListTile(
                         title: Text(category.name),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(CityPage.routeName, arguments: category),
                       ),
                     ),
                   );

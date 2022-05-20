@@ -87,6 +87,63 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load phone codes');
   }
 
+  Future<List<Advert>> getAdverts(
+      String categoryId, String cityId, String? filter) async {
+    final query = supabase
+        .from('advert')
+        .select()
+        .eq('city_id', cityId)
+        .eq('category_id', categoryId);
+
+    late PostgrestResponse response;
+
+    if (filter == null || filter.isEmpty) {
+      response = await query.execute();
+    } else {
+      response = await query.textSearch('name', "$filter:*").execute();
+    }
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return (response.data as List<dynamic>)
+          .map((json) => Advert.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Failed to load adverts');
+  }
+
+  Future<List<Advert>> getMyAdverts(String? filter) async {
+    final query = supabase.from('advert').select().eq('created_by', getCurrentUserId());
+
+    late PostgrestResponse response;
+
+    if (filter == null || filter.isEmpty) {
+      response = await query.execute();
+    } else {
+      response = await query.textSearch('name', "$filter:*").execute();
+    }
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return (response.data as List<dynamic>)
+          .map((json) => Advert.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Failed to load adverts');
+  }
+
   Future<PostgrestResponse> createAdvert(Advert model) {
     final response = supabase.from('advert').insert(model.toMap()).execute();
     return response;

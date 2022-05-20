@@ -1,4 +1,8 @@
 import 'package:aqniyet/pages/add_page.dart';
+import 'package:aqniyet/pages/advert_page.dart';
+import 'package:aqniyet/pages/adverts_page.dart';
+import 'package:aqniyet/pages/city_page.dart';
+import 'package:aqniyet/pages/my_adverts_page.dart';
 import 'package:aqniyet/pages/signup_page.dart';
 import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +51,10 @@ class MyApp extends StatelessWidget {
           SignUpPage.routeName: (_) => const SignUpPage(),
           MainPage.routeName: (_) => const MainPage(),
           AddPage.routeName: (_) => const AddPage(),
+          CityPage.routeName: (_) => const CityPage(),
+          AdvertsPage.routeName: (_) => const AdvertsPage(),
+          MyAdvertsPages.routeName: (_) => const MyAdvertsPages(),
+          AdvertPage.routeName: (_) => const AdvertPage(),
         },
       );
     });
