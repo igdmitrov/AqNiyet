@@ -38,8 +38,10 @@ class _MainPageState extends State<MainPage> {
               ListTile(
                 leading: const Icon(Icons.my_library_books),
                 title: const Text('My items'),
-                onTap: () =>
-                    Navigator.of(context).pushNamed(MyAdvertsPages.routeName),
+                onTap: () {
+                  Navigator.of(context)
+                      .popAndPushNamed(MyAdvertsPages.routeName);
+                },
               ),
             const Divider(),
             if (isAuthenticated())

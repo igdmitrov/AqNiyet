@@ -22,7 +22,8 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
         title: const Text('My items'),
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
+            onPressed: () =>
+                {Navigator.of(context).pushNamed(AddPage.routeName)},
             icon: const Icon(Icons.add),
           )
         ],
