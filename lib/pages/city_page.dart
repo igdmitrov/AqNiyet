@@ -48,6 +48,7 @@ class _CityPageState extends State<CityPage> {
                         onTap: () => Navigator.of(context).pushNamed(
                             AdvertsPage.routeName,
                             arguments: {'category': category, 'city': city}),
+                        trailing: Text(city.num.toString()),
                       ),
                     ),
                   );

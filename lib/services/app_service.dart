@@ -9,7 +9,8 @@ import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
   Future<List<Category>> getCategory(String? filter) async {
-    final query = supabase.from('category').select('id, name');
+    final query =
+        supabase.from('categoryview').select('id, name, num').gt('num', 0);
 
     late PostgrestResponse response;
 
@@ -35,8 +36,11 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<City>> getCity(String? filter) async {
-    final query =
-        supabase.from('city').select('id, name').eq('country_id', 'kz');
+    final query = supabase
+        .from('cityview')
+        .select('id, name, num')
+        .eq('country_id', 'kz')
+        .gt('num', 0);
 
     late PostgrestResponse response;
 
@@ -119,7 +123,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<Advert>> getMyAdverts(String? filter) async {
-    final query = supabase.from('advert').select().eq('created_by', getCurrentUserId());
+    final query =
+        supabase.from('advert').select().eq('created_by', getCurrentUserId());
 
     late PostgrestResponse response;
 

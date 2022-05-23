@@ -73,6 +73,7 @@ class _MainPageState extends State<MainPage> {
                         title: Text(category.name),
                         onTap: () => Navigator.of(context)
                             .pushNamed(CityPage.routeName, arguments: category),
+                        trailing: Text(category.num.toString()),
                       ),
                     ),
                   );
