@@ -188,8 +188,9 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                   showSearchBox: true,
                   isFilteredOnline: true,
                   itemAsString: (Category? model) => model!.name,
-                  onFind: (String? filter) =>
-                      context.read<AppService>().getCategory(filter),
+                  onFind: (String? filter) => context
+                      .read<AppService>()
+                      .getCategoryList(filter: filter),
                   dropdownBuilder: (ctx, Category? model) =>
                       model == null ? const Text('') : Text(model.name),
                   onSaved: (val) => _category = val,
@@ -218,7 +219,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                   isFilteredOnline: true,
                   itemAsString: (City? model) => model!.name,
                   onFind: (String? filter) =>
-                      context.read<AppService>().getCity(filter),
+                      context.read<AppService>().getCityList(filter: filter),
                   dropdownBuilder: (ctx, City? model) =>
                       model == null ? const Text('') : Text(model.name),
                   onSaved: (val) => _city = val,
@@ -246,8 +247,9 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                         showSearchBox: true,
                         isFilteredOnline: true,
                         itemAsString: (PhoneCode? model) => model!.getName(),
-                        onFind: (String? filter) =>
-                            context.read<AppService>().getPhoneCode(filter),
+                        onFind: (String? filter) => context
+                            .read<AppService>()
+                            .getPhoneCodeList(filter: filter),
                         dropdownBuilder: (ctx, PhoneCode? model) =>
                             model == null ? const Text('') : Text(model.code),
                         onSaved: (val) => _phoneCode = val,

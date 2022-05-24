@@ -8,7 +8,7 @@ import '../model/city.dart';
 import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
-  Future<List<Category>> getCategory(String? filter) async {
+  Future<List<Category>> getCategoryList({String? filter}) async {
     final query =
         supabase.from('categoryview').select('id, name, num').gt('num', 0);
 
@@ -35,7 +35,7 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load categories');
   }
 
-  Future<List<City>> getCity(String? filter) async {
+  Future<List<City>> getCityList({String? filter}) async {
     final query = supabase
         .from('cityview')
         .select('id, name, num')
@@ -65,7 +65,7 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load cities');
   }
 
-  Future<List<PhoneCode>> getPhoneCode(String? filter) async {
+  Future<List<PhoneCode>> getPhoneCodeList({String? filter}) async {
     final query = supabase.from('phonecode_view').select();
 
     late PostgrestResponse response;

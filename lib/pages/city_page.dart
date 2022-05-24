@@ -32,7 +32,7 @@ class _CityPageState extends State<CityPage> {
         ],
       ),
       body: FutureBuilder<List<City>>(
-        future: context.read<AppService>().getCity(null),
+        future: context.read<AppService>().getCityList(),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
