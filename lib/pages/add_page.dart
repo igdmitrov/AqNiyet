@@ -10,6 +10,7 @@ import 'package:aqniyet/pages/main_page.dart';
 import 'package:aqniyet/utils/constants.dart';
 import 'package:aqniyet/widgets/checkbox_from_input.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,6 +70,13 @@ class _AddPageState extends AuthRequiredState<AddPage> {
         if (response.hasError) {
           context.showErrorSnackBar(message: error!.message);
         } else {
+          final advertId =
+              (((response.data) as List<dynamic>)[0]['id']) as String;
+
+          for (var image in _images) {
+            await _saveImage(advertId, image);
+          }
+
           context.showSnackBar(message: 'You created a new item');
           Navigator.of(context).pushReplacementNamed(MainPage.routeName);
         }
@@ -78,6 +86,16 @@ class _AddPageState extends AuthRequiredState<AddPage> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _saveImage(String advertId, XFile file) async {
+    final response = await supabase.storage.from('public-images').upload(
+        '${getCurrentUserId()}/$advertId/${file.name}', File(file.path));
+
+    final error = response.error;
+    if (response.hasError) {
+      context.showErrorSnackBar(message: error!.message);
+    }
   }
 
   Future<void> _takePicture() async {
@@ -107,6 +125,28 @@ class _AddPageState extends AuthRequiredState<AddPage> {
     } catch (error) {
       context.showErrorSnackBar(message: 'Unexpected error');
     }
+  }
+
+  Future<void> _showOption() async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _getImagesFromGallery();
+              },
+              child: const Text('Gallery')),
+          CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _takePicture();
+              },
+              child: const Text('Camera')),
+        ],
+      ),
+    );
   }
 
   @override
@@ -230,18 +270,9 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    OutlinedButton(
-                      onPressed: _takePicture,
-                      child: const Text('Take picture'),
-                    ),
-                    const SizedBox(width: 10),
-                    OutlinedButton(
-                      onPressed: _getImagesFromGallery,
-                      child: const Text('Get photo from Library'),
-                    ),
-                  ],
+                OutlinedButton(
+                  onPressed: _showOption,
+                  child: const Text('Take a photo'),
                 ),
                 const SizedBox(height: 20),
                 Wrap(
