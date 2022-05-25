@@ -1,7 +1,3 @@
-import 'category.dart';
-import 'city.dart';
-import 'phonecode.dart';
-
 class AdvertPageView {
   final String id;
   final String categoryName;
@@ -11,10 +7,10 @@ class AdvertPageView {
   final String address;
   final String phoneCode;
   final String phone;
+  final String createdBy;
   final DateTime createdAt;
 
-  factory AdvertPageView.fromJson(List<Category> categories, List<City> cities,
-      List<PhoneCode> phoneCodes, Map<String, dynamic> json) {
+  factory AdvertPageView.fromJson(Map<String, dynamic> json) {
     return AdvertPageView(
         id: json['id'],
         categoryName: json['category']['name'],
@@ -24,6 +20,7 @@ class AdvertPageView {
         address: json['address'],
         phoneCode: json['phonecode']['code'],
         phone: json['phone'],
+        createdBy: json['created_by'],
         createdAt: DateTime.parse(json['created_at']));
   }
 
@@ -37,5 +34,6 @@ class AdvertPageView {
     required this.phoneCode,
     required this.phone,
     required this.createdAt,
+    required this.createdBy,
   });
 }

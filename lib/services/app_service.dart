@@ -146,13 +146,8 @@ class AppService extends ChangeNotifier {
       throw Exception(error.message);
     }
 
-    final categories = await getCategories();
-    final cities = await getCities();
-    final phoneCodes = await getPhoneCodes();
-
     if (response.data != null) {
-      return AdvertPageView.fromJson(
-          categories, cities, phoneCodes, response.data[0]);
+      return AdvertPageView.fromJson(response.data[0]);
     }
 
     throw Exception('Failed to load adverts');

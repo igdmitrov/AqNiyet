@@ -35,7 +35,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 children: [
                   Text(advert.name),
                   Text(advert.description),
-                  //Text(advert.address),
+                  Text(advert.address),
                 ],
               );
             } else if (snapshot.hasError) {
