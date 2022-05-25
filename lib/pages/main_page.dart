@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       body: FutureBuilder<List<Category>>(
-        future: context.read<AppService>().getCategoryList(),
+        future: context.read<AppService>().getCategories(),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

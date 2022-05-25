@@ -10,25 +10,6 @@ import '../model/phonecode.dart';
 import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
-  Future<List<Category>> getCategoryList() async {
-    final query = supabase.from('category').select('id, name');
-
-    final PostgrestResponse response = await query.execute();
-    final error = response.error;
-
-    if (error != null && response.status != 406) {
-      throw Exception(error.message);
-    }
-
-    if (response.data != null) {
-      return (response.data as List<dynamic>)
-          .map((json) => Category.fromJson(json))
-          .toList();
-    }
-
-    throw Exception('Failed to load categories');
-  }
-
   Future<List<Category>> getCategories({String? filter}) async {
     final query = supabase.from('category').select('id, name');
 
@@ -53,25 +34,6 @@ class AppService extends ChangeNotifier {
     }
 
     throw Exception('Failed to load categories');
-  }
-
-  Future<List<City>> getCityList() async {
-    final query = supabase.from('city').select().eq('country_id', 'kz');
-
-    final PostgrestResponse response = await query.execute();
-    final error = response.error;
-
-    if (error != null && response.status != 406) {
-      throw Exception(error.message);
-    }
-
-    if (response.data != null) {
-      return (response.data as List<dynamic>)
-          .map((json) => City.fromJson(json))
-          .toList();
-    }
-
-    throw Exception('Failed to load cities');
   }
 
   Future<List<City>> getCities({String? filter}) async {
@@ -172,7 +134,10 @@ class AppService extends ChangeNotifier {
   }
 
   Future<AdvertPageView> getAdvertPageView(String id) async {
-    final query = supabase.from('advert').select().eq('id', id);
+    final query = supabase
+        .from('advert')
+        .select('''*, category ( name ), city ( name ), phonecode (code)''').eq(
+            'id', id);
 
     final PostgrestResponse response = await query.execute();
     final error = response.error;

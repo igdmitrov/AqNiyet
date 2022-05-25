@@ -17,17 +17,12 @@ class AdvertPageView {
       List<PhoneCode> phoneCodes, Map<String, dynamic> json) {
     return AdvertPageView(
         id: json['id'],
-        categoryName: categories
-            .firstWhere((element) => element.id == json['category_id'])
-            .name,
+        categoryName: json['category']['name'],
         name: json['name'],
         description: json['description'],
-        cityName:
-            cities.firstWhere((element) => element.id == json['city_id']).name,
+        cityName: json['city']['name'],
         address: json['address'],
-        phoneCode: phoneCodes
-            .firstWhere((element) => element.id == json['phonecode_id'])
-            .code,
+        phoneCode: json['phonecode']['code'],
         phone: json['phone'],
         createdAt: DateTime.parse(json['created_at']));
   }
