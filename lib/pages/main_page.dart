@@ -1,12 +1,14 @@
-import 'package:aqniyet/model/category.dart';
-import 'package:aqniyet/pages/add_page.dart';
-import 'package:aqniyet/pages/city_page.dart';
-import 'package:aqniyet/pages/my_adverts_page.dart';
-import 'package:aqniyet/services/app_service.dart';
-import 'package:aqniyet/utils/constants.dart';
-import 'package:aqniyet/widgets/greeting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../model/category.dart';
+import '../services/app_service.dart';
+import '../utils/constants.dart';
+import '../widgets/greeting.dart';
+import '../widgets/menuitem_count_by_category.dart';
+import 'add_page.dart';
+import 'city_page.dart';
+import 'my_adverts_page.dart';
 
 class MainPage extends StatefulWidget {
   static String routeName = '/main';
@@ -73,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                         title: Text(category.name),
                         onTap: () => Navigator.of(context)
                             .pushNamed(CityPage.routeName, arguments: category),
-                        trailing: Text(category.num.toString()),
+                        trailing: MenuItemCountByCategory(category.id),
                       ),
                     ),
                   );

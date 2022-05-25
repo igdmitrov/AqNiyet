@@ -1,14 +1,5 @@
 import 'dart:io';
 
-import 'package:aqniyet/components/auth_required_state.dart';
-import 'package:aqniyet/components/model_validator.dart';
-import 'package:aqniyet/model/advert.dart';
-import 'package:aqniyet/model/category.dart';
-import 'package:aqniyet/model/city.dart';
-import 'package:aqniyet/model/phonecode.dart';
-import 'package:aqniyet/pages/main_page.dart';
-import 'package:aqniyet/utils/constants.dart';
-import 'package:aqniyet/widgets/checkbox_from_input.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +8,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../components/auth_required_state.dart';
+import '../components/model_validator.dart';
+import '../model/advert.dart';
+import '../model/category.dart';
+import '../model/city.dart';
+import '../model/phonecode.dart';
 import '../services/app_service.dart';
+import '../utils/constants.dart';
+import '../widgets/checkbox_from_input.dart';
+import 'main_page.dart';
 
 class AddPage extends StatefulWidget {
   static String routeName = '/add';
@@ -188,9 +188,8 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                   showSearchBox: true,
                   isFilteredOnline: true,
                   itemAsString: (Category? model) => model!.name,
-                  onFind: (String? filter) => context
-                      .read<AppService>()
-                      .getCategoryList(filter: filter),
+                  onFind: (String? filter) =>
+                      context.read<AppService>().getCategories(filter: filter),
                   dropdownBuilder: (ctx, Category? model) =>
                       model == null ? const Text('') : Text(model.name),
                   onSaved: (val) => _category = val,
@@ -219,7 +218,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                   isFilteredOnline: true,
                   itemAsString: (City? model) => model!.name,
                   onFind: (String? filter) =>
-                      context.read<AppService>().getCityList(filter: filter),
+                      context.read<AppService>().getCities(filter: filter),
                   dropdownBuilder: (ctx, City? model) =>
                       model == null ? const Text('') : Text(model.name),
                   onSaved: (val) => _city = val,
@@ -249,7 +248,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                         itemAsString: (PhoneCode? model) => model!.getName(),
                         onFind: (String? filter) => context
                             .read<AppService>()
-                            .getPhoneCodeList(filter: filter),
+                            .getPhoneCodes(filter: filter),
                         dropdownBuilder: (ctx, PhoneCode? model) =>
                             model == null ? const Text('') : Text(model.code),
                         onSaved: (val) => _phoneCode = val,

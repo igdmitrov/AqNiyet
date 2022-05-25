@@ -1,12 +1,12 @@
-import 'package:aqniyet/model/advert.dart';
-import 'package:aqniyet/pages/advert_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/advert_menu_item.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../services/app_service.dart';
 import 'add_page.dart';
+import 'advert_page.dart';
 
 class AdvertsPage extends StatefulWidget {
   static String routeName = '/adverts';
@@ -36,9 +36,9 @@ class _AdvertsPageState extends State<AdvertsPage> {
           )
         ],
       ),
-      body: FutureBuilder<List<Advert>>(
+      body: FutureBuilder<List<AdvertMenuItem>>(
         future:
-            context.read<AppService>().getAdverts(category.id, city.id, null),
+            context.read<AppService>().getAdvertMenuItems(category.id, city.id),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

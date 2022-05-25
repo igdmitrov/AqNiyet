@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/advert.dart';
+import '../model/advert_menu_item.dart';
 import '../services/app_service.dart';
 import 'add_page.dart';
 import 'advert_page.dart';
@@ -28,8 +28,8 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
           )
         ],
       ),
-      body: FutureBuilder<List<Advert>>(
-        future: context.read<AppService>().getMyAdverts(null),
+      body: FutureBuilder<List<AdvertMenuItem>>(
+        future: context.read<AppService>().getMyAdvertMenuItems(),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

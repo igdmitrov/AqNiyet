@@ -1,9 +1,9 @@
-import 'package:aqniyet/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sizer/sizer.dart';
 
 import '../utils/constants.dart';
+import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   static String routeName = '/signup';

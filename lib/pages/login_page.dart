@@ -1,8 +1,8 @@
-import 'package:aqniyet/pages/main_page.dart';
-import 'package:aqniyet/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../utils/constants.dart';
+import 'main_page.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   static String routeName = '/login';

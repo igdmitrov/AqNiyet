@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../services/app_service.dart';
+import '../widgets/menuitem_count_by_category_and_city.dart';
 import 'add_page.dart';
 import 'adverts_page.dart';
 
@@ -18,8 +19,7 @@ class CityPage extends StatefulWidget {
 class _CityPageState extends State<CityPage> {
   @override
   Widget build(BuildContext context) {
-    final Category category =
-        ModalRoute.of(context)!.settings.arguments as Category;
+    final category = ModalRoute.of(context)!.settings.arguments as Category;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +48,8 @@ class _CityPageState extends State<CityPage> {
                         onTap: () => Navigator.of(context).pushNamed(
                             AdvertsPage.routeName,
                             arguments: {'category': category, 'city': city}),
-                        trailing: Text(city.num.toString()),
+                        trailing: MenuItemCountByCategoryAndCity(
+                            category.id, city.id),
                       ),
                     ),
                   );
