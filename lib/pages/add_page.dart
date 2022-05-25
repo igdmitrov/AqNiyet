@@ -300,6 +300,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 ElevatedButton(
                     onPressed: _isLoading ? null : _saveData,
                     child: Text(_isLoading ? 'Loading' : 'Save')),
+                const SizedBox(height: 20),
               ],
             ),
           ),

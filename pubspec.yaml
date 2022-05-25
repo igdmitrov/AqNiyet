@@ -41,6 +41,9 @@ dependencies:
   dropdown_search: ^3.0.1
   form_field_validator: ^1.1.0
   image_picker: ^0.8.5+3
+  url_launcher: ^6.1.2
+  shadow: ^1.0.0
+  timeago: ^3.2.2
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../model/advert_menu_item.dart';
 import '../model/category.dart';
@@ -51,9 +52,11 @@ class _AdvertsPageState extends State<AdvertsPage> {
                     child: Card(
                       child: ListTile(
                         title: Text(advert.name),
-                        subtitle: Text(advert.description),
+                        subtitle: Text(
+                            advert.description.characters.take(50).toString()),
                         onTap: () => Navigator.of(context)
                             .pushNamed(AdvertPage.routeName, arguments: advert),
+                        trailing: Text(timeago.format(advert.createdAt)),
                       ),
                     ),
                   );

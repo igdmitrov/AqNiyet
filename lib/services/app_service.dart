@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -95,7 +97,8 @@ class AppService extends ChangeNotifier {
         .from('advert')
         .select('id, name, description, created_at')
         .eq('city_id', cityId)
-        .eq('category_id', categoryId);
+        .eq('category_id', categoryId)
+        .order('created_at', ascending: false);
 
     final PostgrestResponse response = await query.execute();
     final error = response.error;
@@ -114,8 +117,11 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<AdvertMenuItem>> getMyAdvertMenuItems() async {
-    final query =
-        supabase.from('advert').select().eq('created_by', getCurrentUserId());
+    final query = supabase
+        .from('advert')
+        .select()
+        .eq('created_by', getCurrentUserId())
+        .order('created_at', ascending: false);
 
     final PostgrestResponse response = await query.execute();
     final error = response.error;
@@ -190,5 +196,40 @@ class AppService extends ChangeNotifier {
   Future<PostgrestResponse> createAdvert(Advert model) {
     final response = supabase.from('advert').insert(model.toMap()).execute();
     return response;
+  }
+
+  Future<List<String>> getFileList(String advertId, String userId) async {
+    final response = await supabase.storage
+        .from('public-images')
+        .list(path: '$userId/$advertId/');
+
+    if (response.data == null) {
+      return [];
+    } else {
+      return response.data!.map((e) => e.name).toList();
+    }
+  }
+
+  Future<List<Uint8List>> downloadImages(
+      String advertId, String userId, List<String> files) async {
+    final List<Uint8List> images = [];
+
+    for (var fileName in files) {
+      final response = await supabase.storage
+          .from('public-images')
+          .download('$userId/$advertId/$fileName');
+
+      if (response.data != null) {
+        images.add(response.data as Uint8List);
+      }
+    }
+
+    return images;
+  }
+
+  Future<List<Uint8List>> getImages(String advertId, String userId) async {
+    final files = await getFileList(advertId, userId);
+    final images = await downloadImages(advertId, userId, files);
+    return images;
   }
 }
