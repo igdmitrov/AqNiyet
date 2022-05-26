@@ -198,7 +198,7 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
-  Future<List<String>> getFileList(String advertId, String userId) async {
+  Future<List<String>> _getFileList(String advertId, String userId) async {
     final response = await supabase.storage
         .from('public-images')
         .list(path: '$userId/$advertId/');
@@ -210,7 +210,7 @@ class AppService extends ChangeNotifier {
     }
   }
 
-  Future<List<Uint8List>> downloadImages(
+  Future<List<Uint8List>> _downloadImages(
       String advertId, String userId, List<String> files) async {
     final List<Uint8List> images = [];
 
@@ -228,8 +228,14 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<Uint8List>> getImages(String advertId, String userId) async {
-    final files = await getFileList(advertId, userId);
-    final images = await downloadImages(advertId, userId, files);
+    final files = await _getFileList(advertId, userId);
+    final images = await _downloadImages(advertId, userId, files);
     return images;
+  }
+
+  Future<Uint8List> getMainImage(String advertId, String userId) async {
+    final files = await _getFileList(advertId, userId);
+    final images = await _downloadImages(advertId, userId, files);
+    return images[0];
   }
 }

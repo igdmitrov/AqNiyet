@@ -282,8 +282,9 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                           padding: const EdgeInsets.all(5.0),
                           child: Image.file(
                             File(e.path),
-                            width: 20.w,
-                            height: 20.w,
+                            width: 45.w,
+                            height: 45.w,
+                            fit: BoxFit.cover,
                           ),
                         )),
                   ],

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Greeting extends StatelessWidget {
-  final DateTime dateTime;
-  const Greeting({Key? key, required this.dateTime}) : super(key: key);
+  const Greeting({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final hour = dateTime.hour;
+    final hour = DateTime.now().hour;
 
     if (hour > 4 && hour < 12) {
       return const Text('Good morning!');

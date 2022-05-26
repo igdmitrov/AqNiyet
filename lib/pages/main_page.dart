@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
       drawer: Drawer(
         child: Column(
           children: [
-            AppBar(title: Greeting(dateTime: DateTime.now())),
+            AppBar(title: const Greeting()),
             const Divider(),
             if (isAuthenticated())
               ListTile(

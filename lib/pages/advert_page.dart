@@ -10,6 +10,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
 import '../services/app_service.dart';
+import '../widgets/image_dialog.dart';
 
 class AdvertPage extends StatefulWidget {
   static String routeName = '/advert';
@@ -60,10 +61,10 @@ class _AdvertPageState extends State<AdvertPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 children: [
-                  FutureBuilder<List<Uint8List>>(
+                  FutureBuilder<Uint8List>(
                       future: context
                           .read<AppService>()
-                          .getImages(advert.id, advert.createdBy),
+                          .getMainImage(advert.id, advert.createdBy),
                       builder: (ctx, snapshot) {
                         if (snapshot.hasData) {
                           return Row(
@@ -73,9 +74,10 @@ class _AdvertPageState extends State<AdvertPage> {
                                 offset: const Offset(0, 30),
                                 opacity: 0.3,
                                 child: Image.memory(
-                                  (snapshot.data![0]),
+                                  (snapshot.data as Uint8List),
                                   width: 50.w,
                                   height: 50.w,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ],
@@ -136,10 +138,18 @@ class _AdvertPageState extends State<AdvertPage> {
                             children: [
                               ...snapshot.data!.map((image) => Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: Image.memory(
-                                      image,
-                                      width: 45.w,
-                                      height: 45.w,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (_) => ImageDialog(image));
+                                      },
+                                      child: Image.memory(
+                                        image,
+                                        width: 45.w,
+                                        height: 45.w,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   )),
                             ],
