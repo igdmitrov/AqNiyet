@@ -1,3 +1,4 @@
+import 'package:aqniyet/widgets/menuitem_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -52,6 +53,7 @@ class _AdvertsPageState extends State<AdvertsPage> {
                     child: Card(
                       child: ListTile(
                         title: Text(advert.name),
+                        leading: MenuItemImage(advert),
                         subtitle: Text(
                             advert.description.characters.take(50).toString()),
                         onTap: () => Navigator.of(context)

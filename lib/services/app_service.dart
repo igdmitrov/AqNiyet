@@ -104,7 +104,7 @@ class AppService extends ChangeNotifier {
       String categoryId, String cityId) async {
     final query = supabase
         .from('advert')
-        .select('id, name, description, created_at')
+        .select('id, name, description, created_at, created_by')
         .eq('city_id', cityId)
         .eq('category_id', categoryId)
         .order('created_at', ascending: false);
