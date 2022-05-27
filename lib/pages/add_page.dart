@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -40,6 +41,11 @@ class _AddPageState extends AuthRequiredState<AddPage> {
   City? _city;
   PhoneCode? _phoneCode;
   final List<XFile> _images = [];
+
+  final maskFormatter = MaskTextInputFormatter(
+      mask: '(###) ###-##-##',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   Future<void> _saveData() async {
     setState(() {
@@ -272,6 +278,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                               RequiredValidator(errorText: 'Phone is required'),
                           enabled: !_isLoading,
                           keyboardType: TextInputType.phone,
+                          inputFormatters: [maskFormatter],
                         ),
                       ),
                     ),
@@ -298,7 +305,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 ),
                 const SizedBox(height: 20),
                 CheckboxFormInput(
-                  title: 'Enable',
+                  title: 'Public',
                   onSaved: (val) => _enabled = val ?? false,
                   validator: (c) => null,
                   enabled: !_isLoading,
