@@ -18,9 +18,12 @@ class AppService extends ChangeNotifier {
     late PostgrestResponse response;
 
     if (filter == null || filter.isEmpty) {
-      response = await query.execute();
+      response = await query.order('order', ascending: false).execute();
     } else {
-      response = await query.textSearch('name', "$filter:*").execute();
+      response = await query
+          .textSearch('name', "$filter:*")
+          .order('order', ascending: false)
+          .execute();
     }
 
     final error = response.error;
@@ -45,9 +48,12 @@ class AppService extends ChangeNotifier {
     late PostgrestResponse response;
 
     if (filter == null || filter.isEmpty) {
-      response = await query.execute();
+      response = await query.order('order', ascending: false).execute();
     } else {
-      response = await query.textSearch('name', "$filter:*").execute();
+      response = await query
+          .textSearch('name', "$filter:*")
+          .order('order', ascending: false)
+          .execute();
     }
 
     final error = response.error;
@@ -73,7 +79,10 @@ class AppService extends ChangeNotifier {
     if (filter == null || filter.isEmpty) {
       response = await query.execute();
     } else {
-      response = await query.textSearch('countryname', "$filter:*").execute();
+      response = await query
+          .textSearch('countryname', "$filter:*")
+          .order('order', ascending: false)
+          .execute();
     }
 
     final error = response.error;

@@ -254,18 +254,25 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                         onSaved: (val) => _phoneCode = val,
                         validator:
                             ModelValidator(errorText: 'Phone code is required'),
+                        selectedItem: PhoneCode(
+                            id: 'e6944e99-37be-4890-8433-84a73e74e0bc',
+                            code: '+7',
+                            countryName: 'kz'),
                       ),
                     ),
                     Expanded(
                       flex: 4,
-                      child: TextFormField(
-                        controller: _phoneController,
-                        decoration: const InputDecoration(labelText: 'Phone'),
-                        autocorrect: false,
-                        validator:
-                            RequiredValidator(errorText: 'Phone is required'),
-                        enabled: !_isLoading,
-                        keyboardType: TextInputType.phone,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
+                        child: TextFormField(
+                          controller: _phoneController,
+                          decoration: const InputDecoration(labelText: 'Phone'),
+                          autocorrect: false,
+                          validator:
+                              RequiredValidator(errorText: 'Phone is required'),
+                          enabled: !_isLoading,
+                          keyboardType: TextInputType.phone,
+                        ),
                       ),
                     ),
                   ],
