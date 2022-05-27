@@ -24,7 +24,7 @@ class _MenuItemImageState extends State<MenuItemImage> {
         maxWidth: 64,
         maxHeight: 64,
       ),
-      child: FutureBuilder<Uint8List>(
+      child: FutureBuilder<Uint8List?>(
           future: context
               .read<AppService>()
               .getMainImage(widget.menuItem.id, widget.menuItem.createdBy),

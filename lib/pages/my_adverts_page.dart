@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../model/advert_menu_item.dart';
 import '../services/app_service.dart';
+import '../widgets/menuitem_image.dart';
 import 'add_page.dart';
 import 'advert_page.dart';
 
@@ -43,6 +44,7 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
                     child: Card(
                       child: ListTile(
                         title: Text(advert.name),
+                        leading: MenuItemImage(advert),
                         subtitle: Text(advert.description),
                         onTap: () => Navigator.of(context)
                             .pushNamed(AdvertPage.routeName, arguments: advert),

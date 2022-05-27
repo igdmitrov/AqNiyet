@@ -61,7 +61,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 children: [
-                  FutureBuilder<Uint8List>(
+                  FutureBuilder<Uint8List?>(
                       future: context
                           .read<AppService>()
                           .getMainImage(advert.id, advert.createdBy),

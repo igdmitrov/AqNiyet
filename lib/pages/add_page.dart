@@ -14,6 +14,7 @@ import '../components/model_validator.dart';
 import '../model/advert.dart';
 import '../model/category.dart';
 import '../model/city.dart';
+import '../model/image_meta_data.dart';
 import '../model/phonecode.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
@@ -41,6 +42,7 @@ class _AddPageState extends AuthRequiredState<AddPage> {
   City? _city;
   PhoneCode? _phoneCode;
   final List<XFile> _images = [];
+  String? _mainImageId;
 
   final maskFormatter = MaskTextInputFormatter(
       mask: '(###) ###-##-##',
@@ -101,6 +103,23 @@ class _AddPageState extends AuthRequiredState<AddPage> {
     final error = response.error;
     if (response.hasError) {
       context.showErrorSnackBar(message: error!.message);
+    } else {
+      await _saveImageMetaData(advertId, file);
+    }
+  }
+
+  Future<void> _saveImageMetaData(String advertId, XFile file) async {
+    final response =
+        await context.read<AppService>().addImageMetaData(ImageMetaData(
+              id: '',
+              advertId: advertId,
+              primary: file.name == _mainImageId ? true : false,
+              imageName: file.name,
+              createdBy: getCurrentUserId(),
+            ));
+    final error = response.error;
+    if (response.hasError) {
+      context.showErrorSnackBar(message: error!.message);
     }
   }
 
@@ -112,6 +131,8 @@ class _AddPageState extends AuthRequiredState<AddPage> {
       if (pickedPhoto != null) {
         setState(() {
           _images.add(pickedPhoto);
+
+          _mainImageId ??= pickedPhoto.name;
         });
       }
     } catch (error) {
@@ -126,6 +147,8 @@ class _AddPageState extends AuthRequiredState<AddPage> {
       if (pickedPhotos != null) {
         setState(() {
           _images.addAll(pickedPhotos);
+
+          _mainImageId ??= pickedPhotos[0].name;
         });
       }
     } catch (error) {
@@ -292,13 +315,38 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 const SizedBox(height: 20),
                 Wrap(
                   children: [
-                    ..._images.map((e) => Padding(
+                    ..._images.map((image) => Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.file(
-                            File(e.path),
-                            width: 45.w,
-                            height: 45.w,
-                            fit: BoxFit.cover,
+                          child: GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                _mainImageId = image.name;
+                              });
+                            },
+                            child: Stack(
+                              alignment: Alignment.topLeft,
+                              children: [
+                                Image.file(
+                                  File(image.path),
+                                  width: 45.w,
+                                  height: 45.w,
+                                  fit: BoxFit.cover,
+                                ),
+                                if (image.name == _mainImageId)
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Main image',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        background: Paint()
+                                          ..color = Colors.green,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         )),
                   ],
