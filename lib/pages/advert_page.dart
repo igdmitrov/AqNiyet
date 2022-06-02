@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shadow/shadow.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../model/advert_menu_item.dart';
@@ -70,15 +69,11 @@ class _AdvertPageState extends State<AdvertPage> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Shadow(
-                                offset: const Offset(0, 30),
-                                opacity: 0.3,
-                                child: Image.memory(
-                                  (snapshot.data as Uint8List),
-                                  width: 50.w,
-                                  height: 50.w,
-                                  fit: BoxFit.cover,
-                                ),
+                              Image.memory(
+                                (snapshot.data as Uint8List),
+                                width: 50.w,
+                                height: 50.w,
+                                fit: BoxFit.cover,
                               ),
                             ],
                           );

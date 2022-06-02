@@ -210,14 +210,14 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 const SizedBox(height: 20),
                 DropdownSearch<Category>(
                   key: const ValueKey('category'),
-                  mode: Mode.DIALOG,
+                  popupProps: const PopupProps.dialog(
+                      isFilterOnline: true, showSearchBox: true),
                   enabled: !_isLoading,
-                  dropdownSearchDecoration:
-                      const InputDecoration(labelText: 'Category'),
-                  showSearchBox: true,
-                  isFilteredOnline: true,
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration:
+                          InputDecoration(labelText: 'Category')),
                   itemAsString: (Category? model) => model!.name,
-                  onFind: (String? filter) =>
+                  asyncItems: (String? filter) =>
                       context.read<AppService>().getCategories(filter: filter),
                   dropdownBuilder: (ctx, Category? model) =>
                       model == null ? const Text('') : Text(model.name),
@@ -239,14 +239,14 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                 const SizedBox(height: 20),
                 DropdownSearch<City>(
                   key: const ValueKey('city'),
-                  mode: Mode.DIALOG,
+                  popupProps: const PopupProps.dialog(
+                      isFilterOnline: true, showSearchBox: true),
                   enabled: !_isLoading,
-                  dropdownSearchDecoration:
-                      const InputDecoration(labelText: 'City'),
-                  showSearchBox: true,
-                  isFilteredOnline: true,
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration:
+                          InputDecoration(labelText: 'City')),
                   itemAsString: (City? model) => model!.name,
-                  onFind: (String? filter) =>
+                  asyncItems: (String? filter) =>
                       context.read<AppService>().getCities(filter: filter),
                   dropdownBuilder: (ctx, City? model) =>
                       model == null ? const Text('') : Text(model.name),
@@ -268,14 +268,14 @@ class _AddPageState extends AuthRequiredState<AddPage> {
                       flex: 2,
                       child: DropdownSearch<PhoneCode>(
                         key: const ValueKey('phoneCode'),
-                        mode: Mode.DIALOG,
+                        popupProps: const PopupProps.dialog(
+                            isFilterOnline: true, showSearchBox: true),
                         enabled: !_isLoading,
-                        dropdownSearchDecoration:
-                            const InputDecoration(labelText: 'Phone code'),
-                        showSearchBox: true,
-                        isFilteredOnline: true,
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                            dropdownSearchDecoration:
+                                InputDecoration(labelText: 'Phone code')),
                         itemAsString: (PhoneCode? model) => model!.getName(),
-                        onFind: (String? filter) => context
+                        asyncItems: (String? filter) => context
                             .read<AppService>()
                             .getPhoneCodes(filter: filter),
                         dropdownBuilder: (ctx, PhoneCode? model) =>
