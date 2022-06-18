@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'pages/edit_page.dart';
 import 'pages/login_page.dart';
 import 'pages/main_page.dart';
 import 'pages/splash_page.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
           SignUpPage.routeName: (_) => const SignUpPage(),
           MainPage.routeName: (_) => const MainPage(),
           AddPage.routeName: (_) => const AddPage(),
+          EditPage.routeName: (_) => const EditPage(),
           CityPage.routeName: (_) => const CityPage(),
           AdvertsPage.routeName: (_) => const AdvertsPage(),
           MyAdvertsPages.routeName: (_) => const MyAdvertsPages(),

@@ -1,4 +1,7 @@
-class Advert {
+import 'base_model.dart';
+
+class Advert implements BaseModel {
+  @override
   final String id;
   final String categoryId;
   final String name;
@@ -54,4 +57,7 @@ class Advert {
       'created_by': createdBy,
     };
   }
+
+  @override
+  String value() => name;
 }

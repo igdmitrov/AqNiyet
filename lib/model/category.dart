@@ -1,5 +1,9 @@
-class Category {
+import 'package:aqniyet/model/base_model.dart';
+
+class Category implements BaseModel {
+  @override
   final String id;
+
   final String name;
 
   Category({
@@ -12,5 +16,10 @@ class Category {
       id: json['id'],
       name: json['name'],
     );
+  }
+
+  @override
+  String value() {
+    return name;
   }
 }

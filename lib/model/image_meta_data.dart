@@ -1,3 +1,5 @@
+import 'image_data.dart';
+
 class ImageMetaData {
   final String id;
   final String imageName;
@@ -20,6 +22,16 @@ class ImageMetaData {
       advertId: json['advert_id'],
       primary: json['primary'],
       createdBy: json['created_by'],
+    );
+  }
+
+  factory ImageMetaData.fromImageData(ImageData imageData, bool primary) {
+    return ImageMetaData(
+      id: imageData.id,
+      imageName: imageData.imageName,
+      advertId: imageData.advertId,
+      primary: primary,
+      createdBy: imageData.createdBy,
     );
   }
 

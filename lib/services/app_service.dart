@@ -9,6 +9,7 @@ import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
 import '../model/category.dart';
 import '../model/city.dart';
+import '../model/image_data.dart';
 import '../model/phonecode.dart';
 import '../utils/constants.dart';
 
@@ -42,6 +43,26 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load categories');
   }
 
+  Future<Category> getCategoryById(String id) async {
+    final response = await supabase
+        .from('category')
+        .select('id, name')
+        .eq('id', id)
+        .execute();
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return Category.fromJson(response.data[0]);
+    }
+
+    throw Exception('Failed to load category');
+  }
+
   Future<List<City>> getCities({String? filter}) async {
     final query =
         supabase.from('city').select('id, name').eq('country_id', 'kz');
@@ -72,6 +93,23 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load cities');
   }
 
+  Future<City> getCityById(String id) async {
+    final response =
+        await supabase.from('city').select('id, name').eq('id', id).execute();
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return City.fromJson(response.data[0]);
+    }
+
+    throw Exception('Failed to load city');
+  }
+
   Future<List<PhoneCode>> getPhoneCodes({String? filter}) async {
     final query = supabase.from('phonecode_view').select();
 
@@ -99,6 +137,23 @@ class AppService extends ChangeNotifier {
     }
 
     throw Exception('Failed to load phone codes');
+  }
+
+  Future<PhoneCode> getPhoneCodeById(String id) async {
+    final response =
+        await supabase.from('phonecode_view').select().eq('id', id).execute();
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return PhoneCode.fromJson(response.data[0]);
+    }
+
+    throw Exception('Failed to load phone code');
   }
 
   Future<List<AdvertMenuItem>> getAdvertMenuItems(
@@ -208,8 +263,31 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
+  Future<PostgrestResponse> updateAdvert(Advert model) {
+    final response = supabase
+        .from('advert')
+        .update(model.toMap())
+        .eq('id', model.id)
+        .execute();
+    return response;
+  }
+
   Future<PostgrestResponse> addImageMetaData(ImageMetaData model) {
     final response = supabase.from('image').insert(model.toMap()).execute();
+    return response;
+  }
+
+  Future<PostgrestResponse> setPrimaryImage(ImageMetaData model) {
+    final response = supabase
+        .from('image')
+        .update(model.toMap())
+        .eq('id', model.id)
+        .execute();
+    return response;
+  }
+
+  Future<PostgrestResponse> removeImage(String id) {
+    final response = supabase.from('image').delete().eq('id', id).execute();
     return response;
   }
 
@@ -266,15 +344,15 @@ class AppService extends ChangeNotifier {
     return null;
   }
 
-  Future<List<Uint8List>> getImages(String advertId, String userId) async {
-    final metaData = await _getFileList(advertId, userId);
-    final List<Uint8List> images = [];
+  Future<List<ImageData>> getImages(String advertId, String userId) async {
+    final List<ImageMetaData> metaData = await _getFileList(advertId, userId);
+    final List<ImageData> images = [];
 
     for (var item in metaData) {
       final image = await _downloadImage(item);
 
       if (image != null) {
-        images.add(image);
+        images.add(ImageData.fromMetaData(item, image));
       }
     }
 

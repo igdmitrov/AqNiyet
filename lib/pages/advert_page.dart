@@ -8,8 +8,11 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
+import '../model/image_data.dart';
 import '../services/app_service.dart';
+import '../utils/constants.dart';
 import '../widgets/image_dialog.dart';
+import 'edit_page.dart';
 
 class AdvertPage extends StatefulWidget {
   static String routeName = '/advert';
@@ -60,6 +63,21 @@ class _AdvertPageState extends State<AdvertPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 children: [
+                  if (advert.createdBy == getCurrentUserId())
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                          onPressed: () => Navigator.of(context)
+                              .pushReplacementNamed(EditPage.routeName,
+                                  arguments: advert),
+                          child: const Text('Edit'),
+                        ),
+                      ],
+                    ),
                   FutureBuilder<Uint8List?>(
                       future: context
                           .read<AppService>()
@@ -123,7 +141,7 @@ class _AdvertPageState extends State<AdvertPage> {
                     ],
                   ),
                   const SizedBox(height: 18),
-                  FutureBuilder<List<Uint8List>>(
+                  FutureBuilder<List<ImageData>>(
                       future: context
                           .read<AppService>()
                           .getImages(advert.id, advert.createdBy),
@@ -131,16 +149,17 @@ class _AdvertPageState extends State<AdvertPage> {
                         if (snapshot.hasData) {
                           return Wrap(
                             children: [
-                              ...snapshot.data!.map((image) => Padding(
+                              ...snapshot.data!.map((imageData) => Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: GestureDetector(
                                       onTap: () async {
                                         await showDialog(
                                             context: context,
-                                            builder: (_) => ImageDialog(image));
+                                            builder: (_) =>
+                                                ImageDialog(imageData.image));
                                       },
                                       child: Image.memory(
-                                        image,
+                                        imageData.image,
                                         width: 45.w,
                                         height: 45.w,
                                         fit: BoxFit.cover,

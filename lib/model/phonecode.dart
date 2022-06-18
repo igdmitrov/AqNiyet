@@ -1,4 +1,7 @@
-class PhoneCode {
+import 'base_model.dart';
+
+class PhoneCode implements BaseModel {
+  @override
   final String id;
   final String code;
   final String countryName;
@@ -13,5 +16,6 @@ class PhoneCode {
     );
   }
 
-  String getName() => '$code $countryName';
+  @override
+  String value() => code;
 }

@@ -5,7 +5,7 @@ class CheckboxFormInput extends FormField<bool> {
       {Key? key,
       required String title,
       required FormFieldSetter<bool> onSaved,
-      required FormFieldValidator<bool> validator,
+      FormFieldValidator<bool>? validator,
       required bool enabled,
       bool initialValue = false,
       autoValidate = false})

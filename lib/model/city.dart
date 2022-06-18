@@ -1,4 +1,7 @@
-class City {
+import 'base_model.dart';
+
+class City implements BaseModel {
+  @override
   final String id;
   final String name;
 
@@ -10,4 +13,7 @@ class City {
       name: json['name'],
     );
   }
+
+  @override
+  String value() => name;
 }

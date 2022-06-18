@@ -1,25 +1,24 @@
-import 'dart:io';
-
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:aqniyet/components/advert_state.dart';
+import 'package:aqniyet/widgets/text_form_input.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
-import '../components/auth_required_state.dart';
 import '../components/model_validator.dart';
-import '../model/advert.dart';
 import '../model/category.dart';
 import '../model/city.dart';
-import '../model/image_meta_data.dart';
 import '../model/phonecode.dart';
 import '../services/app_service.dart';
-import '../utils/constants.dart';
-import '../widgets/checkbox_from_input.dart';
-import 'main_page.dart';
+import '../widgets/category_lookup.dart';
+import '../widgets/checkbox_form_input.dart';
+import '../widgets/city_lookup.dart';
+import '../widgets/form_input_divider.dart';
+import '../widgets/image_preview.dart';
+import '../widgets/lookup_form_input.dart';
+import '../widgets/phone_input.dart';
+import '../widgets/phonecode_lookup.dart';
+import '../widgets/remove_image_button.dart';
+import '../widgets/text_area_input.dart';
 
 class AddPage extends StatefulWidget {
   static String routeName = '/add';
@@ -29,166 +28,11 @@ class AddPage extends StatefulWidget {
   State<AddPage> createState() => _AddPageState();
 }
 
-class _AddPageState extends AuthRequiredState<AddPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-  final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
-  bool _enabled = true;
-  Category? _category;
-  City? _city;
-  PhoneCode? _phoneCode;
-  final List<XFile> _images = [];
-  String? _mainImageId;
-
-  final maskFormatter = MaskTextInputFormatter(
-      mask: '(###) ###-##-##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
-
-  Future<void> _saveData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    if (_formKey.currentState != null &&
-        _formKey.currentState!.validate() &&
-        isAuthenticated()) {
-      _formKey.currentState!.save();
-
-      if (_category != null && _city != null && _phoneCode != null) {
-        final model = Advert(
-          id: '',
-          categoryId: _category!.id,
-          name: _nameController.text,
-          description: _descriptionController.text,
-          cityId: _city!.id,
-          address: _addressController.text,
-          phoneCodeId: _phoneCode!.id,
-          phone: _phoneController.text,
-          enabled: _enabled,
-          createdBy: getCurrentUserId(),
-        );
-
-        final response = await context.read<AppService>().createAdvert(model);
-        final error = response.error;
-        if (response.hasError) {
-          context.showErrorSnackBar(message: error!.message);
-        } else {
-          final advertId =
-              (((response.data) as List<dynamic>)[0]['id']) as String;
-
-          for (var image in _images) {
-            await _saveImage(advertId, image);
-          }
-
-          context.showSnackBar(message: 'You created a new item');
-          Navigator.of(context).pushReplacementNamed(MainPage.routeName);
-        }
-      }
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _saveImage(String advertId, XFile file) async {
-    final response = await supabase.storage.from('public-images').upload(
-        '${getCurrentUserId()}/$advertId/${file.name}', File(file.path));
-
-    final error = response.error;
-    if (response.hasError) {
-      context.showErrorSnackBar(message: error!.message);
-    } else {
-      await _saveImageMetaData(advertId, file);
-    }
-  }
-
-  Future<void> _saveImageMetaData(String advertId, XFile file) async {
-    final response =
-        await context.read<AppService>().addImageMetaData(ImageMetaData(
-              id: '',
-              advertId: advertId,
-              primary: file.name == _mainImageId ? true : false,
-              imageName: file.name,
-              createdBy: getCurrentUserId(),
-            ));
-    final error = response.error;
-    if (response.hasError) {
-      context.showErrorSnackBar(message: error!.message);
-    }
-  }
-
-  Future<void> _takePicture() async {
-    try {
-      final XFile? pickedPhoto =
-          await _picker.pickImage(source: ImageSource.camera);
-
-      if (pickedPhoto != null) {
-        setState(() {
-          _images.add(pickedPhoto);
-
-          _mainImageId ??= pickedPhoto.name;
-        });
-      }
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error');
-    }
-  }
-
-  Future<void> _getImagesFromGallery() async {
-    try {
-      final List<XFile>? pickedPhotos = await _picker.pickMultiImage();
-
-      if (pickedPhotos != null) {
-        setState(() {
-          _images.addAll(pickedPhotos);
-
-          _mainImageId ??= pickedPhotos[0].name;
-        });
-      }
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error');
-    }
-  }
-
-  Future<void> _showOption() async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _getImagesFromGallery();
-              },
-              child: const Text('Gallery')),
-          CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _takePicture();
-              },
-              child: const Text('Camera')),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _descriptionController.dispose();
-    _addressController.dispose();
-    _phoneController.dispose();
-    super.dispose();
-  }
-
+class _AddPageState extends AdvertState<AddPage> {
   @override
   Widget build(BuildContext context) {
+    final appService = context.read<AppService>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('New advert'),
@@ -197,173 +41,106 @@ class _AddPageState extends AuthRequiredState<AddPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  autocorrect: false,
+                TextFormInput(
+                  name: 'Name',
+                  controller: nameController,
+                  isLoading: isLoading,
                   validator: RequiredValidator(errorText: 'Name is required'),
-                  enabled: !_isLoading,
                 ),
-                const SizedBox(height: 20),
-                DropdownSearch<Category>(
-                  key: const ValueKey('category'),
-                  popupProps: const PopupProps.dialog(
-                      isFilterOnline: true, showSearchBox: true),
-                  enabled: !_isLoading,
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration:
-                          InputDecoration(labelText: 'Category')),
-                  itemAsString: (Category? model) => model!.name,
-                  asyncItems: (String? filter) =>
-                      context.read<AppService>().getCategories(filter: filter),
-                  dropdownBuilder: (ctx, Category? model) =>
-                      model == null ? const Text('') : Text(model.name),
-                  onSaved: (val) => _category = val,
-                  validator: ModelValidator(errorText: 'Category is required'),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
-                  autocorrect: false,
+                const FormInputDivider(),
+                CategoryLookup(
+                    appService: appService,
+                    isLoading: isLoading,
+                    onSaved: (Category? val) => category = val),
+                const FormInputDivider(),
+                TextAreaInput(
+                  name: 'Description',
+                  controller: descriptionController,
                   validator:
                       RequiredValidator(errorText: 'Description is required'),
-                  enabled: !_isLoading,
-                  minLines: 3,
-                  maxLines: 5,
-                  keyboardType: TextInputType.multiline,
+                  isLoading: isLoading,
                 ),
-                const SizedBox(height: 20),
-                DropdownSearch<City>(
-                  key: const ValueKey('city'),
-                  popupProps: const PopupProps.dialog(
-                      isFilterOnline: true, showSearchBox: true),
-                  enabled: !_isLoading,
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration:
-                          InputDecoration(labelText: 'City')),
-                  itemAsString: (City? model) => model!.name,
-                  asyncItems: (String? filter) =>
-                      context.read<AppService>().getCities(filter: filter),
-                  dropdownBuilder: (ctx, City? model) =>
-                      model == null ? const Text('') : Text(model.name),
-                  onSaved: (val) => _city = val,
-                  validator: ModelValidator(errorText: 'City is required'),
+                const FormInputDivider(),
+                CityLookup(
+                    appService: appService,
+                    isLoading: isLoading,
+                    onSaved: (City? val) => city = val),
+                const FormInputDivider(),
+                TextFormInput(
+                  name: 'Address',
+                  controller: addressController,
+                  isLoading: isLoading,
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _addressController,
-                  decoration: const InputDecoration(labelText: 'Address'),
-                  autocorrect: false,
-                  validator: (val) => null,
-                  enabled: !_isLoading,
-                ),
-                const SizedBox(height: 20),
+                const FormInputDivider(),
                 Row(
                   children: [
                     Expanded(
                       flex: 2,
-                      child: DropdownSearch<PhoneCode>(
-                        key: const ValueKey('phoneCode'),
-                        popupProps: const PopupProps.dialog(
-                            isFilterOnline: true, showSearchBox: true),
-                        enabled: !_isLoading,
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                            dropdownSearchDecoration:
-                                InputDecoration(labelText: 'Phone code')),
-                        itemAsString: (PhoneCode? model) => model!.getName(),
-                        asyncItems: (String? filter) => context
-                            .read<AppService>()
-                            .getPhoneCodes(filter: filter),
-                        dropdownBuilder: (ctx, PhoneCode? model) =>
-                            model == null ? const Text('') : Text(model.code),
-                        onSaved: (val) => _phoneCode = val,
-                        validator:
-                            ModelValidator(errorText: 'Phone code is required'),
-                        selectedItem: PhoneCode(
-                            id: 'e6944e99-37be-4890-8433-84a73e74e0bc',
-                            code: '+7',
-                            countryName: 'kz'),
+                      child: PhonecodeLookup(
+                        appService: appService,
+                        isLoading: isLoading,
+                        onSaved: (PhoneCode? val) => phoneCode = val,
                       ),
                     ),
                     Expanded(
                       flex: 4,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
-                        child: TextFormField(
-                          controller: _phoneController,
-                          decoration: const InputDecoration(labelText: 'Phone'),
-                          autocorrect: false,
-                          validator:
-                              RequiredValidator(errorText: 'Phone is required'),
-                          enabled: !_isLoading,
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: [maskFormatter],
+                        child: PhoneInput(
+                          controller: phoneController,
+                          isLoading: isLoading,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const FormInputDivider(),
                 OutlinedButton(
-                  onPressed: _showOption,
+                  onPressed: showOption,
                   child: const Text('Take a photo'),
                 ),
-                const SizedBox(height: 20),
+                const FormInputDivider(),
                 Wrap(
                   children: [
-                    ..._images.map((image) => Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                _mainImageId = image.name;
-                              });
-                            },
-                            child: Stack(
-                              alignment: Alignment.topLeft,
-                              children: [
-                                Image.file(
-                                  File(image.path),
-                                  width: 45.w,
-                                  height: 45.w,
-                                  fit: BoxFit.cover,
+                    ...images.map((image) => Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  setState(() {
+                                    mainImageId = image.name;
+                                  });
+                                },
+                                child: ImagePreview(
+                                  file: image,
+                                  primary: mainImageId == image.name,
                                 ),
-                                if (image.name == _mainImageId)
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Main image',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        background: Paint()
-                                          ..color = Colors.green,
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                              ),
                             ),
-                          ),
+                            RemoveImageButton(
+                              onPressed: () =>
+                                  removeImageFromMemory(image.name),
+                            ),
+                          ],
                         )),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const FormInputDivider(),
                 CheckboxFormInput(
                   title: 'Public',
-                  onSaved: (val) => _enabled = val ?? false,
-                  validator: (c) => null,
-                  enabled: !_isLoading,
+                  onSaved: (val) => enabled = val ?? false,
+                  enabled: !isLoading,
                   initialValue: true,
                 ),
-                const SizedBox(height: 20),
+                const FormInputDivider(),
                 ElevatedButton(
-                    onPressed: _isLoading ? null : _saveData,
-                    child: Text(_isLoading ? 'Loading' : 'Save')),
-                const SizedBox(height: 20),
+                    onPressed: isLoading ? null : saveData,
+                    child: Text(isLoading ? 'Loading' : 'Save')),
+                const FormInputDivider(),
               ],
             ),
           ),

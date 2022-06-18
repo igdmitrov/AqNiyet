@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -50,3 +51,8 @@ MultiValidator emailValidator() {
     EmailValidator(errorText: 'Enter a valid email address'),
   ]);
 }
+
+final phoneMaskFormatter = MaskTextInputFormatter(
+    mask: '(###) ###-##-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy);
