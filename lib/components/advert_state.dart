@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../model/advert.dart';
 import '../model/category.dart';
 import '../model/city.dart';
@@ -30,7 +32,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
   String? mainImageId;
   List<String> removedImages = [];
 
-  Future<void> saveData() async {
+  Future<void> saveData(AppLocalizations appLocalizations) async {
     setState(() {
       isLoading = true;
     });
@@ -57,6 +59,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         final response = await context.read<AppService>().createAdvert(model);
         final error = response.error;
         if (response.hasError) {
+          if (!mounted) return;
           context.showErrorSnackBar(message: error!.message);
         } else {
           final advertId =
@@ -66,7 +69,8 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
             await _saveImage(advertId, image);
           }
 
-          context.showSnackBar(message: 'You created a new item');
+          if (!mounted) return;
+          context.showSnackBar(message: appLocalizations.created_new_item);
           Navigator.of(context).pushReplacementNamed(MyAdvertsPages.routeName);
         }
       }
@@ -104,6 +108,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         final response = await appService.updateAdvert(model);
         final error = response.error;
         if (response.hasError) {
+          if (!mounted) return;
           context.showErrorSnackBar(message: error!.message);
         } else {
           for (var image in images) {
@@ -128,6 +133,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
             }
           }
 
+          if (!mounted) return;
           Navigator.of(context).pushReplacementNamed(MyAdvertsPages.routeName);
         }
       }
@@ -144,6 +150,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
 
     final error = response.error;
     if (response.hasError) {
+      if (!mounted) return;
       context.showErrorSnackBar(message: error!.message);
     } else {
       await _saveImageMetaData(advertId, file);
@@ -161,11 +168,12 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
             ));
     final error = response.error;
     if (response.hasError) {
+      if (!mounted) return;
       context.showErrorSnackBar(message: error!.message);
     }
   }
 
-  Future<void> _takePicture() async {
+  Future<void> _takePicture(AppLocalizations appLocalization) async {
     try {
       final XFile? pickedPhoto =
           await _picker.pickImage(source: ImageSource.camera);
@@ -178,11 +186,11 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         });
       }
     } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error');
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }
   }
 
-  Future<void> _getImagesFromGallery() async {
+  Future<void> _getImagesFromGallery(AppLocalizations appLocalization) async {
     try {
       final List<XFile>? pickedPhotos = await _picker.pickMultiImage();
 
@@ -194,11 +202,11 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         });
       }
     } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error');
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }
   }
 
-  Future<void> showOption() async {
+  Future<void> showOption(AppLocalizations appLocalization) async {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -206,21 +214,22 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.of(context).pop();
-                _getImagesFromGallery();
+                _getImagesFromGallery(appLocalization);
               },
-              child: const Text('Gallery')),
+              child: Text(appLocalization.gallery)),
           CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.of(context).pop();
-                _takePicture();
+                _takePicture(appLocalization);
               },
-              child: const Text('Camera')),
+              child: Text(appLocalization.camera)),
         ],
       ),
     );
   }
 
-  Future<void> removeImage(ImageData imageData, AppService appService) async {
+  Future<void> removeImage(ImageData imageData, AppService appService,
+      AppLocalizations appLocalization) async {
     setState(() {
       isLoading = true;
     });
@@ -246,7 +255,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         }
       }
     } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error');
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }
 
     setState(() {

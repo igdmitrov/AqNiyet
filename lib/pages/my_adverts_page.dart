@@ -1,6 +1,8 @@
+import 'package:aqniyet/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/advert_menu_item.dart';
 import '../services/app_service.dart';
@@ -19,9 +21,11 @@ class MyAdvertsPages extends StatefulWidget {
 class _MyAdvertsPagesState extends State<MyAdvertsPages> {
   @override
   Widget build(BuildContext context) {
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My items'),
+        title: Text(appLocalization.my_items),
         actions: [
           IconButton(
             onPressed: () =>
@@ -31,7 +35,8 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
         ],
       ),
       body: FutureBuilder<List<AdvertMenuItem>>(
-        future: context.read<AppService>().getMyAdvertMenuItems(),
+        future:
+            context.read<AppService>().getMyAdvertMenuItems(getCurrentUserId()),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

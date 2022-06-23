@@ -34,12 +34,12 @@ class ImagePreview extends StatelessWidget {
         if (primary == true)
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Main image',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                background: Paint()..color = Colors.green,
+            child: Container(
+              height: 20,
+              width: 20,
+              decoration: const BoxDecoration(
+                color: Colors.lightGreen,
+                shape: BoxShape.circle,
               ),
             ),
           ),

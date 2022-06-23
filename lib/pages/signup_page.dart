@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../widgets/footer.dart';
+import '../widgets/logo.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -21,7 +24,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  Future<void> _signUp() async {
+  Future<void> _signUp(AppLocalizations appLocalizations) async {
     setState(() {
       _isLoading = true;
     });
@@ -34,9 +37,11 @@ class _SignUpPageState extends State<SignUpPage> {
           .signUp(_emailController.text, _passwordController.text);
       final error = response.error;
       if (error != null) {
+        if (!mounted) return;
         context.showErrorSnackBar(message: error.message);
       } else {
-        context.showSnackBar(message: 'User was created');
+        if (!mounted) return;
+        context.showSnackBar(message: appLocalizations.user_created);
         Navigator.of(context)
             .pushNamed(LoginPage.routeName, arguments: _emailController.text);
       }
@@ -57,6 +62,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
@@ -65,50 +72,42 @@ class _SignUpPageState extends State<SignUpPage> {
             key: _form,
             child: Column(
               children: [
-                Image.asset(
-                  'assets/images/login.png',
-                  height: 30.h,
-                ),
-                const Text(
-                  'AqNiyet',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                const Logo(),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  validator: emailValidator(),
+                  decoration: InputDecoration(labelText: appLocalization.email),
+                  validator: emailValidator(appLocalization),
                 ),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration:
+                      InputDecoration(labelText: appLocalization.password),
                   obscureText: true,
-                  validator: passwordValidator(),
+                  validator: passwordValidator(appLocalization),
                 ),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _confirmPasswordController,
-                  decoration:
-                      const InputDecoration(labelText: 'Confirm Password'),
+                  decoration: InputDecoration(
+                      labelText: appLocalization.confirm_password),
                   obscureText: true,
-                  validator: (val) =>
-                      MatchValidator(errorText: 'Password do not match')
-                          .validateMatch(_confirmPasswordController.text,
-                              _passwordController.text),
+                  validator: (val) => MatchValidator(
+                          errorText: appLocalization.password_dont_match)
+                      .validateMatch(_confirmPasswordController.text,
+                          _passwordController.text),
                 ),
                 const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: _isLoading ? null : _signUp,
-                      child: Text(_isLoading ? 'Loading' : 'Sign Up'),
+                      onPressed:
+                          _isLoading ? null : () => _signUp(appLocalization),
+                      child: Text(_isLoading
+                          ? appLocalization.loading
+                          : appLocalization.signup),
                     ),
                     const SizedBox(
                       width: 10,
@@ -116,27 +115,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed(LoginPage.routeName),
-                      child: const Text('Sign In'),
+                      child: Text(appLocalization.signin),
                     ),
                   ],
                 ),
                 SizedBox(height: 20.h),
-                const Text(
-                  'DEVELOPED BY IGOR DMITROV',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  DateTime.now().year.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
+                const Footer(),
               ],
             ),
           ),

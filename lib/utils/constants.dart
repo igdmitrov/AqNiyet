@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+const appName = 'AqNiyet';
+const footerText = 'DEVELOPED BY IGOR DMITROV';
 
 final supabase = Supabase.instance.client;
 
@@ -9,8 +13,12 @@ bool isAuthenticated() {
   return supabase.auth.currentUser != null;
 }
 
-String? getCurrentUserEmail() {
-  return isAuthenticated() ? supabase.auth.currentUser!.email : null;
+bool isUnauthenticated() {
+  return isAuthenticated() == false;
+}
+
+String getCurrentUserEmail() {
+  return isAuthenticated() ? supabase.auth.currentUser!.email ?? '' : '';
 }
 
 String getCurrentUserId() {
@@ -36,19 +44,19 @@ extension ShowSnackBar on BuildContext {
   }
 }
 
-MultiValidator passwordValidator() {
-  const _minLengthPassword = 8;
+MultiValidator passwordValidator(AppLocalizations appLocalizations) {
+  const minLengthPassword = 8;
   return MultiValidator([
-    RequiredValidator(errorText: 'Password is required'),
-    MinLengthValidator(_minLengthPassword,
-        errorText: 'Password must be at least $_minLengthPassword digits long')
+    RequiredValidator(errorText: appLocalizations.password_required),
+    MinLengthValidator(minLengthPassword,
+        errorText: appLocalizations.password_length_error(minLengthPassword))
   ]);
 }
 
-MultiValidator emailValidator() {
+MultiValidator emailValidator(AppLocalizations appLocalizations) {
   return MultiValidator([
-    RequiredValidator(errorText: 'Email is required'),
-    EmailValidator(errorText: 'Enter a valid email address'),
+    RequiredValidator(errorText: appLocalizations.email_required),
+    EmailValidator(errorText: appLocalizations.valid_email),
   ]);
 }
 

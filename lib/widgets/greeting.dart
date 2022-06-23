@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Greeting extends StatelessWidget {
   const Greeting({Key? key}) : super(key: key);
@@ -6,18 +7,19 @@ class Greeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hour = DateTime.now().hour;
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     if (hour > 4 && hour < 12) {
-      return const Text('Good morning!');
+      return Text(appLocalization.goodmorning);
     }
-    if (hour < 17) {
-      return const Text('Good afternoon!');
-    }
-
-    if (hour > 17 && hour < 23) {
-      return const Text('Good evening!');
+    if (hour < 19) {
+      return Text(appLocalization.goodafternoon);
     }
 
-    return const Text('Good night!');
+    if (hour >= 19 && hour < 23) {
+      return Text(appLocalization.goodevening);
+    }
+
+    return Text(appLocalization.goodnight);
   }
 }

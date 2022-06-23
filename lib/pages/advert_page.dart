@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
@@ -49,6 +50,8 @@ class _AdvertPageState extends State<AdvertPage> {
     final advertMenuItem =
         ModalRoute.of(context)!.settings.arguments as AdvertMenuItem;
 
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(advertMenuItem.name),
@@ -74,7 +77,7 @@ class _AdvertPageState extends State<AdvertPage> {
                           onPressed: () => Navigator.of(context)
                               .pushReplacementNamed(EditPage.routeName,
                                   arguments: advert),
-                          child: const Text('Edit'),
+                          child: Text(appLocalization.edit),
                         ),
                       ],
                     ),
@@ -83,6 +86,11 @@ class _AdvertPageState extends State<AdvertPage> {
                           .read<AppService>()
                           .getMainImage(advert.id, advert.createdBy),
                       builder: (ctx, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text(appLocalization.loading);
+                        }
+
                         if (snapshot.hasData) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,8 +103,9 @@ class _AdvertPageState extends State<AdvertPage> {
                               ),
                             ],
                           );
+                        } else {
+                          return Container();
                         }
-                        return const Text('Loading');
                       }),
                   Text(advert.categoryName),
                   const SizedBox(height: 10),
@@ -169,7 +178,7 @@ class _AdvertPageState extends State<AdvertPage> {
                             ],
                           );
                         }
-                        return const Text('Loading');
+                        return Text(appLocalization.loading);
                       }),
                   const SizedBox(height: 30),
                 ],

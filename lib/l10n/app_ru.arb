@@ -1,0 +1,67 @@
+{
+    "goodmorning": "Доброе утро!",
+    "goodafternoon": "Добрый день!",
+    "goodevening": "Добрый вечер!",
+    "goodnight": "Доброй ночи!",
+    "back": "Назад",
+    "email": "Email",
+    "password": "Пароль",
+    "loading": "Загрузка",
+    "signin": "Войти",
+    "signup": "Зарегистрироваться",
+    "confirm_password": "Подтвердить пароль",
+    "user_created": "Пользователь создан",
+    "password_dont_match": "Пароль не совпадает",
+    "password_required": "Необходимо указать пароль",
+
+    "password_length_error": "Пароль должен быть минимум {minLengthPassword} символов",
+    "@password_length_error": {
+        "description": "Ошибка длины пароля",
+        "placeholders": {
+            "minLengthPassword": {
+                "type": "int",
+                "example": "8"
+            }
+        }
+    },
+
+    "logoff": "Выйти ({email})",
+    "@logoff": {
+        "description": "Выйти из учетной записи",
+        "placeholders": {
+            "email": {
+                "type": "String",
+                "example": "user@gmail.com"
+            }
+        }
+    },
+
+    "email_required": "Необходимо указать email",
+    "valid_email": "Введите корректный email",
+    "my_items": "Мои объявления",
+    "edit": "Редактировать",
+    "new_advert": "Новое объявление",
+    "name": "Наименование",
+    "name_required": "Укажите наименование",
+    "description": "Описание",
+    "description_required": "Заполните описание",
+    "address": "Адрес",
+    "take_photo": "Фото",
+    "public": "Опубликовать",
+    "save": "Сохранить",
+    "created_new_item": "Добавили новое объявление",
+    "unexpected_error": "Неожиданная ошибка",
+    "gallery": "Галерея",
+    "camera": "Камера",
+    "category": "Категория",
+    "category_required": "Укажите категорию",
+    "city": "Город",
+    "city_required": "Укажите город",
+    "remove": "Удалить",
+    "phone": "Телефон",
+    "phone_required": "Укажите телефон",
+    "phonecode": "Код",
+    "phonecode_required": "Укажите код",
+    "my_account": "Аккаунт",
+    "question_remove_account": "Удалить аккаунт?"
+}

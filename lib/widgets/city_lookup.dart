@@ -1,5 +1,6 @@
 import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/model_validator.dart';
 import '../model/city.dart';
@@ -21,12 +22,14 @@ class CityLookup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+
     return LookupFormInput(
-      name: 'City',
+      name: appLocalization.city,
       isLoading: isLoading,
       asyncItems: (String? filter) => appService.getCities(filter: filter),
       onSaved: onSaved,
-      validator: ModelValidator(errorText: 'City is required'),
+      validator: ModelValidator(errorText: appLocalization.city_required),
       selectedItem: selectedItem,
     );
   }

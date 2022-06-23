@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/constants.dart';
+import '../widgets/footer.dart';
+import '../widgets/logo.dart';
 import 'main_page.dart';
 import 'signup_page.dart';
 
@@ -9,7 +12,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -31,8 +34,10 @@ class _LoginPageState extends State<LoginPage> {
           email: _emailController.text, password: _passwordController.text);
       final error = response.error;
       if (error != null) {
+        if (!mounted) return;
         context.showErrorSnackBar(message: error.message);
       } else {
+        if (!mounted) return;
         Navigator.of(context).pushReplacementNamed(MainPage.routeName);
       }
     }
@@ -51,10 +56,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String? _emailFromSignUp =
+    final String? emailFromSignUp =
         ModalRoute.of(context)!.settings.arguments as String?;
 
-    _emailController.text = _emailFromSignUp ?? '';
+    _emailController.text = emailFromSignUp ?? '';
+
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return Scaffold(
       body: ListView(
@@ -70,37 +77,26 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed(MainPage.routeName),
-                      child: const Text('Back'),
+                      child: Text(appLocalization.back),
                     ),
                   ],
                 ),
-                Image.asset(
-                  'assets/images/login.png',
-                  height: 30.h,
-                ),
-                const Text(
-                  'AqNiyet',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                const Logo(),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: appLocalization.email),
                   enabled: !_isLoading,
-                  validator: emailValidator(),
+                  validator: emailValidator(appLocalization),
                 ),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration:
+                      InputDecoration(labelText: appLocalization.password),
                   obscureText: true,
                   enabled: !_isLoading,
-                  validator: passwordValidator(),
+                  validator: passwordValidator(appLocalization),
                 ),
                 const SizedBox(height: 18),
                 Row(
@@ -108,7 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     ElevatedButton(
                       onPressed: _isLoading ? null : _signIn,
-                      child: Text(_isLoading ? 'Loading' : 'Sign In'),
+                      child: Text(_isLoading
+                          ? appLocalization.loading
+                          : appLocalization.signin),
                     ),
                     const SizedBox(
                       width: 10,
@@ -118,27 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                           ? null
                           : Navigator.of(context)
                               .pushNamed(SignUpPage.routeName),
-                      child: const Text('Sign Up'),
+                      child: Text(appLocalization.signup),
                     ),
                   ],
                 ),
                 SizedBox(height: 20.h),
-                const Text(
-                  'DEVELOPED BY IGOR DMITROV',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  DateTime.now().year.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
+                const Footer(),
               ],
             ),
           ),

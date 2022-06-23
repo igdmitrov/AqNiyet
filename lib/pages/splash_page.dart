@@ -3,6 +3,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../widgets/footer.dart';
+import '../widgets/logo.dart';
 import 'main_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -10,7 +12,7 @@ class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
@@ -25,36 +27,9 @@ class _SplashPageState extends State<SplashPage> {
           children: [
             Column(
               children: [
-                Image.asset(
-                  'assets/images/login.png',
-                  height: 30.h,
-                ),
-                const Text(
-                  'AqNiyet',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                const Logo(),
                 SizedBox(height: 23.h),
-                const Text(
-                  'DEVELOPED BY IGOR DMITROV',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  DateTime.now().year.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
+                const Footer(),
               ],
             ),
           ],

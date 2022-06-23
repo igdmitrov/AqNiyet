@@ -6,13 +6,16 @@ import 'package:aqniyet/pages/my_adverts_page.dart';
 import 'package:aqniyet/pages/signup_page.dart';
 import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'pages/account_page.dart';
 import 'pages/edit_page.dart';
 import 'pages/login_page.dart';
 import 'pages/main_page.dart';
 import 'pages/splash_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +48,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
         ),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ru', 'RU'),
+          Locale('en', 'US'),
+        ],
         initialRoute: SplashPage.routeName,
         routes: <String, WidgetBuilder>{
           SplashPage.routeName: (_) => const SplashPage(),
@@ -57,6 +70,7 @@ class MyApp extends StatelessWidget {
           AdvertsPage.routeName: (_) => const AdvertsPage(),
           MyAdvertsPages.routeName: (_) => const MyAdvertsPages(),
           AdvertPage.routeName: (_) => const AdvertPage(),
+          AccountPage.routeName: (_) => const AccountPage(),
         },
       );
     });

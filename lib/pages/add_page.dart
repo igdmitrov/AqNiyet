@@ -1,10 +1,9 @@
-import 'package:aqniyet/components/advert_state.dart';
-import 'package:aqniyet/widgets/text_form_input.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../components/model_validator.dart';
+import '../components/advert_state.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../model/phonecode.dart';
@@ -14,11 +13,11 @@ import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/image_preview.dart';
-import '../widgets/lookup_form_input.dart';
 import '../widgets/phone_input.dart';
 import '../widgets/phonecode_lookup.dart';
 import '../widgets/remove_image_button.dart';
 import '../widgets/text_area_input.dart';
+import '../widgets/text_form_input.dart';
 
 class AddPage extends StatefulWidget {
   static String routeName = '/add';
@@ -32,10 +31,11 @@ class _AddPageState extends AdvertState<AddPage> {
   @override
   Widget build(BuildContext context) {
     final appService = context.read<AppService>();
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New advert'),
+        title: Text(appLocalization.new_advert),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -45,10 +45,11 @@ class _AddPageState extends AdvertState<AddPage> {
             child: Column(
               children: [
                 TextFormInput(
-                  name: 'Name',
+                  name: appLocalization.name,
                   controller: nameController,
                   isLoading: isLoading,
-                  validator: RequiredValidator(errorText: 'Name is required'),
+                  validator: RequiredValidator(
+                      errorText: appLocalization.name_required),
                 ),
                 const FormInputDivider(),
                 CategoryLookup(
@@ -57,10 +58,10 @@ class _AddPageState extends AdvertState<AddPage> {
                     onSaved: (Category? val) => category = val),
                 const FormInputDivider(),
                 TextAreaInput(
-                  name: 'Description',
+                  name: appLocalization.description,
                   controller: descriptionController,
-                  validator:
-                      RequiredValidator(errorText: 'Description is required'),
+                  validator: RequiredValidator(
+                      errorText: appLocalization.description_required),
                   isLoading: isLoading,
                 ),
                 const FormInputDivider(),
@@ -70,7 +71,7 @@ class _AddPageState extends AdvertState<AddPage> {
                     onSaved: (City? val) => city = val),
                 const FormInputDivider(),
                 TextFormInput(
-                  name: 'Address',
+                  name: appLocalization.address,
                   controller: addressController,
                   isLoading: isLoading,
                 ),
@@ -99,8 +100,8 @@ class _AddPageState extends AdvertState<AddPage> {
                 ),
                 const FormInputDivider(),
                 OutlinedButton(
-                  onPressed: showOption,
-                  child: const Text('Take a photo'),
+                  onPressed: () => showOption(appLocalization),
+                  child: Text(appLocalization.take_photo),
                 ),
                 const FormInputDivider(),
                 Wrap(
@@ -124,6 +125,7 @@ class _AddPageState extends AdvertState<AddPage> {
                             RemoveImageButton(
                               onPressed: () =>
                                   removeImageFromMemory(image.name),
+                              isLoading: isLoading,
                             ),
                           ],
                         )),
@@ -131,15 +133,18 @@ class _AddPageState extends AdvertState<AddPage> {
                 ),
                 const FormInputDivider(),
                 CheckboxFormInput(
-                  title: 'Public',
+                  title: appLocalization.public,
                   onSaved: (val) => enabled = val ?? false,
                   enabled: !isLoading,
                   initialValue: true,
                 ),
                 const FormInputDivider(),
                 ElevatedButton(
-                    onPressed: isLoading ? null : saveData,
-                    child: Text(isLoading ? 'Loading' : 'Save')),
+                    onPressed:
+                        isLoading ? null : () => saveData(appLocalization),
+                    child: Text(isLoading
+                        ? appLocalization.loading
+                        : appLocalization.save)),
                 const FormInputDivider(),
               ],
             ),

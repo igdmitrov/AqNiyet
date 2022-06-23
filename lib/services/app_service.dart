@@ -1,15 +1,16 @@
 import 'dart:typed_data';
 
-import 'package:aqniyet/model/image_meta_data.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../model/account_delete.dart';
 import '../model/advert.dart';
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
+import '../model/image_meta_data.dart';
 import '../model/phonecode.dart';
 import '../utils/constants.dart';
 
@@ -181,11 +182,11 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load adverts');
   }
 
-  Future<List<AdvertMenuItem>> getMyAdvertMenuItems() async {
+  Future<List<AdvertMenuItem>> getMyAdvertMenuItems(String userId) async {
     final query = supabase
         .from('advert')
         .select()
-        .eq('created_by', getCurrentUserId())
+        .eq('created_by', userId)
         .order('created_at', ascending: false);
 
     final PostgrestResponse response = await query.execute();
@@ -368,5 +369,13 @@ class AppService extends ChangeNotifier {
     }
 
     return null;
+  }
+
+  Future<PostgrestResponse> removeAccount(String userId) {
+    final response = supabase
+        .from('account_delete')
+        .insert(AccountDelete(createdBy: userId).toMap())
+        .execute();
+    return response;
   }
 }

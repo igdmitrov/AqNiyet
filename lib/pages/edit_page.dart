@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/advert_state.dart';
-import '../components/model_validator.dart';
 import '../model/advert_page_view.dart';
 import '../model/category.dart';
 import '../model/city.dart';
@@ -15,7 +15,6 @@ import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/image_preview.dart';
-import '../widgets/lookup_form_input.dart';
 import '../widgets/phone_input.dart';
 import '../widgets/phonecode_lookup.dart';
 import '../widgets/remove_image_button.dart';
@@ -41,6 +40,7 @@ class _EditPageState extends AdvertState<EditPage> {
     enabled = advert.enabled;
 
     final appService = context.read<AppService>();
+    final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,10 +55,11 @@ class _EditPageState extends AdvertState<EditPage> {
             child: Column(
               children: [
                 TextFormInput(
-                  name: 'Name',
+                  name: appLocalization.name,
                   controller: nameController,
                   isLoading: isLoading,
-                  validator: RequiredValidator(errorText: 'Name is required'),
+                  validator: RequiredValidator(
+                      errorText: appLocalization.name_required),
                 ),
                 const FormInputDivider(),
                 FutureBuilder<Category>(
@@ -71,14 +72,14 @@ class _EditPageState extends AdvertState<EditPage> {
                             onSaved: (Category? val) => category = val,
                             selectedItem: snapshot.data);
                       }
-                      return const Text('Loading');
+                      return Text(appLocalization.loading);
                     }),
                 const FormInputDivider(),
                 TextAreaInput(
-                  name: 'Description',
+                  name: appLocalization.description,
                   controller: descriptionController,
-                  validator:
-                      RequiredValidator(errorText: 'Description is required'),
+                  validator: RequiredValidator(
+                      errorText: appLocalization.description_required),
                   isLoading: isLoading,
                 ),
                 const FormInputDivider(),
@@ -94,7 +95,7 @@ class _EditPageState extends AdvertState<EditPage> {
                     }),
                 const FormInputDivider(),
                 TextFormInput(
-                  name: 'Address',
+                  name: appLocalization.address,
                   controller: addressController,
                   isLoading: isLoading,
                 ),
@@ -126,8 +127,8 @@ class _EditPageState extends AdvertState<EditPage> {
                 ),
                 const FormInputDivider(),
                 OutlinedButton(
-                  onPressed: showOption,
-                  child: const Text('Take a photo'),
+                  onPressed: () => showOption(appLocalization),
+                  child: Text(appLocalization.take_photo),
                 ),
                 const FormInputDivider(),
                 FutureBuilder<List<ImageData>>(
@@ -165,8 +166,9 @@ class _EditPageState extends AdvertState<EditPage> {
                                       ),
                                     ),
                                     RemoveImageButton(
-                                      onPressed: () =>
-                                          removeImage(imageData, appService),
+                                      onPressed: () => removeImage(imageData,
+                                          appService, appLocalization),
+                                      isLoading: isLoading,
                                     ),
                                   ],
                                 );
@@ -178,7 +180,7 @@ class _EditPageState extends AdvertState<EditPage> {
                       );
                     }
 
-                    return const Text('Loading');
+                    return Text(appLocalization.loading);
                   },
                 ),
                 Wrap(
@@ -202,6 +204,7 @@ class _EditPageState extends AdvertState<EditPage> {
                             RemoveImageButton(
                               onPressed: () =>
                                   removeImageFromMemory(image.name),
+                              isLoading: isLoading,
                             ),
                           ],
                         )),
@@ -209,7 +212,7 @@ class _EditPageState extends AdvertState<EditPage> {
                 ),
                 const FormInputDivider(),
                 CheckboxFormInput(
-                  title: 'Public',
+                  title: appLocalization.public,
                   onSaved: (val) => enabled = val ?? false,
                   enabled: !isLoading,
                   initialValue: enabled,
@@ -222,11 +225,13 @@ class _EditPageState extends AdvertState<EditPage> {
                         onPressed: isLoading
                             ? null
                             : () => updateData(advert.id, appService),
-                        child: Text(isLoading ? 'Loading' : 'Save')),
+                        child: Text(isLoading
+                            ? appLocalization.loading
+                            : appLocalization.save)),
                     const SizedBox(width: 10),
                     OutlinedButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Back')),
+                        child: Text(appLocalization.back)),
                   ],
                 ),
                 const FormInputDivider(),

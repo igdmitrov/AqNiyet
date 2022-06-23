@@ -1,0 +1,67 @@
+{
+    "goodmorning": "Good morning!",
+    "goodafternoon": "Good afternoon!",
+    "goodevening": "Good evening!",
+    "goodnight": "Good night!",
+    "back": "Back",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "confirm_password": "Confirm Password",
+    "user_created": "User was created",
+    "password_dont_match": "Password do not match",
+    "password_required": "Password is required",
+
+    "password_length_error": "Password must be at least {minLengthPassword} digits long",
+    "@password_length_error": {
+        "description": "Password length error",
+        "placeholders": {
+            "minLengthPassword": {
+                "type": "int",
+                "example": "8"
+            }
+        }
+    },
+
+    "logoff": "Log off ({email})",
+    "@logoff": {
+        "description": "Log off text",
+        "placeholders": {
+            "email": {
+                "type": "String",
+                "example": "user@gmail.com"
+            }
+        }
+    },
+
+    "email_required": "Email is required",
+    "valid_email": "Enter a valid email address",
+    "my_items": "My items",
+    "edit": "Edit",
+    "new_advert": "New advert",
+    "name": "Name",
+    "name_required": "Name is required",
+    "description": "Description",
+    "description_required": "Description is required",
+    "address": "Address",
+    "take_photo": "Take a photo",
+    "public": "Public",
+    "save": "Save",
+    "created_new_item": "You created a new item",
+    "unexpected_error": "Unexpected error",
+    "gallery": "Gallery",
+    "camera": "Camera",
+    "category": "Category",
+    "category_required": "Category is required",
+    "city": "City",
+    "city_required": "City is required",
+    "remove": "Remove",
+    "phone": "Phone",
+    "phone_required": "Phone is required",
+    "phonecode": "Phone code",
+    "phonecode_required": "Phone code is required",
+    "my_account": "Account",
+    "question_remove_account": "Remove account?"
+}
