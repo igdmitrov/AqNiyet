@@ -37,9 +37,10 @@ class ImagePreview extends StatelessWidget {
             child: Container(
               height: 20,
               width: 20,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.lightGreen,
                 shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
               ),
             ),
           ),

@@ -43,6 +43,7 @@ dependencies:
   timeago: ^3.2.2
   mask_text_input_formatter: ^2.3.0
   page_transition: ^2.0.7
+  image: ^3.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

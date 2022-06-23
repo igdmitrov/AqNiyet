@@ -9,6 +9,8 @@ const footerText = 'DEVELOPED BY IGOR DMITROV';
 
 final supabase = Supabase.instance.client;
 
+const maxImageWidth = 800;
+
 bool isAuthenticated() {
   return supabase.auth.currentUser != null;
 }

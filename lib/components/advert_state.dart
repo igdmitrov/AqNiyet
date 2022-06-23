@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -144,9 +145,22 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     });
   }
 
+  File _resizeImage(String filePath) {
+    final image = decodeImage(File(filePath).readAsBytesSync());
+    if (image == null) return File(filePath);
+
+    if (image.width > maxImageWidth) {
+      final thumbnail = copyResize(image, width: maxImageWidth);
+      File(filePath).writeAsBytesSync(encodePng(thumbnail));
+    }
+
+    return File(filePath);
+  }
+
   Future<void> _saveImage(String advertId, XFile file) async {
     final response = await supabase.storage.from('public-images').upload(
-        '${getCurrentUserId()}/$advertId/${file.name}', File(file.path));
+        '${getCurrentUserId()}/$advertId/${file.name}',
+        _resizeImage(file.path));
 
     final error = response.error;
     if (response.hasError) {
