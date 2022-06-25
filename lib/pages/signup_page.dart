@@ -1,12 +1,16 @@
+import 'package:aqniyet/widgets/confirm_password_input.dart';
+import 'package:aqniyet/widgets/password_input.dart';
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
 import '../widgets/footer.dart';
+import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
+import '../widgets/phone_input.dart';
 import 'login_page.dart';
+import 'verify_page.dart';
 
 class SignUpPage extends StatefulWidget {
   static String routeName = '/signup';
@@ -19,7 +23,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _form = GlobalKey<FormState>();
   bool _isLoading = false;
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -33,17 +37,17 @@ class _SignUpPageState extends State<SignUpPage> {
         _form.currentState == null ? false : _form.currentState!.validate();
 
     if (isValid) {
+      final formatedPhoneNumber = formatPhoneNumber(_phoneController.text);
       final response = await supabase.auth
-          .signUp(_emailController.text, _passwordController.text);
+          .signUpWithPhone(formatedPhoneNumber, _passwordController.text);
       final error = response.error;
       if (error != null) {
         if (!mounted) return;
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
-        context.showSnackBar(message: appLocalizations.user_created);
         Navigator.of(context)
-            .pushNamed(LoginPage.routeName, arguments: _emailController.text);
+            .pushNamed(VerifyPage.routeName, arguments: _phoneController.text);
       }
     }
 
@@ -54,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -73,32 +77,23 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               children: [
                 const Logo(),
-                const SizedBox(height: 18),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(labelText: appLocalization.email),
-                  validator: emailValidator(appLocalization),
+                PhoneInput(
+                  controller: _phoneController,
+                  isLoading: _isLoading,
                 ),
-                const SizedBox(height: 18),
-                TextFormField(
+                const FormInputDivider(),
+                PasswordInput(
                   controller: _passwordController,
-                  decoration:
-                      InputDecoration(labelText: appLocalization.password),
-                  obscureText: true,
-                  validator: passwordValidator(appLocalization),
+                  isLoading: _isLoading,
                 ),
-                const SizedBox(height: 18),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                      labelText: appLocalization.confirm_password),
-                  obscureText: true,
-                  validator: (val) => MatchValidator(
-                          errorText: appLocalization.password_dont_match)
-                      .validateMatch(_confirmPasswordController.text,
-                          _passwordController.text),
+                const FormInputDivider(),
+                ConfirmPasswordInput(
+                  confirmController: _confirmPasswordController,
+                  passwordController: _passwordController,
+                  isLoading: _isLoading,
+                  password: _passwordController.text,
                 ),
-                const SizedBox(height: 18),
+                const FormInputDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -109,9 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ? appLocalization.loading
                           : appLocalization.signup),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     TextButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed(LoginPage.routeName),

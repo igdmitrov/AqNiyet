@@ -99,10 +99,11 @@ class _AddPageState extends AdvertState<AddPage> {
                   ],
                 ),
                 const FormInputDivider(),
-                OutlinedButton(
-                  onPressed: () => showOption(appLocalization),
-                  child: Text(appLocalization.take_photo),
-                ),
+                if (canAttachImage())
+                  OutlinedButton(
+                    onPressed: () => showOption(appLocalization),
+                    child: Text(appLocalization.take_photo),
+                  ),
                 const FormInputDivider(),
                 Wrap(
                   children: [

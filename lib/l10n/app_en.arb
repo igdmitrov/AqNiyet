@@ -63,5 +63,14 @@
     "phonecode": "Phone code",
     "phonecode_required": "Phone code is required",
     "my_account": "Account",
-    "question_remove_account": "Remove account?"
+    "question_remove_account": "Remove account?",
+    "otp_code": "Code",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "resend": "Resend",
+    "otp_was_sent": "We sent to you a new SMS on your phone",
+    "sec": "sec.",
+    "phone_incorrect": "Incorrect phone number",
+    "otpcode_required": "OTP code is required",
+    "otpcode_incorrect": "Incorrect OTP code"
 }

@@ -360,6 +360,25 @@ class AppService extends ChangeNotifier {
     return images;
   }
 
+  Future<int> getImageCount(String advertId, String userId) async {
+    final query = supabase
+        .from('image')
+        .select()
+        .eq('advert_id', advertId)
+        .eq('created_by', userId);
+
+    final PostgrestResponse response =
+        await query.execute(count: CountOption.exact);
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    return response.count ?? 0;
+  }
+
   Future<Uint8List?> getMainImage(String advertId, String userId) async {
     final file = await _getMainFile(advertId, userId);
 
@@ -377,5 +396,9 @@ class AppService extends ChangeNotifier {
         .insert(AccountDelete(createdBy: userId).toMap())
         .execute();
     return response;
+  }
+
+  Future<GotrueJsonResponse> sendOTPCode(String phone) async {
+    return await supabase.auth.api.sendMobileOTP(formatPhoneNumber(phone));
   }
 }

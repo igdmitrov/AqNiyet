@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -126,10 +127,24 @@ class _EditPageState extends AdvertState<EditPage> {
                   ],
                 ),
                 const FormInputDivider(),
-                OutlinedButton(
-                  onPressed: () => showOption(appLocalization),
-                  child: Text(appLocalization.take_photo),
-                ),
+                FutureBuilder(
+                    future:
+                        appService.getImageCount(advert.id, advert.createdBy),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.hasData) {
+                        final savedImages = (snapshot.data! as int);
+                        if (canAttachImage(savedImages: savedImages)) {
+                          return OutlinedButton(
+                            onPressed: () => showOption(appLocalization),
+                            child: Text(appLocalization.take_photo),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }
+
+                      return Text(appLocalization.loading);
+                    }),
                 const FormInputDivider(),
                 FutureBuilder<List<ImageData>>(
                   future: appService.getImages(advert.id, advert.createdBy),

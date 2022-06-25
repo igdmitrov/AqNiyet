@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
 
-class PhoneInput extends StatelessWidget {
+class OTPCodeInput extends StatelessWidget {
   final TextEditingController controller;
   final bool isLoading;
 
-  const PhoneInput(
+  const OTPCodeInput(
       {Key? key, required this.controller, required this.isLoading})
       : super(key: key);
 
@@ -16,14 +16,14 @@ class PhoneInput extends StatelessWidget {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return TextFormField(
-      controller: controller,
       autofocus: true,
-      decoration: InputDecoration(labelText: appLocalization.phone),
-      autocorrect: false,
-      validator: phoneValidator(appLocalization),
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.number,
+      controller: controller,
       enabled: !isLoading,
-      keyboardType: TextInputType.phone,
-      inputFormatters: [phoneMaskFormatter],
+      decoration: InputDecoration(labelText: appLocalization.otp_code),
+      inputFormatters: [otpCodeMaskFormatter],
+      validator: otpCodeValidator(appLocalization)
     );
   }
 }

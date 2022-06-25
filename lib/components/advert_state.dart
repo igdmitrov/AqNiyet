@@ -33,6 +33,14 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
   String? mainImageId;
   List<String> removedImages = [];
 
+  int getImageCount() {
+    return images.length;
+  }
+
+  bool canAttachImage({int savedImages = 0}) {
+    return (getImageCount() + savedImages) < maxImages;
+  }
+
   Future<void> saveData(AppLocalizations appLocalizations) async {
     setState(() {
       isLoading = true;
@@ -192,7 +200,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
       final XFile? pickedPhoto =
           await _picker.pickImage(source: ImageSource.camera);
 
-      if (pickedPhoto != null) {
+      if (pickedPhoto != null && canAttachImage()) {
         setState(() {
           images.add(pickedPhoto);
 
@@ -208,9 +216,11 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     try {
       final List<XFile>? pickedPhotos = await _picker.pickMultiImage();
 
-      if (pickedPhotos != null) {
+      if (pickedPhotos != null && canAttachImage()) {
         setState(() {
-          images.addAll(pickedPhotos);
+          images.addAll((pickedPhotos.length + getImageCount()) > maxImages
+              ? pickedPhotos.take(maxImages - getImageCount())
+              : pickedPhotos);
 
           mainImageId ??= pickedPhotos[0].name;
         });

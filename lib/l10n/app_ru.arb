@@ -63,5 +63,14 @@
     "phonecode": "Код",
     "phonecode_required": "Укажите код",
     "my_account": "Аккаунт",
-    "question_remove_account": "Удалить аккаунт?"
+    "question_remove_account": "Удалить аккаунт?",
+    "otp_code": "Код",
+    "confirm": "Подтвердить",
+    "cancel": "Отменить",
+    "resend": "Отправить повторно",
+    "otp_was_sent": "Код был отправлен повторно на ваш телефон",
+    "sec": "cек.",
+    "phone_incorrect": "Неверный номер телефона",
+    "otpcode_required": "Укажите SMS код",
+    "otpcode_incorrect": "Неверный формат SMS кода"
 }

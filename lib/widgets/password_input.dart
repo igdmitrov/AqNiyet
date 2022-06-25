@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
 
-class PhoneInput extends StatelessWidget {
+class PasswordInput extends StatelessWidget {
   final TextEditingController controller;
   final bool isLoading;
 
-  const PhoneInput(
+  const PasswordInput(
       {Key? key, required this.controller, required this.isLoading})
       : super(key: key);
 
@@ -17,13 +17,10 @@ class PhoneInput extends StatelessWidget {
 
     return TextFormField(
       controller: controller,
-      autofocus: true,
-      decoration: InputDecoration(labelText: appLocalization.phone),
-      autocorrect: false,
-      validator: phoneValidator(appLocalization),
+      decoration: InputDecoration(labelText: appLocalization.password),
+      obscureText: true,
       enabled: !isLoading,
-      keyboardType: TextInputType.phone,
-      inputFormatters: [phoneMaskFormatter],
+      validator: passwordValidator(appLocalization),
     );
   }
 }

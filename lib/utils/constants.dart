@@ -11,6 +11,8 @@ final supabase = Supabase.instance.client;
 
 const maxImageWidth = 800;
 
+const maxImages = 10;
+
 bool isAuthenticated() {
   return supabase.auth.currentUser != null;
 }
@@ -20,7 +22,7 @@ bool isUnauthenticated() {
 }
 
 String getCurrentUserEmail() {
-  return isAuthenticated() ? supabase.auth.currentUser!.email ?? '' : '';
+  return isAuthenticated() ? supabase.auth.currentUser!.phone ?? '' : '';
 }
 
 String getCurrentUserId() {
@@ -62,7 +64,41 @@ MultiValidator emailValidator(AppLocalizations appLocalizations) {
   ]);
 }
 
+MultiValidator phoneValidator(AppLocalizations appLocalizations) {
+  const phoneLength = 18;
+  return MultiValidator([
+    RequiredValidator(errorText: appLocalizations.phone_required),
+    MinLengthValidator(phoneLength, errorText: appLocalizations.phone_incorrect)
+  ]);
+}
+
+MultiValidator otpCodeValidator(AppLocalizations appLocalizations) {
+  const otpCodeLength = 8;
+  return MultiValidator([
+    RequiredValidator(errorText: appLocalizations.otpcode_required),
+    MinLengthValidator(otpCodeLength,
+        errorText: appLocalizations.otpcode_incorrect)
+  ]);
+}
+
 final phoneMaskFormatter = MaskTextInputFormatter(
-    mask: '(###) ###-##-##',
+    mask: '+7 (###) ###-##-##',
     filter: {"#": RegExp(r'[0-9]')},
     type: MaskAutoCompletionType.lazy);
+
+final otpCodeMaskFormatter = MaskTextInputFormatter(
+    mask: '##-##-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy);
+
+String formatPhoneNumber(String phone) {
+  return phone
+      .replaceAll('(', '')
+      .replaceAll(')', '')
+      .replaceAll(' ', '')
+      .replaceAll('-', '');
+}
+
+String formatOTPCode(String otpCode) {
+  return otpCode.replaceAll('-', '');
+}

@@ -3,9 +3,12 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/constants.dart';
 import '../widgets/footer.dart';
+import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
+import '../widgets/phone_input.dart';
 import 'main_page.dart';
 import 'signup_page.dart';
+import 'verify_page.dart';
 
 class LoginPage extends StatefulWidget {
   static String routeName = '/login';
@@ -18,7 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _form = GlobalKey<FormState>();
   bool _isLoading = false;
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _signIn() async {
@@ -31,10 +34,16 @@ class _LoginPageState extends State<LoginPage> {
 
     if (isValid) {
       final response = await supabase.auth.signIn(
-          email: _emailController.text, password: _passwordController.text);
+          phone: formatPhoneNumber(_phoneController.text),
+          password: _passwordController.text);
       final error = response.error;
       if (error != null) {
         if (!mounted) return;
+
+        if (error.message == 'Phone not confirmed') {
+          Navigator.of(context).pushNamed(VerifyPage.routeName,
+              arguments: _phoneController.text);
+        }
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
@@ -49,17 +58,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String? emailFromSignUp =
+    final String? phoneFromSignUp =
         ModalRoute.of(context)!.settings.arguments as String?;
 
-    _emailController.text = emailFromSignUp ?? '';
+    _phoneController.text = phoneFromSignUp ?? _phoneController.text;
 
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
@@ -82,14 +91,11 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const Logo(),
-                const SizedBox(height: 18),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(labelText: appLocalization.email),
-                  enabled: !_isLoading,
-                  validator: emailValidator(appLocalization),
+                PhoneInput(
+                  controller: _phoneController,
+                  isLoading: _isLoading,
                 ),
-                const SizedBox(height: 18),
+                const FormInputDivider(),
                 TextFormField(
                   controller: _passwordController,
                   decoration:
@@ -98,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                   enabled: !_isLoading,
                   validator: passwordValidator(appLocalization),
                 ),
-                const SizedBox(height: 18),
+                const FormInputDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -108,9 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                           ? appLocalization.loading
                           : appLocalization.signin),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     TextButton(
                       onPressed: () => _isLoading
                           ? null

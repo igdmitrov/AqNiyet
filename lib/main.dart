@@ -17,6 +17,8 @@ import 'pages/main_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'pages/verify_page.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -71,6 +73,7 @@ class MyApp extends StatelessWidget {
           MyAdvertsPages.routeName: (_) => const MyAdvertsPages(),
           AdvertPage.routeName: (_) => const AdvertPage(),
           AccountPage.routeName: (_) => const AccountPage(),
+          VerifyPage.routeName: (_) => const VerifyPage(),
         },
       );
     });
