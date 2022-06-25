@@ -9,7 +9,9 @@ import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
 import '../widgets/phone_input.dart';
+import '../widgets/privacy_button.dart';
 import 'login_page.dart';
+import 'privacy_page.dart';
 import 'verify_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -112,7 +114,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.h),
+                const PrivacyButton(),
+                SizedBox(height: 10.h),
                 const Footer(),
               ],
             ),

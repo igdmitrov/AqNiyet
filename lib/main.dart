@@ -1,23 +1,24 @@
-import 'package:aqniyet/pages/add_page.dart';
-import 'package:aqniyet/pages/advert_page.dart';
-import 'package:aqniyet/pages/adverts_page.dart';
-import 'package:aqniyet/pages/city_page.dart';
-import 'package:aqniyet/pages/my_adverts_page.dart';
-import 'package:aqniyet/pages/signup_page.dart';
-import 'package:aqniyet/services/app_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'pages/account_page.dart';
+import 'pages/add_page.dart';
+import 'pages/advert_page.dart';
+import 'pages/adverts_page.dart';
+import 'pages/city_page.dart';
 import 'pages/edit_page.dart';
 import 'pages/login_page.dart';
 import 'pages/main_page.dart';
+import 'pages/my_adverts_page.dart';
+import 'pages/privacy_page.dart';
+import 'pages/signup_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'pages/verify_page.dart';
+import 'services/app_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
           AdvertPage.routeName: (_) => const AdvertPage(),
           AccountPage.routeName: (_) => const AccountPage(),
           VerifyPage.routeName: (_) => const VerifyPage(),
+          PrivacyPage.routeName: (_) => const PrivacyPage(),
         },
       );
     });

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../components/auth_required_state.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
+import '../widgets/privacy_button.dart';
 import '../widgets/remove_image_button.dart';
 
 class AccountPage extends StatefulWidget {
@@ -55,10 +56,11 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              getCurrentUserEmail(),
+              getCurrentUserPhone(),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
+          const PrivacyButton(),
           const SizedBox(height: 40),
           Text(
             appLocalization.question_remove_account,

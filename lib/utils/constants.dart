@@ -21,7 +21,7 @@ bool isUnauthenticated() {
   return isAuthenticated() == false;
 }
 
-String getCurrentUserEmail() {
+String getCurrentUserPhone() {
   return isAuthenticated() ? supabase.auth.currentUser!.phone ?? '' : '';
 }
 

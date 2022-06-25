@@ -72,5 +72,6 @@
     "sec": "cек.",
     "phone_incorrect": "Неверный номер телефона",
     "otpcode_required": "Укажите SMS код",
-    "otpcode_incorrect": "Неверный формат SMS кода"
+    "otpcode_incorrect": "Неверный формат SMS кода",
+    "privacy": "Пользовательское соглашение"
 }

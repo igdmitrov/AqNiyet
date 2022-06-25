@@ -72,5 +72,6 @@
     "sec": "sec.",
     "phone_incorrect": "Incorrect phone number",
     "otpcode_required": "OTP code is required",
-    "otpcode_incorrect": "Incorrect OTP code"
+    "otpcode_incorrect": "Incorrect OTP code",
+    "privacy": "Privacy"
 }

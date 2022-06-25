@@ -12,6 +12,7 @@ import 'add_page.dart';
 import 'city_page.dart';
 import 'login_page.dart';
 import 'my_adverts_page.dart';
+import 'privacy_page.dart';
 
 class MainPage extends StatefulWidget {
   static String routeName = '/main';
@@ -71,7 +72,7 @@ class _MainPageState extends State<MainPage> {
             if (isAuthenticated())
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
-                title: Text(appLocalization.logoff(getCurrentUserEmail())),
+                title: Text(appLocalization.logoff(getCurrentUserPhone())),
                 onTap: () {
                   setState(() {
                     supabase.auth.signOut();
