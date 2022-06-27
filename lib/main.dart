@@ -7,16 +7,19 @@ import 'pages/account_page.dart';
 import 'pages/add_page.dart';
 import 'pages/advert_page.dart';
 import 'pages/adverts_page.dart';
+import 'pages/change_password.dart';
 import 'pages/city_page.dart';
 import 'pages/edit_page.dart';
 import 'pages/login_page.dart';
 import 'pages/main_page.dart';
 import 'pages/my_adverts_page.dart';
+import 'pages/password_recovery_page.dart';
 import 'pages/privacy_page.dart';
+import 'pages/remove_account_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'pages/verify_email_page.dart';
 import 'pages/verify_page.dart';
 import 'services/app_service.dart';
 
@@ -76,6 +79,10 @@ class MyApp extends StatelessWidget {
           AccountPage.routeName: (_) => const AccountPage(),
           VerifyPage.routeName: (_) => const VerifyPage(),
           PrivacyPage.routeName: (_) => const PrivacyPage(),
+          PasswordRecoveryPage.routeName: (_) => const PasswordRecoveryPage(),
+          VerifyEmailPage.routeName: (_) => const VerifyEmailPage(),
+          RemoveAccountPage.routeName: (_) => const RemoveAccountPage(),
+          ChangePassword.routeName: (_) => const ChangePassword(),
         },
       );
     });

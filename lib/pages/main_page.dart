@@ -12,7 +12,7 @@ import 'add_page.dart';
 import 'city_page.dart';
 import 'login_page.dart';
 import 'my_adverts_page.dart';
-import 'privacy_page.dart';
+import 'verify_email_page.dart';
 
 class MainPage extends StatefulWidget {
   static String routeName = '/main';
@@ -32,7 +32,14 @@ class _MainPageState extends State<MainPage> {
         title: const Text(appName),
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
+            onPressed: () {
+              if (isAuthenticated() && isEmail() == false) {
+                Navigator.of(context).pushNamed(VerifyEmailPage.routeName);
+                return;
+              }
+
+              Navigator.of(context).pushNamed(AddPage.routeName);
+            },
             icon: const Icon(Icons.add),
           )
         ],

@@ -11,7 +11,6 @@ import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
-import '../model/phonecode.dart';
 import '../pages/my_adverts_page.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
@@ -23,12 +22,10 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final addressController = TextEditingController();
-  final phoneController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   bool enabled = true;
   Category? category;
   City? city;
-  PhoneCode? phoneCode;
   final List<XFile> images = [];
   String? mainImageId;
   List<String> removedImages = [];
@@ -51,7 +48,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         isAuthenticated()) {
       formKey.currentState!.save();
 
-      if (category != null && city != null && phoneCode != null) {
+      if (category != null && city != null) {
         final model = Advert(
           id: '',
           categoryId: category!.id,
@@ -59,8 +56,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           description: descriptionController.text,
           cityId: city!.id,
           address: addressController.text,
-          phoneCodeId: phoneCode!.id,
-          phone: phoneController.text,
+          phone: getCurrentUserPhone(),
           enabled: enabled,
           createdBy: getCurrentUserId(),
         );
@@ -100,7 +96,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         isAuthenticated()) {
       formKey.currentState!.save();
 
-      if (category != null && city != null && phoneCode != null) {
+      if (category != null && city != null) {
         final model = Advert(
           id: id,
           categoryId: category!.id,
@@ -108,8 +104,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           description: descriptionController.text,
           cityId: city!.id,
           address: addressController.text,
-          phoneCodeId: phoneCode!.id,
-          phone: phoneController.text,
+          phone: getCurrentUserPhone(),
           enabled: enabled,
           createdBy: getCurrentUserId(),
         );
@@ -308,7 +303,6 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     nameController.dispose();
     descriptionController.dispose();
     addressController.dispose();
-    phoneController.dispose();
     super.dispose();
   }
 }

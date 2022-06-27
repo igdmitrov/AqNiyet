@@ -1,3 +1,4 @@
+import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -22,11 +23,27 @@ bool isUnauthenticated() {
 }
 
 String getCurrentUserPhone() {
-  return isAuthenticated() ? supabase.auth.currentUser!.phone ?? '' : '';
+  return isAuthenticated()
+      ? formatedPhoneNumber(supabase.auth.currentUser!.phone)
+      : '';
 }
 
 String getCurrentUserId() {
   return isAuthenticated() ? supabase.auth.currentUser!.id : '';
+}
+
+bool isEmail() {
+  supabase.auth.refreshSession();
+
+  return isAuthenticated() == true
+      ? supabase.auth.currentUser!.email!.isNotEmpty
+      : false;
+}
+
+String getUnverifiedEmail() {
+  return isAuthenticated() == true
+      ? supabase.auth.currentUser!.userMetadata['email']
+      : '';
 }
 
 extension ShowSnackBar on BuildContext {
@@ -73,7 +90,7 @@ MultiValidator phoneValidator(AppLocalizations appLocalizations) {
 }
 
 MultiValidator otpCodeValidator(AppLocalizations appLocalizations) {
-  const otpCodeLength = 8;
+  const otpCodeLength = 7;
   return MultiValidator([
     RequiredValidator(errorText: appLocalizations.otpcode_required),
     MinLengthValidator(otpCodeLength,
@@ -87,7 +104,7 @@ final phoneMaskFormatter = MaskTextInputFormatter(
     type: MaskAutoCompletionType.lazy);
 
 final otpCodeMaskFormatter = MaskTextInputFormatter(
-    mask: '##-##-##',
+    mask: '###-###',
     filter: {"#": RegExp(r'[0-9]')},
     type: MaskAutoCompletionType.lazy);
 
@@ -101,4 +118,13 @@ String formatPhoneNumber(String phone) {
 
 String formatOTPCode(String otpCode) {
   return otpCode.replaceAll('-', '');
+}
+
+String formatedPhoneNumber(String? phone) {
+  String formattedNumber = '';
+
+  if (phone == null) return formattedNumber;
+
+  MagicMask mask = MagicMask.buildMask('\\+9 (999) 999-99-99');
+  return mask.getMaskedString(phone);
 }

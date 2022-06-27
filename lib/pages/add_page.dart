@@ -6,15 +6,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/advert_state.dart';
 import '../model/category.dart';
 import '../model/city.dart';
-import '../model/phonecode.dart';
 import '../services/app_service.dart';
 import '../widgets/category_lookup.dart';
 import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/image_preview.dart';
-import '../widgets/phone_input.dart';
-import '../widgets/phonecode_lookup.dart';
 import '../widgets/remove_image_button.dart';
 import '../widgets/text_area_input.dart';
 import '../widgets/text_form_input.dart';
@@ -74,29 +71,6 @@ class _AddPageState extends AdvertState<AddPage> {
                   name: appLocalization.address,
                   controller: addressController,
                   isLoading: isLoading,
-                ),
-                const FormInputDivider(),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: PhonecodeLookup(
-                        appService: appService,
-                        isLoading: isLoading,
-                        onSaved: (PhoneCode? val) => phoneCode = val,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
-                        child: PhoneInput(
-                          controller: phoneController,
-                          isLoading: isLoading,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
                 const FormInputDivider(),
                 if (canAttachImage())

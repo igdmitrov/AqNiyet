@@ -11,7 +11,6 @@ import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
-import '../model/phonecode.dart';
 import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
@@ -111,52 +110,6 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load city');
   }
 
-  Future<List<PhoneCode>> getPhoneCodes({String? filter}) async {
-    final query = supabase.from('phonecode_view').select();
-
-    late PostgrestResponse response;
-
-    if (filter == null || filter.isEmpty) {
-      response = await query.execute();
-    } else {
-      response = await query
-          .textSearch('countryname', "$filter:*")
-          .order('order', ascending: false)
-          .execute();
-    }
-
-    final error = response.error;
-
-    if (error != null && response.status != 406) {
-      throw Exception(error.message);
-    }
-
-    if (response.data != null) {
-      return (response.data as List<dynamic>)
-          .map((json) => PhoneCode.fromJson(json))
-          .toList();
-    }
-
-    throw Exception('Failed to load phone codes');
-  }
-
-  Future<PhoneCode> getPhoneCodeById(String id) async {
-    final response =
-        await supabase.from('phonecode_view').select().eq('id', id).execute();
-
-    final error = response.error;
-
-    if (error != null && response.status != 406) {
-      throw Exception(error.message);
-    }
-
-    if (response.data != null) {
-      return PhoneCode.fromJson(response.data[0]);
-    }
-
-    throw Exception('Failed to load phone code');
-  }
-
   Future<List<AdvertMenuItem>> getAdvertMenuItems(
       String categoryId, String cityId) async {
     final query = supabase
@@ -208,8 +161,7 @@ class AppService extends ChangeNotifier {
   Future<AdvertPageView> getAdvertPageView(String id) async {
     final query = supabase
         .from('advert')
-        .select('''*, category ( name ), city ( name ), phonecode (code)''').eq(
-            'id', id);
+        .select('''*, category ( name ), city ( name )''').eq('id', id);
 
     final PostgrestResponse response = await query.execute();
     final error = response.error;

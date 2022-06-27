@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,15 +8,12 @@ import '../model/advert_page_view.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
-import '../model/phonecode.dart';
 import '../services/app_service.dart';
 import '../widgets/category_lookup.dart';
 import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/image_preview.dart';
-import '../widgets/phone_input.dart';
-import '../widgets/phonecode_lookup.dart';
 import '../widgets/remove_image_button.dart';
 import '../widgets/text_area_input.dart';
 import '../widgets/text_form_input.dart';
@@ -37,7 +33,6 @@ class _EditPageState extends AdvertState<EditPage> {
     nameController.text = advert.name;
     descriptionController.text = advert.description;
     addressController.text = advert.address;
-    phoneController.text = advert.phone;
     enabled = advert.enabled;
 
     final appService = context.read<AppService>();
@@ -99,32 +94,6 @@ class _EditPageState extends AdvertState<EditPage> {
                   name: appLocalization.address,
                   controller: addressController,
                   isLoading: isLoading,
-                ),
-                const FormInputDivider(),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: FutureBuilder<PhoneCode>(
-                          future:
-                              appService.getPhoneCodeById(advert.phoneCodeId),
-                          builder: (ctx, snapshot) {
-                            return PhonecodeLookup(
-                              appService: appService,
-                              isLoading: isLoading,
-                              onSaved: (PhoneCode? val) => phoneCode = val,
-                              selectedItem: snapshot.data,
-                            );
-                          }),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: PhoneInput(
-                        controller: phoneController,
-                        isLoading: isLoading,
-                      ),
-                    ),
-                  ],
                 ),
                 const FormInputDivider(),
                 FutureBuilder(

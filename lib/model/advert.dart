@@ -9,7 +9,6 @@ class Advert implements BaseModel {
   final String countryId;
   final String cityId;
   final String address;
-  final String phoneCodeId;
   final String phone;
   final bool enabled;
   final String createdBy;
@@ -23,7 +22,6 @@ class Advert implements BaseModel {
         countryId: json['country_id'],
         cityId: json['city_id'],
         address: json['address'],
-        phoneCodeId: json['phonecode_id'],
         phone: json['phone'],
         enabled: json['enabled'],
         createdBy: json['created_by']);
@@ -37,7 +35,6 @@ class Advert implements BaseModel {
     this.countryId = 'kz',
     required this.cityId,
     required this.address,
-    required this.phoneCodeId,
     required this.phone,
     required this.enabled,
     required this.createdBy,
@@ -51,7 +48,6 @@ class Advert implements BaseModel {
       'country_id': countryId,
       'city_id': cityId,
       'address': address,
-      'phonecode_id': phoneCodeId,
       'phone': phone,
       'enabled': enabled,
       'created_by': createdBy,

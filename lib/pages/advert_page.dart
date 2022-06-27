@@ -139,13 +139,12 @@ class _AdvertPageState extends State<AdvertPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       OutlinedButton(
-                        onPressed: !_hasCallSupport
+                        onPressed: _hasCallSupport
                             ? () => setState(() {
-                                  _makePhoneCall(
-                                      '${advert.phoneCode}${advert.phone}');
+                                  _makePhoneCall(advert.phone);
                                 })
                             : null,
-                        child: Text('${advert.phoneCode} ${advert.phone}'),
+                        child: Text(advert.phone),
                       ),
                     ],
                   ),

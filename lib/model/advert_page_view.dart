@@ -7,8 +7,6 @@ class AdvertPageView {
   final String cityId;
   final String cityName;
   final String address;
-  final String phoneCodeId;
-  final String phoneCode;
   final String phone;
   final bool enabled;
   final String createdBy;
@@ -24,8 +22,6 @@ class AdvertPageView {
         cityId: json['city_id'],
         cityName: json['city']['name'],
         address: json['address'],
-        phoneCodeId: json['phonecode_id'],
-        phoneCode: json['phonecode']['code'],
         phone: json['phone'],
         enabled: json['enabled'],
         createdBy: json['created_by'],
@@ -41,8 +37,6 @@ class AdvertPageView {
     required this.cityId,
     required this.cityName,
     required this.address,
-    required this.phoneCodeId,
-    required this.phoneCode,
     required this.phone,
     required this.enabled,
     required this.createdAt,

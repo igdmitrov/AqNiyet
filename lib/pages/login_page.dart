@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../utils/constants.dart';
 import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
 import '../widgets/phone_input.dart';
 import 'main_page.dart';
+import 'password_recovery_page.dart';
 import 'signup_page.dart';
 import 'verify_page.dart';
 
@@ -47,6 +49,13 @@ class _LoginPageState extends State<LoginPage> {
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
+        if (isAuthenticated() && isEmail() == false) {
+          final email = supabase.auth.currentUser?.userMetadata['email'];
+          final responseEmailUpd =
+              await supabase.auth.update(UserAttributes(email: email));
+          final errorEmailUpd = responseEmailUpd.error;
+        }
+
         Navigator.of(context).pushReplacementNamed(MainPage.routeName);
       }
     }
@@ -124,7 +133,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.h),
+                const FormInputDivider(),
+                TextButton(
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed(PasswordRecoveryPage.routeName),
+                  child: Text(
+                    appLocalization.password_recovery,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 const Footer(),
               ],
             ),

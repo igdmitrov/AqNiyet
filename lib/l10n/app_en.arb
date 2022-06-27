@@ -25,7 +25,7 @@
         }
     },
 
-    "logoff": "Log off ({email})",
+    "logoff": "Log off [{email}]",
     "@logoff": {
         "description": "Log off text",
         "placeholders": {
@@ -73,5 +73,12 @@
     "phone_incorrect": "Incorrect phone number",
     "otpcode_required": "OTP code is required",
     "otpcode_incorrect": "Incorrect OTP code",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "password_recovery": "Password recovery",
+    "confirm_email_address": "Please confirm your email address",
+    "refresh": "Refresh",
+    "check_your_email": "Please check your email",
+    "remove_account_description": "Your account and data will be removed for 30 days",
+    "change_password": "Change password",
+    "password_changed": "Password was changed"
 }

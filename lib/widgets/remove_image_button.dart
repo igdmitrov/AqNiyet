@@ -13,7 +13,7 @@ class RemoveImageButton extends StatelessWidget {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return OutlinedButton.icon(
-      label: Text(appLocalization.remove),
+      label: Text(appLocalization.question_remove_account),
       icon: const Icon(Icons.delete_forever_rounded),
       onPressed: isLoading ? null : onPressed,
       style: OutlinedButton.styleFrom(

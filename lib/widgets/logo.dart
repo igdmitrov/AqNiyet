@@ -1,6 +1,7 @@
-import 'package:aqniyet/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utils/constants.dart';
 
 class Logo extends StatelessWidget {
   const Logo({Key? key}) : super(key: key);

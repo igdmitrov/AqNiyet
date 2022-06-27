@@ -5,13 +5,13 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../widgets/email_input.dart';
 import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
 import '../widgets/phone_input.dart';
 import '../widgets/privacy_button.dart';
 import 'login_page.dart';
-import 'privacy_page.dart';
 import 'verify_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -26,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _form = GlobalKey<FormState>();
   bool _isLoading = false;
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -40,8 +41,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (isValid) {
       final formatedPhoneNumber = formatPhoneNumber(_phoneController.text);
-      final response = await supabase.auth
-          .signUpWithPhone(formatedPhoneNumber, _passwordController.text);
+      final response = await supabase.auth.signUpWithPhone(
+          formatedPhoneNumber, _passwordController.text,
+          userMetadata: {'email': _emailController.text});
       final error = response.error;
       if (error != null) {
         if (!mounted) return;
@@ -61,6 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void dispose() {
     _phoneController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -81,6 +84,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Logo(),
                 PhoneInput(
                   controller: _phoneController,
+                  isLoading: _isLoading,
+                ),
+                const FormInputDivider(),
+                EmailInput(
+                  controller: _emailController,
                   isLoading: _isLoading,
                 ),
                 const FormInputDivider(),
@@ -115,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 const PrivacyButton(),
-                SizedBox(height: 10.h),
+                const FormInputDivider(),
                 const Footer(),
               ],
             ),

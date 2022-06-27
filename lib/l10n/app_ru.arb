@@ -25,7 +25,7 @@
         }
     },
 
-    "logoff": "Выйти ({email})",
+    "logoff": "Выйти [{email}]",
     "@logoff": {
         "description": "Выйти из учетной записи",
         "placeholders": {
@@ -73,5 +73,12 @@
     "phone_incorrect": "Неверный номер телефона",
     "otpcode_required": "Укажите SMS код",
     "otpcode_incorrect": "Неверный формат SMS кода",
-    "privacy": "Пользовательское соглашение"
+    "privacy": "Пользовательское соглашение",
+    "password_recovery": "Восстановить пароль",
+    "confirm_email_address": "Пожалуйста подтвердите ваш email",
+    "refresh": "Обновить",
+    "check_your_email": "Пожалуйста проверьте ваш email",
+    "remove_account_description": "Ваш аккаунт и все данные будут удалены в течении 30 дней",
+    "change_password": "Поменять пароль",
+    "password_changed": "Пароль был изменен"
 }
