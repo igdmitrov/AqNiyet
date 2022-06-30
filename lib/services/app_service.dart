@@ -14,11 +14,22 @@ import '../model/image_meta_data.dart';
 import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
+  Future<void> refreshSession() async {
+    if (isAuthenticated() && supabase.auth.currentSession != null) {
+      final expiresAt = DateTime.fromMillisecondsSinceEpoch(
+          supabase.auth.currentSession!.expiresAt! * 1000);
+      if (expiresAt
+          .isBefore(DateTime.now().subtract(const Duration(seconds: 2)))) {
+        await supabase.auth.refreshSession();
+      }
+    }
+  }
+
   Future<List<Category>> getCategories({String? filter}) async {
+    await refreshSession();
+
     final query = supabase.from('category').select('id, name');
-
     late PostgrestResponse response;
-
     if (filter == null || filter.isEmpty) {
       response = await query.order('order', ascending: false).execute();
     } else {
@@ -44,6 +55,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<Category> getCategoryById(String id) async {
+    await refreshSession();
+
     final response = await supabase
         .from('category')
         .select('id, name')
@@ -64,9 +77,10 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<City>> getCities({String? filter}) async {
+    await refreshSession();
+
     final query =
         supabase.from('city').select('id, name').eq('country_id', 'kz');
-
     late PostgrestResponse response;
 
     if (filter == null || filter.isEmpty) {
@@ -94,6 +108,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<City> getCityById(String id) async {
+    await refreshSession();
+
     final response =
         await supabase.from('city').select('id, name').eq('id', id).execute();
 
@@ -112,6 +128,8 @@ class AppService extends ChangeNotifier {
 
   Future<List<AdvertMenuItem>> getAdvertMenuItems(
       String categoryId, String cityId) async {
+    await refreshSession();
+
     final query = supabase
         .from('advert')
         .select('id, name, description, created_at, created_by')
@@ -136,6 +154,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<List<AdvertMenuItem>> getMyAdvertMenuItems(String userId) async {
+    await refreshSession();
+
     final query = supabase
         .from('advert')
         .select()
@@ -159,6 +179,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<AdvertPageView> getAdvertPageView(String id) async {
+    await refreshSession();
+
     final query = supabase
         .from('advert')
         .select('''*, category ( name ), city ( name )''').eq('id', id);
@@ -178,6 +200,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<int> getCountByCategory(String categoryId) async {
+    await refreshSession();
+
     final query =
         supabase.from('advert').select('id').eq('category_id', categoryId);
 
@@ -194,6 +218,8 @@ class AppService extends ChangeNotifier {
 
   Future<int> getCountByCategoryAndCity(
       String categoryId, String cityId) async {
+    await refreshSession();
+
     final query = supabase
         .from('advert')
         .select('id')
@@ -211,12 +237,16 @@ class AppService extends ChangeNotifier {
     return response.count ?? 0;
   }
 
-  Future<PostgrestResponse> createAdvert(Advert model) {
+  Future<PostgrestResponse> createAdvert(Advert model) async {
+    await refreshSession();
+
     final response = supabase.from('advert').insert(model.toMap()).execute();
     return response;
   }
 
-  Future<PostgrestResponse> updateAdvert(Advert model) {
+  Future<PostgrestResponse> updateAdvert(Advert model) async {
+    await refreshSession();
+
     final response = supabase
         .from('advert')
         .update(model.toMap())
@@ -225,12 +255,16 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
-  Future<PostgrestResponse> addImageMetaData(ImageMetaData model) {
+  Future<PostgrestResponse> addImageMetaData(ImageMetaData model) async {
+    await refreshSession();
+
     final response = supabase.from('image').insert(model.toMap()).execute();
     return response;
   }
 
-  Future<PostgrestResponse> setPrimaryImage(ImageMetaData model) {
+  Future<PostgrestResponse> setPrimaryImage(ImageMetaData model) async {
+    await refreshSession();
+
     final response = supabase
         .from('image')
         .update(model.toMap())
@@ -239,13 +273,17 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
-  Future<PostgrestResponse> removeImage(String id) {
+  Future<PostgrestResponse> removeImage(String id) async {
+    await refreshSession();
+
     final response = supabase.from('image').delete().eq('id', id).execute();
     return response;
   }
 
   Future<List<ImageMetaData>> _getFileList(
       String advertId, String userId) async {
+    await refreshSession();
+
     final query = supabase
         .from('image')
         .select()
@@ -270,6 +308,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<ImageMetaData?> _getMainFile(String advertId, String userId) async {
+    await refreshSession();
+
     final query = supabase
         .from('image')
         .select()
@@ -287,6 +327,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<Uint8List?> _downloadImage(ImageMetaData imageMetaData) async {
+    await refreshSession();
+
     final response = await supabase.storage.from('public-images').download(
         '${imageMetaData.createdBy}/${imageMetaData.advertId}/${imageMetaData.imageName}');
 
@@ -313,6 +355,8 @@ class AppService extends ChangeNotifier {
   }
 
   Future<int> getImageCount(String advertId, String userId) async {
+    await refreshSession();
+
     final query = supabase
         .from('image')
         .select()
@@ -342,7 +386,9 @@ class AppService extends ChangeNotifier {
     return null;
   }
 
-  Future<PostgrestResponse> removeAccount(String userId) {
+  Future<PostgrestResponse> removeAccount(String userId) async {
+    await refreshSession();
+
     final response = supabase
         .from('account_delete')
         .insert(AccountDelete(createdBy: userId).toMap())
