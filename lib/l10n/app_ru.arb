@@ -80,5 +80,6 @@
     "check_your_email": "Пожалуйста проверьте ваш email",
     "remove_account_description": "Ваш аккаунт и все данные будут удалены в течении 30 дней",
     "change_password": "Поменять пароль",
-    "password_changed": "Пароль был изменен"
+    "password_changed": "Пароль был изменен",
+    "privacy_definition": "ОПРЕДЕЛЕНИЯ"
 }

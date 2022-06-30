@@ -80,5 +80,6 @@
     "check_your_email": "Please check your email",
     "remove_account_description": "Your account and data will be removed for 30 days",
     "change_password": "Change password",
-    "password_changed": "Password was changed"
+    "password_changed": "Password was changed",
+    "privacy_definition": "DEFINITIONS"
 }
