@@ -1,4 +1,3 @@
-import 'package:aqniyet/widgets/menuitem_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -7,6 +6,8 @@ import '../model/advert_menu_item.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../services/app_service.dart';
+import '../widgets/empty_list.dart';
+import '../widgets/menuitem_image.dart';
 import 'add_page.dart';
 import 'advert_page.dart';
 
@@ -43,6 +44,10 @@ class _AdvertsPageState extends State<AdvertsPage> {
             context.read<AppService>().getAdvertMenuItems(category.id, city.id),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return const EmptyList();
+            }
+
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {

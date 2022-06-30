@@ -81,5 +81,6 @@
     "remove_account_description": "Your account and data will be removed for 30 days",
     "change_password": "Change password",
     "password_changed": "Password was changed",
+    "empty_list_text": "There are no posts in this category yet. Be the first who posts a new advert.",
     "privacy_definition": "DEFINITIONS"
 }
