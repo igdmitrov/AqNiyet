@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const appName = 'AqNiyet';
 const footerText = 'DEVELOPED BY IGOR DMITROV';
+const supportEmail = 'igor.dmitrov.business@gmail.com';
 
 final supabase = Supabase.instance.client;
 

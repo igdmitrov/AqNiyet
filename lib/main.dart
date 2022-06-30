@@ -19,6 +19,7 @@ import 'pages/remove_account_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'pages/support_page.dart';
 import 'pages/verify_email_page.dart';
 import 'pages/verify_page.dart';
 import 'services/app_service.dart';
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
           VerifyEmailPage.routeName: (_) => const VerifyEmailPage(),
           RemoveAccountPage.routeName: (_) => const RemoveAccountPage(),
           ChangePassword.routeName: (_) => const ChangePassword(),
+          SupportPage.routeName: (_) => const SupportPage(),
         },
       );
     });

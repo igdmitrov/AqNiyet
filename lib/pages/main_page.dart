@@ -12,6 +12,7 @@ import 'add_page.dart';
 import 'city_page.dart';
 import 'login_page.dart';
 import 'my_adverts_page.dart';
+import 'support_page.dart';
 import 'verify_email_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -49,15 +50,6 @@ class _MainPageState extends State<MainPage> {
           children: [
             AppBar(title: const Greeting()),
             const Divider(),
-            if (isUnauthenticated())
-              ListTile(
-                leading: const Icon(Icons.input_outlined),
-                title: Text(appLocalization.signin),
-                onTap: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      LoginPage.routeName, (route) => false);
-                },
-              ),
             if (isAuthenticated())
               ListTile(
                 leading: const Icon(Icons.my_library_books),
@@ -75,7 +67,24 @@ class _MainPageState extends State<MainPage> {
                   Navigator.of(context).popAndPushNamed(AccountPage.routeName);
                 },
               ),
+            ListTile(
+              leading: const Icon(Icons.help_center),
+              title: Text(appLocalization.support),
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    SupportPage.routeName, (route) => false);
+              },
+            ),
             const Divider(),
+            if (isUnauthenticated())
+              ListTile(
+                leading: const Icon(Icons.input_outlined),
+                title: Text(appLocalization.signin),
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      LoginPage.routeName, (route) => false);
+                },
+              ),
             if (isAuthenticated())
               ListTile(
                 leading: const Icon(Icons.exit_to_app),

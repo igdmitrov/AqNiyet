@@ -82,5 +82,9 @@
     "change_password": "Change password",
     "password_changed": "Password was changed",
     "empty_list_text": "There are no posts in this category yet. Be the first who posts a new advert.",
+    "support": "Support",
+    "support_text_introduction": "If you have any questions or suggestions for improving the service, please write to us about it.",
+    "support_email_subject": "AqNiyet: IT Support",
+    "email_client_not_found": "We can not find your email client",
     "privacy_definition": "DEFINITIONS"
 }
