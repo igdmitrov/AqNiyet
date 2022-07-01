@@ -140,9 +140,7 @@ class _AdvertPageState extends State<AdvertPage> {
                     children: [
                       OutlinedButton(
                         onPressed: _hasCallSupport
-                            ? () => setState(() {
-                                  _makePhoneCall(advert.phone);
-                                })
+                            ? () => _makePhoneCall(advert.phone)
                             : null,
                         child: Text(advert.phone),
                       ),
