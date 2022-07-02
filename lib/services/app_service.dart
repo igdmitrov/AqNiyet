@@ -135,6 +135,7 @@ class AppService extends ChangeNotifier {
         .select('id, name, description, created_at, created_by')
         .eq('city_id', cityId)
         .eq('category_id', categoryId)
+        .eq('enabled', true)
         .order('created_at', ascending: false);
 
     final PostgrestResponse response = await query.execute();
@@ -202,8 +203,11 @@ class AppService extends ChangeNotifier {
   Future<int> getCountByCategory(String categoryId) async {
     await refreshSession();
 
-    final query =
-        supabase.from('advert').select('id').eq('category_id', categoryId);
+    final query = supabase
+        .from('advert')
+        .select('id')
+        .eq('category_id', categoryId)
+        .eq('enabled', true);
 
     final PostgrestResponse response =
         await query.execute(count: CountOption.exact);
@@ -224,7 +228,8 @@ class AppService extends ChangeNotifier {
         .from('advert')
         .select('id')
         .eq('category_id', categoryId)
-        .eq('city_id', cityId);
+        .eq('city_id', cityId)
+        .eq('enabled', true);
 
     final PostgrestResponse response =
         await query.execute(count: CountOption.exact);
@@ -398,5 +403,18 @@ class AppService extends ChangeNotifier {
 
   Future<GotrueJsonResponse> sendOTPCode(String phone) async {
     return await supabase.auth.api.sendMobileOTP(formatPhoneNumber(phone));
+  }
+
+  Future<PostgrestResponse> removeAdvert(String id) async {
+    await refreshSession();
+
+    final responseFromImage =
+        await supabase.from('image').delete().eq('advert_id', id).execute();
+    if (responseFromImage.error != null) {
+      return responseFromImage;
+    }
+
+    final response = supabase.from('advert').delete().eq('id', id).execute();
+    return response;
   }
 }

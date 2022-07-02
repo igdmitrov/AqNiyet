@@ -11,6 +11,7 @@ import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
+import '../pages/main_page.dart';
 import '../pages/my_adverts_page.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
@@ -296,6 +297,27 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         }
       }
     });
+  }
+
+  Future<void> removeItem(AppService appService, String id) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await appService.removeAdvert(id);
+    final error = response.error;
+    if (response.hasError) {
+      if (!mounted) return;
+      context.showErrorSnackBar(message: error!.message);
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (!mounted) return;
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(MainPage.routeName, (route) => false);
   }
 
   @override

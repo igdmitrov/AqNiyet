@@ -50,6 +50,16 @@ class _EditPageState extends AdvertState<EditPage> {
             key: formKey,
             child: Column(
               children: [
+                const FormInputDivider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    RemoveImageButton(
+                      onPressed: () => removeItem(appService, advert.id),
+                      isLoading: isLoading,
+                    ),
+                  ],
+                ),
                 TextFormInput(
                   name: appLocalization.name,
                   controller: nameController,
