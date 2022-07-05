@@ -374,7 +374,7 @@ class AppService extends ChangeNotifier {
     final error = response.error;
 
     if (error != null && response.status != 406) {
-      throw Exception(error.message);
+      return 0;
     }
 
     return response.count ?? 0;

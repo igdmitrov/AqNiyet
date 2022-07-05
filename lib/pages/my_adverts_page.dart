@@ -19,6 +19,17 @@ class MyAdvertsPages extends StatefulWidget {
 }
 
 class _MyAdvertsPagesState extends State<MyAdvertsPages> {
+  Future<List<AdvertMenuItem>> _getMyAdvertMenuItems(BuildContext context,
+      AppLocalizations appLocalization, String userId) async {
+    try {
+      return await context.read<AppService>().getMyAdvertMenuItems(userId);
+    } on Exception catch (_) {
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
+    }
+
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
@@ -36,28 +47,34 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
       ),
       body: FutureBuilder<List<AdvertMenuItem>>(
         future:
-            context.read<AppService>().getMyAdvertMenuItems(getCurrentUserId()),
+            _getMyAdvertMenuItems(context, appLocalization, getCurrentUserId()),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final advert = snapshot.data![index];
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                    child: Card(
-                      child: ListTile(
-                        title: Text(advert.name),
-                        leading: MenuItemImage(advert),
-                        subtitle: Text(advert.description),
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AdvertPage.routeName, arguments: advert),
-                        trailing: Text(timeago.format(advert.createdAt)),
+            return RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final advert = snapshot.data![index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 3),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(advert.name),
+                          leading: MenuItemImage(advert),
+                          subtitle: Text(advert.description),
+                          onTap: () => Navigator.of(context).pushNamed(
+                              AdvertPage.routeName,
+                              arguments: advert),
+                          trailing: Text(timeago.format(advert.createdAt)),
+                        ),
                       ),
-                    ),
-                  );
-                });
+                    );
+                  }),
+            );
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }

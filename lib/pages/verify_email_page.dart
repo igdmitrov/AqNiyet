@@ -28,6 +28,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     await supabase.auth.refreshSession();
 
     if (isAuthenticated() && isEmail() == true) {
+      if (!mounted) return;
       Navigator.of(context).pushReplacementNamed(AddPage.routeName);
       return;
     }

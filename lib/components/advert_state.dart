@@ -39,7 +39,8 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     return (getImageCount() + savedImages) < maxImages;
   }
 
-  Future<void> saveData(AppLocalizations appLocalizations) async {
+  Future<void> saveData(
+      AppLocalizations appLocalizations, AppService appService) async {
     setState(() {
       isLoading = true;
     });
@@ -62,7 +63,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           createdBy: getCurrentUserId(),
         );
 
-        final response = await context.read<AppService>().createAdvert(model);
+        final response = await appService.createAdvert(model);
         final error = response.error;
         if (response.hasError) {
           if (!mounted) return;

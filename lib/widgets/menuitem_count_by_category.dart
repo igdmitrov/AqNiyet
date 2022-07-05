@@ -13,11 +13,19 @@ class MenuItemCountByCategory extends StatefulWidget {
 }
 
 class _MenuItemCountByCategoryState extends State<MenuItemCountByCategory> {
+  Future<int> _getCountByCategory(
+      BuildContext context, String categoryId) async {
+    try {
+      return await context.read<AppService>().getCountByCategory(categoryId);
+    } on Exception catch (_) {
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<int>(
-        future:
-            context.read<AppService>().getCountByCategory(widget.categoryId),
+        future: _getCountByCategory(context, widget.categoryId),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             final num = snapshot.data as int;

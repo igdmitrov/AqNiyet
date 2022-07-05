@@ -115,8 +115,9 @@ class _AddPageState extends AdvertState<AddPage> {
                 ),
                 const FormInputDivider(),
                 ElevatedButton(
-                    onPressed:
-                        isLoading ? null : () => saveData(appLocalization),
+                    onPressed: isLoading
+                        ? null
+                        : () => saveData(appLocalization, appService),
                     child: Text(isLoading
                         ? appLocalization.loading
                         : appLocalization.save)),

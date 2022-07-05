@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../services/app_service.dart';
 import '../utils/constants.dart';
 import '../widgets/confirm_password_input.dart';
 import '../widgets/footer.dart';
@@ -64,7 +62,6 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
-    final appService = context.read<AppService>();
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return Scaffold(

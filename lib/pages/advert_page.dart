@@ -26,6 +26,17 @@ class AdvertPage extends StatefulWidget {
 class _AdvertPageState extends State<AdvertPage> {
   bool _hasCallSupport = false;
 
+  Future<AdvertPageView?> _getAdvertPageView(
+      BuildContext context, AppLocalizations appLocalization, String id) async {
+    try {
+      return await context.read<AppService>().getAdvertPageView(id);
+    } on Exception catch (_) {
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
+    }
+
+    return null;
+  }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -56,11 +67,11 @@ class _AdvertPageState extends State<AdvertPage> {
       appBar: AppBar(
         title: Text(advertMenuItem.name),
       ),
-      body: FutureBuilder<AdvertPageView>(
+      body: FutureBuilder<AdvertPageView?>(
           future:
-              context.read<AppService>().getAdvertPageView(advertMenuItem.id),
+              _getAdvertPageView(context, appLocalization, advertMenuItem.id),
           builder: (ctx, snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.hasData && snapshot.data != null) {
               final advert = snapshot.data as AdvertPageView;
               return ListView(
                 padding:

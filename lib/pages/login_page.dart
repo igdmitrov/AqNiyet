@@ -51,11 +51,10 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
         if (isAuthenticated() && isEmail() == false) {
           final email = supabase.auth.currentUser?.userMetadata['email'];
-          final responseEmailUpd =
-              await supabase.auth.update(UserAttributes(email: email));
-          final errorEmailUpd = responseEmailUpd.error;
+          await supabase.auth.update(UserAttributes(email: email));
         }
 
+        if (!mounted) return;
         Navigator.of(context).pushReplacementNamed(MainPage.routeName);
       }
     }

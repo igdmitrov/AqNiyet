@@ -24,6 +24,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Future<List<Category>> _getCategories(
+      BuildContext context, AppLocalizations appLocalization) async {
+    try {
+      return await context.read<AppService>().getCategories();
+    } on Exception catch (_) {
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
+    }
+
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
@@ -99,26 +110,32 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       body: FutureBuilder<List<Category>>(
-        future: context.read<AppService>().getCategories(),
+        future: _getCategories(context, appLocalization),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final category = snapshot.data![index];
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                    child: Card(
-                      child: ListTile(
-                        title: Text(category.name),
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(CityPage.routeName, arguments: category),
-                        trailing: MenuItemCountByCategory(category.id),
+            return RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final category = snapshot.data![index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 3),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(category.name),
+                          onTap: () => Navigator.of(context).pushNamed(
+                              CityPage.routeName,
+                              arguments: category),
+                          trailing: MenuItemCountByCategory(category.id),
+                        ),
                       ),
-                    ),
-                  );
-                });
+                    );
+                  }),
+            );
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
