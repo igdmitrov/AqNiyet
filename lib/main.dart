@@ -14,6 +14,7 @@ import 'pages/login_page.dart';
 import 'pages/main_page.dart';
 import 'pages/my_adverts_page.dart';
 import 'pages/password_recovery_page.dart';
+import 'pages/policy_page.dart';
 import 'pages/privacy_page.dart';
 import 'pages/remove_account_page.dart';
 import 'pages/signup_page.dart';
@@ -62,8 +63,8 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
-          Locale('ru', 'RU'),
-          Locale('en', 'US'),
+          Locale('ru', ''),
+          Locale('en', ''),
         ],
         initialRoute: SplashPage.routeName,
         routes: <String, WidgetBuilder>{
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
           RemoveAccountPage.routeName: (_) => const RemoveAccountPage(),
           ChangePassword.routeName: (_) => const ChangePassword(),
           SupportPage.routeName: (_) => const SupportPage(),
+          PolicyPage.routeName: (_) => const PolicyPage(),
         },
       );
     });

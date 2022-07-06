@@ -73,7 +73,7 @@
     "phone_incorrect": "Incorrect phone number",
     "otpcode_required": "OTP code is required",
     "otpcode_incorrect": "Incorrect OTP code",
-    "privacy": "Privacy",
+    "privacy": "Privacy policy",
     "password_recovery": "Password recovery",
     "confirm_email_address": "Please confirm your email address",
     "refresh": "Refresh",
@@ -85,6 +85,5 @@
     "support": "Support",
     "support_text_introduction": "If you have any questions or suggestions for improving the service, please write to us about it.",
     "support_email_subject": "AqNiyet: IT Support",
-    "email_client_not_found": "We can not find your email client",
-    "privacy_definition": "DEFINITIONS"
+    "email_client_not_found": "We can not find your email client"
 }
