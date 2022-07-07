@@ -25,6 +25,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
   final addressController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   bool enabled = true;
+  bool confirm = false;
   Category? category;
   City? city;
   final List<XFile> images = [];
@@ -50,7 +51,12 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         isAuthenticated()) {
       formKey.currentState!.save();
 
-      if (category != null && city != null) {
+      if (confirm == false) {
+        context.showErrorSnackBar(
+            message: appLocalizations.unconfirmed_privacy);
+      }
+
+      if (category != null && city != null && confirm == true) {
         final model = Advert(
           id: '',
           categoryId: category!.id,
@@ -88,7 +94,8 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     });
   }
 
-  Future<void> updateData(String id, AppService appService) async {
+  Future<void> updateData(String id, AppLocalizations appLocalizations,
+      AppService appService) async {
     setState(() {
       isLoading = true;
     });
@@ -98,7 +105,12 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         isAuthenticated()) {
       formKey.currentState!.save();
 
-      if (category != null && city != null) {
+      if (confirm == false) {
+        context.showErrorSnackBar(
+            message: appLocalizations.unconfirmed_privacy);
+      }
+
+      if (category != null && city != null && confirm == true) {
         final model = Advert(
           id: id,
           categoryId: category!.id,

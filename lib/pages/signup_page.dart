@@ -5,11 +5,13 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../widgets/checkbox_form_input.dart';
 import '../widgets/email_input.dart';
 import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
 import '../widgets/phone_input.dart';
+import '../widgets/policy_button.dart';
 import '../widgets/privacy_button.dart';
 import 'login_page.dart';
 import 'verify_page.dart';
@@ -30,6 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  bool _confirm = false;
 
   Future<void> _signUp(AppLocalizations appLocalizations) async {
     setState(() {
@@ -40,6 +43,14 @@ class _SignUpPageState extends State<SignUpPage> {
         _form.currentState == null ? false : _form.currentState!.validate();
 
     if (isValid) {
+      _form.currentState!.save();
+    }
+
+    if (_confirm == false) {
+      context.showErrorSnackBar(message: appLocalizations.unconfirmed_privacy);
+    }
+
+    if (isValid && _confirm == true) {
       final formatedPhoneNumber = formatPhoneNumber(_phoneController.text);
       final response = await supabase.auth.signUpWithPhone(
           formatedPhoneNumber, _passwordController.text,
@@ -104,6 +115,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   password: _passwordController.text,
                 ),
                 const FormInputDivider(),
+                const PrivacyButton(),
+                const PolicyButton(),
+                CheckboxFormInput(
+                  title: appLocalization.privacy_confirm_text,
+                  onSaved: (val) {
+                    _confirm = val ?? false;
+                  },
+                  enabled: _isLoading,
+                  initialValue: _confirm,
+                ),
+                const FormInputDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -122,7 +144,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ],
                 ),
-                const PrivacyButton(),
                 const FormInputDivider(),
                 const Footer(),
               ],

@@ -14,6 +14,8 @@ import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/image_preview.dart';
+import '../widgets/policy_button.dart';
+import '../widgets/privacy_button.dart';
 import '../widgets/remove_image_button.dart';
 import '../widgets/text_area_input.dart';
 import '../widgets/text_form_input.dart';
@@ -211,6 +213,14 @@ class _EditPageState extends AdvertState<EditPage> {
                   enabled: !isLoading,
                   initialValue: enabled,
                 ),
+                const PrivacyButton(),
+                const PolicyButton(),
+                CheckboxFormInput(
+                  title: appLocalization.privacy_confirm_text,
+                  onSaved: (val) => confirm = val ?? false,
+                  enabled: !isLoading,
+                  initialValue: false,
+                ),
                 const FormInputDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +228,8 @@ class _EditPageState extends AdvertState<EditPage> {
                     ElevatedButton(
                         onPressed: isLoading
                             ? null
-                            : () => updateData(advert.id, appService),
+                            : () => updateData(
+                                advert.id, appLocalization, appService),
                         child: Text(isLoading
                             ? appLocalization.loading
                             : appLocalization.save)),

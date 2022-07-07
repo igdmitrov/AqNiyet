@@ -74,6 +74,7 @@
     "otpcode_required": "OTP code is required",
     "otpcode_incorrect": "Incorrect OTP code",
     "privacy": "Privacy policy",
+    "policy": "User policy",
     "password_recovery": "Password recovery",
     "confirm_email_address": "Please confirm your email address",
     "refresh": "Refresh",
@@ -85,5 +86,7 @@
     "support": "Support",
     "support_text_introduction": "If you have any questions or suggestions for improving the service, please write to us about it.",
     "support_email_subject": "AqNiyet: IT Support",
-    "email_client_not_found": "We can not find your email client"
+    "email_client_not_found": "We can not find your email client",
+    "privacy_confirm_text": "I have read and agree to the user rules and privacy policy",
+    "unconfirmed_privacy": "You need to confirm user rule and privacy policy"
 }
