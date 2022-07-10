@@ -60,7 +60,7 @@ class _ReportPageState extends State<ReportPage> {
           context.showErrorSnackBar(message: error!.message);
         } else {
           if (!mounted) return;
-          context.showSnackBar(message: appLocalizations.created_new_item);
+          context.showSnackBar(message: appLocalizations.report_thanks);
           Navigator.of(context).pop();
         }
       }
