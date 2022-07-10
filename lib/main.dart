@@ -17,6 +17,7 @@ import 'pages/password_recovery_page.dart';
 import 'pages/policy_page.dart';
 import 'pages/privacy_page.dart';
 import 'pages/remove_account_page.dart';
+import 'pages/report_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
           ChangePassword.routeName: (_) => const ChangePassword(),
           SupportPage.routeName: (_) => const SupportPage(),
           PolicyPage.routeName: (_) => const PolicyPage(),
+          ReportPage.routeName: (_) => const ReportPage(),
         },
       );
     });

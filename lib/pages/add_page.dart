@@ -7,6 +7,7 @@ import '../components/advert_state.dart';
 import '../model/category.dart';
 import '../model/city.dart';
 import '../services/app_service.dart';
+import '../utils/constants.dart';
 import '../widgets/category_lookup.dart';
 import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
@@ -35,6 +36,8 @@ class _AddPageState extends AdvertState<AddPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appLocalization.new_advert),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
       ),
       body: SingleChildScrollView(
         child: Padding(

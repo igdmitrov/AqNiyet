@@ -2,7 +2,7 @@ import 'package:aqniyet/widgets/clause_subheader.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../utils/constants.dart';
+import '../widgets/app_title.dart';
 import '../widgets/back_button.dart';
 import '../widgets/clause.dart';
 import '../widgets/clause_header.dart';
@@ -21,15 +21,7 @@ class PrivacyPage extends StatelessWidget {
           Column(
             children: const [
               BackToPageButton(),
-              Text(
-                appName,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              AppTitle(),
               ClauseHeader(
                 header: 'Политика конфиденциальности',
               ),

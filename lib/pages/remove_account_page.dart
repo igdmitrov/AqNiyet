@@ -47,6 +47,8 @@ class _RemoveAccountPageState extends State<RemoveAccountPage> {
         title: Text(
           appLocalization.my_account,
         ),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
       ),
       body: Center(
           child: Column(

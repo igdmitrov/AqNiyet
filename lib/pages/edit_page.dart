@@ -9,6 +9,7 @@ import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
 import '../services/app_service.dart';
+import '../utils/constants.dart';
 import '../widgets/category_lookup.dart';
 import '../widgets/checkbox_form_input.dart';
 import '../widgets/city_lookup.dart';
@@ -44,6 +45,8 @@ class _EditPageState extends AdvertState<EditPage> {
       appBar: AppBar(
         title: Text(advert.name),
         automaticallyImplyLeading: false,
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
       ),
       body: SingleChildScrollView(
         child: Padding(

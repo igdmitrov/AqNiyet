@@ -37,6 +37,8 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appLocalization.my_items),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
         actions: [
           IconButton(
             onPressed: () =>

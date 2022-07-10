@@ -41,7 +41,12 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(appName),
+        title: const Text(
+          appName,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
         actions: [
           IconButton(
             onPressed: () {
@@ -59,7 +64,11 @@ class _MainPageState extends State<MainPage> {
       drawer: Drawer(
         child: Column(
           children: [
-            AppBar(title: const Greeting()),
+            AppBar(
+              title: const Greeting(),
+              backgroundColor: appBackgroundColor,
+              foregroundColor: appForegroundColor,
+            ),
             const Divider(),
             if (isAuthenticated())
               ListTile(

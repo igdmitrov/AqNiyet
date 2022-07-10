@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/auth_required_state.dart';
 import '../utils/constants.dart';
+import '../widgets/app_title.dart';
+import '../widgets/policy_button.dart';
 import '../widgets/privacy_button.dart';
 import '../widgets/remove_image_button.dart';
 import 'change_password.dart';
@@ -30,6 +32,8 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
       body: Center(
           child: Column(
         children: [
+          const SizedBox(height: 10),
+          const AppTitle(),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
@@ -51,6 +55,7 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
           ),
           const SizedBox(height: 40),
           const PrivacyButton(),
+          const PolicyButton(),
         ],
       )),
     );

@@ -13,6 +13,7 @@ import '../model/image_data.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
 import '../widgets/image_dialog.dart';
+import '../widgets/report_button.dart';
 import 'edit_page.dart';
 
 class AdvertPage extends StatefulWidget {
@@ -66,6 +67,8 @@ class _AdvertPageState extends State<AdvertPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(advertMenuItem.name),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
       ),
       body: FutureBuilder<AdvertPageView?>(
           future:
@@ -118,6 +121,14 @@ class _AdvertPageState extends State<AdvertPage> {
                           return Container();
                         }
                       }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ReportButton(
+                        advertId: advert.id,
+                      ),
+                    ],
+                  ),
                   Text(advert.categoryName),
                   const SizedBox(height: 10),
                   Padding(
@@ -177,8 +188,8 @@ class _AdvertPageState extends State<AdvertPage> {
                                       },
                                       child: Image.memory(
                                         imageData.image,
-                                        width: 45.w,
-                                        height: 45.w,
+                                        width: 40.w,
+                                        height: 40.w,
                                         fit: BoxFit.cover,
                                       ),
                                     ),

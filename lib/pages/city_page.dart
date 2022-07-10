@@ -38,6 +38,8 @@ class _CityPageState extends State<CityPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(category.name),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),

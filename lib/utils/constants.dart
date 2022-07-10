@@ -15,6 +15,9 @@ const maxImageWidth = 800;
 
 const maxImages = 10;
 
+Color? appBackgroundColor = Colors.grey.shade50;
+Color? appForegroundColor = Colors.indigo;
+
 bool isAuthenticated() {
   return supabase.auth.currentUser != null;
 }

@@ -52,6 +52,8 @@ class _AdvertsPageState extends State<AdvertsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(category.name),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),

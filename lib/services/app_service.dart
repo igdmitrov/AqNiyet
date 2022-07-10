@@ -11,6 +11,7 @@ import '../model/category.dart';
 import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
+import '../model/report.dart';
 import '../utils/constants.dart';
 
 class AppService extends ChangeNotifier {
@@ -415,6 +416,16 @@ class AppService extends ChangeNotifier {
     }
 
     final response = supabase.from('advert').delete().eq('id', id).execute();
+    return response;
+  }
+
+  Future<PostgrestResponse> createReport(Report model) async {
+    await refreshSession();
+
+    final response = supabase
+        .from('report')
+        .insert(model.toMap(), returning: ReturningOption.minimal)
+        .execute();
     return response;
   }
 }
