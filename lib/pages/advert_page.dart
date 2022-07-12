@@ -80,10 +80,14 @@ class _AdvertPageState extends State<AdvertPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 children: [
-                  if (advert.createdBy == getCurrentUserId())
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ReportButton(
+                        advertId: advert.id,
+                      ),
+                      const SizedBox(width: 5.0),
+                      if (advert.createdBy == getCurrentUserId())
                         OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             primary: Colors.red,
@@ -93,8 +97,8 @@ class _AdvertPageState extends State<AdvertPage> {
                                   arguments: advert),
                           child: Text(appLocalization.edit),
                         ),
-                      ],
-                    ),
+                    ],
+                  ),
                   FutureBuilder<Uint8List?>(
                       future: context
                           .read<AppService>()
@@ -121,14 +125,6 @@ class _AdvertPageState extends State<AdvertPage> {
                           return Container();
                         }
                       }),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ReportButton(
-                        advertId: advert.id,
-                      ),
-                    ],
-                  ),
                   Text(advert.categoryName),
                   const SizedBox(height: 10),
                   Padding(

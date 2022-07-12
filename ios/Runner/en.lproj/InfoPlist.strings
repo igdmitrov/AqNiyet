@@ -1,0 +1,2 @@
+NSCameraUsageDescription = "Take photo for your adverts";
+NSPhotoLibraryUsageDescription = "Select photos from library for your adverts";

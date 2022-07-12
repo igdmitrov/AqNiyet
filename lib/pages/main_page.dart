@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
   Future<List<Category>> _getCategories(
       BuildContext context, AppLocalizations appLocalization) async {
     try {
-      return await context.read<AppService>().getCategories();
+      return await context.read<AppService>().getCategoriesForMenu();
     } on Exception catch (_) {
       context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }

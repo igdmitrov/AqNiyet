@@ -22,7 +22,7 @@ class _CityPageState extends State<CityPage> {
   Future<List<City>> _getCities(
       BuildContext context, AppLocalizations appLocalization) async {
     try {
-      return await context.read<AppService>().getCities();
+      return await context.read<AppService>().getCitiesForMenu();
     } on Exception catch (_) {
       context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }

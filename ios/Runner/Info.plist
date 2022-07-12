@@ -33,9 +33,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Take photo for adverts</string>
+	<string>Take photo for your adverts</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Select photos from library</string>
+	<string>Select photos from library for your adverts</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

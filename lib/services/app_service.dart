@@ -55,6 +55,32 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load categories');
   }
 
+  Future<List<Category>> getCategoriesForMenu({String? filter}) async {
+    await refreshSession();
+
+    final query = supabase.from('categoryview').select('id, name');
+    late PostgrestResponse response;
+    if (filter == null || filter.isEmpty) {
+      response = await query.execute();
+    } else {
+      response = await query.textSearch('name', "$filter:*").execute();
+    }
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return (response.data as List<dynamic>)
+          .map((json) => Category.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Failed to load categories');
+  }
+
   Future<Category> getCategoryById(String id) async {
     await refreshSession();
 
@@ -91,6 +117,34 @@ class AppService extends ChangeNotifier {
           .textSearch('name', "$filter:*")
           .order('order', ascending: false)
           .execute();
+    }
+
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return (response.data as List<dynamic>)
+          .map((json) => City.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Failed to load cities');
+  }
+
+  Future<List<City>> getCitiesForMenu({String? filter}) async {
+    await refreshSession();
+
+    final query =
+        supabase.from('cityview').select('id, name').eq('country_id', 'kz');
+    late PostgrestResponse response;
+
+    if (filter == null || filter.isEmpty) {
+      response = await query.execute();
+    } else {
+      response = await query.textSearch('name', "$filter:*").execute();
     }
 
     final error = response.error;
