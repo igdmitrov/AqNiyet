@@ -33,6 +33,7 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
   @override
   Widget build(BuildContext context) {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+    final Locale appLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -71,7 +72,10 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
                           onTap: () => Navigator.of(context).pushNamed(
                               AdvertPage.routeName,
                               arguments: advert),
-                          trailing: Text(timeago.format(advert.createdAt)),
+                          trailing: Text(timeago.format(
+                            advert.createdAt,
+                            locale: appLocale.languageCode,
+                          )),
                         ),
                       ),
                     );

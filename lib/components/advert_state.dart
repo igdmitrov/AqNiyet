@@ -12,7 +12,6 @@ import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
 import '../pages/main_page.dart';
-import '../pages/my_adverts_page.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
 import 'auth_required_state.dart';
@@ -84,7 +83,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
 
           if (!mounted) return;
           context.showSnackBar(message: appLocalizations.created_new_item);
-          Navigator.of(context).pushReplacementNamed(MyAdvertsPages.routeName);
+          Navigator.of(context).pop();
         }
       }
     }
@@ -152,7 +151,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           }
 
           if (!mounted) return;
-          Navigator.of(context).pushReplacementNamed(MyAdvertsPages.routeName);
+          Navigator.of(context).pop();
         }
       }
     }

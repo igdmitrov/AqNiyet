@@ -5,7 +5,13 @@ class TextFormInput extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator<String>? validator;
   final bool isLoading;
-  const TextFormInput({Key? key, required this.name, required this.controller, this.validator, required this.isLoading}) : super(key: key);
+  const TextFormInput(
+      {Key? key,
+      required this.name,
+      required this.controller,
+      this.validator,
+      required this.isLoading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +19,7 @@ class TextFormInput extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(labelText: name),
       autocorrect: false,
+      textCapitalization: TextCapitalization.sentences,
       validator: validator,
       enabled: !isLoading,
     );

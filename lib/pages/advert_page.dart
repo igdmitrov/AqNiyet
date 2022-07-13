@@ -63,6 +63,7 @@ class _AdvertPageState extends State<AdvertPage> {
         ModalRoute.of(context)!.settings.arguments as AdvertMenuItem;
 
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
+    final Locale appLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -138,7 +139,10 @@ class _AdvertPageState extends State<AdvertPage> {
                       ),
                     ),
                   ),
-                  Text(timeago.format(advert.createdAt)),
+                  Text(timeago.format(
+                    advert.createdAt,
+                    locale: appLocale.languageCode,
+                  )),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),

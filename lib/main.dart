@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'pages/account_page.dart';
 import 'pages/add_page.dart';
 import 'pages/advert_page.dart';
@@ -34,6 +35,9 @@ Future<void> main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrYWZyd3pwdm54aW5zbmdicGl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTE1ODMwNjgsImV4cCI6MTk2NzE1OTA2OH0.y0hW774bZKHBFhYDaK_87cmNNNvb1O14tDb769ED5Jg',
   );
+
+  timeago.setLocaleMessages('ru', timeago.RuMessages());
+  timeago.setLocaleMessages('en', timeago.EnMessages());
 
   runApp(MultiProvider(
     providers: [

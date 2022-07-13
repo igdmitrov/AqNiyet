@@ -23,6 +23,7 @@ class TextAreaInput extends StatelessWidget {
       enabled: !isLoading,
       minLines: 3,
       maxLines: 5,
+      textCapitalization: TextCapitalization.sentences,
       keyboardType: TextInputType.multiline,
     );
   }
