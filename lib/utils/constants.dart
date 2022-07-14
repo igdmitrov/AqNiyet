@@ -2,6 +2,7 @@ import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,7 +12,12 @@ const supportEmail = 'aqniyet.help@gmail.com';
 
 final supabase = Supabase.instance.client;
 
-const maxImageWidth = 800;
+const supabaseImageBucket = 'public-images';
+
+const maxImageWidth = 640;
+const maxImageIconWidth = 128;
+const thumbnailPrefix = 'icon_';
+const iconFileName = 'primary_icon.jpg';
 
 const maxImages = 10;
 
@@ -131,4 +137,32 @@ String formatedPhoneNumber(String? phone) {
 
   MagicMask mask = MagicMask.buildMask('\\+9 (999) 999-99-99');
   return mask.getMaskedString(phone);
+}
+
+extension SharedExtension on SharedPreferences {
+  bool checkKey(String key) {
+    if (containsKey(key)) {
+      if (containsKey('${key}_expire')) {
+        final expDate =
+            DateTime.fromMillisecondsSinceEpoch(getInt('${key}_expire') ?? 0);
+
+        if (expDate.isAfter(DateTime.now())) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  void toCacheList(String key, List<String> data,
+      {Duration duration = const Duration(minutes: 10)}) {
+    if (containsKey(key)) {
+      remove(key);
+      remove('${key}_expire');
+    }
+
+    setStringList(key, data);
+    setInt(
+        '${key}_expire', DateTime.now().add(duration).millisecondsSinceEpoch);
+  }
 }

@@ -40,9 +40,7 @@ class _MenuItemCountByCategoryAndCityState
             return Text(snapshot.error.toString());
           }
 
-          return const CircularProgressIndicator(
-            strokeWidth: 1.0,
-          );
+          return const Text('...');
         });
   }
 }

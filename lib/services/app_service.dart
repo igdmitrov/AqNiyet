@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -333,7 +334,7 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
-  Future<PostgrestResponse> removeImage(String id) async {
+  Future<PostgrestResponse> removeImageMetaData(String id) async {
     await refreshSession();
 
     final response = supabase.from('image').delete().eq('id', id).execute();
@@ -386,10 +387,10 @@ class AppService extends ChangeNotifier {
     return null;
   }
 
-  Future<Uint8List?> _downloadImage(ImageMetaData imageMetaData) async {
+  Future<Uint8List?> downloadImage(ImageMetaData imageMetaData) async {
     await refreshSession();
 
-    final response = await supabase.storage.from('public-images').download(
+    final response = await supabase.storage.from(supabaseImageBucket).download(
         '${imageMetaData.createdBy}/${imageMetaData.advertId}/${imageMetaData.imageName}');
 
     if (response.data != null) {
@@ -404,7 +405,7 @@ class AppService extends ChangeNotifier {
     final List<ImageData> images = [];
 
     for (var item in metaData) {
-      final image = await _downloadImage(item);
+      final image = await downloadImage(item);
 
       if (image != null) {
         images.add(ImageData.fromMetaData(item, image));
@@ -439,11 +440,22 @@ class AppService extends ChangeNotifier {
     final file = await _getMainFile(advertId, userId);
 
     if (file != null) {
-      final image = await _downloadImage(file);
+      final image = await downloadImage(file);
       return image;
     }
 
     return null;
+  }
+
+  Future<Uint8List?> getIcon(String advertId, String userId) async {
+    final image = await downloadImage(ImageMetaData(
+      id: '',
+      imageName: iconFileName,
+      advertId: advertId,
+      primary: true,
+      createdBy: userId,
+    ));
+    return image;
   }
 
   Future<PostgrestResponse> removeAccount(String userId) async {
@@ -460,16 +472,32 @@ class AppService extends ChangeNotifier {
     return await supabase.auth.api.sendMobileOTP(formatPhoneNumber(phone));
   }
 
-  Future<PostgrestResponse> removeAdvert(String id) async {
+  Future<PostgrestResponse> removeAdvert(
+    String userId,
+    String advertId,
+  ) async {
     await refreshSession();
 
-    final responseFromImage =
-        await supabase.from('image').delete().eq('advert_id', id).execute();
+    final images = await getImages(advertId, userId);
+
+    await supabase.storage.from(supabaseImageBucket).remove(images
+        .map((image) =>
+            _getStoragePath(image.createdBy, image.advertId, image.imageName))
+        .toList());
+
+    await removeImage(userId, advertId, iconFileName);
+
+    final responseFromImage = await supabase
+        .from('image')
+        .delete()
+        .eq('advert_id', advertId)
+        .execute();
     if (responseFromImage.error != null) {
       return responseFromImage;
     }
 
-    final response = supabase.from('advert').delete().eq('id', id).execute();
+    final response =
+        supabase.from('advert').delete().eq('id', advertId).execute();
     return response;
   }
 
@@ -481,5 +509,42 @@ class AppService extends ChangeNotifier {
         .insert(model.toMap(), returning: ReturningOption.minimal)
         .execute();
     return response;
+  }
+
+  Future<StorageResponse> saveImage(
+      String userId, String advertId, String fileName, File file) async {
+    await refreshSession();
+
+    final response = await supabase.storage
+        .from(supabaseImageBucket)
+        .upload(_getStoragePath(userId, advertId, fileName), file);
+
+    return response;
+  }
+
+  Future<StorageResponse> saveImageBinary(
+      String userId, String advertId, String fileName, Uint8List data) async {
+    await refreshSession();
+
+    final response = await supabase.storage
+        .from(supabaseImageBucket)
+        .uploadBinary(_getStoragePath(userId, advertId, fileName), data);
+
+    return response;
+  }
+
+  Future<StorageResponse> removeImage(
+      String userId, String advertId, String fileName) async {
+    await refreshSession();
+
+    final response = await supabase.storage
+        .from(supabaseImageBucket)
+        .remove([_getStoragePath(userId, advertId, fileName)]);
+
+    return response;
+  }
+
+  String _getStoragePath(String userId, String advertId, String fileName) {
+    return '$userId/$advertId/$fileName';
   }
 }

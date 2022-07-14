@@ -134,7 +134,7 @@ class _AddPageState extends AdvertState<AddPage> {
                     child: Text(isLoading
                         ? appLocalization.loading
                         : appLocalization.save)),
-                const FormInputDivider(),
+                const SizedBox(height: 150),
               ],
             ),
           ),

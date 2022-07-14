@@ -14,6 +14,13 @@ class City implements BaseModel {
     );
   }
 
+  Map toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+
   @override
   String value() => name;
 }

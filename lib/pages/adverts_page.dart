@@ -80,6 +80,7 @@ class _AdvertsPageState extends State<AdvertsPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final advert = snapshot.data![index];
                     return Padding(
+                      key: ValueKey(index),
                       padding: const EdgeInsets.symmetric(
                           vertical: 3, horizontal: 3),
                       child: Card(

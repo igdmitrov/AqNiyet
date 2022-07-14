@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
-import 'package:image/image.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/advert.dart';
@@ -78,7 +78,11 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
               (((response.data) as List<dynamic>)[0]['id']) as String;
 
           for (var image in images) {
-            await _saveImage(advertId, image);
+            await _saveImage(appService, advertId, image);
+
+            if (image.name == mainImageId) {
+              await _savePrimaryIcon(appService, advertId, image.name);
+            }
           }
 
           if (!mounted) return;
@@ -129,7 +133,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           context.showErrorSnackBar(message: error!.message);
         } else {
           for (var image in images) {
-            await _saveImage(id, image);
+            await _saveImage(appService, id, image);
           }
 
           if (mainImageId != null) {
@@ -146,6 +150,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
               if (mainImageId == imageData.imageName) {
                 await appService.setPrimaryImage(
                     ImageMetaData.fromImageData(imageData, true));
+                await _savePrimaryIcon(appService, id, imageData.imageName);
               }
             }
           }
@@ -161,41 +166,78 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     });
   }
 
-  File _resizeImage(String filePath) {
-    final image = decodeImage(File(filePath).readAsBytesSync());
+  File _resizeImage(String filePath, String saveToPath, int imageWidth) {
+    final image = img.decodeImage(File(filePath).readAsBytesSync());
     if (image == null) return File(filePath);
 
-    if (image.width > maxImageWidth) {
-      final thumbnail = copyResize(image, width: maxImageWidth);
-      File(filePath).writeAsBytesSync(encodePng(thumbnail));
+    if (image.width > imageWidth) {
+      final resized = img.copyResize(image, width: imageWidth);
+      File(saveToPath).writeAsBytesSync(img.encodeJpg(resized));
     }
 
-    return File(filePath);
+    return File(saveToPath);
   }
 
-  Future<void> _saveImage(String advertId, XFile file) async {
-    final response = await supabase.storage.from('public-images').upload(
-        '${getCurrentUserId()}/$advertId/${file.name}',
-        _resizeImage(file.path));
+  Uint8List _resizeImageBinary(Uint8List data, int imageWidth) {
+    Uint8List resizedData = data;
+    img.Image image = img.decodeImage(data) as img.Image;
+    img.Image resized = img.copyResize(image, width: imageWidth);
+    resizedData = Uint8List.fromList(img.encodeJpg(resized));
+    return resizedData;
+  }
+
+  Future<void> _saveImage(
+      AppService appService, String advertId, XFile file) async {
+    final response = await appService.saveImage(getCurrentUserId(), advertId,
+        file.name, _resizeImage(file.path, file.path, maxImageWidth));
 
     final error = response.error;
     if (response.hasError) {
       if (!mounted) return;
       context.showErrorSnackBar(message: error!.message);
     } else {
-      await _saveImageMetaData(advertId, file);
+      await _saveImageMetaData(appService, advertId, file.name);
     }
   }
 
-  Future<void> _saveImageMetaData(String advertId, XFile file) async {
-    final response =
-        await context.read<AppService>().addImageMetaData(ImageMetaData(
-              id: '',
-              advertId: advertId,
-              primary: file.name == mainImageId ? true : false,
-              imageName: file.name,
-              createdBy: getCurrentUserId(),
-            ));
+  Future<void> _savePrimaryIcon(
+      AppService appService, String advertId, String fileNameFrom) async {
+    final originFile = await appService.downloadImage(
+      ImageMetaData(
+        id: '',
+        imageName: fileNameFrom,
+        advertId: advertId,
+        primary: true,
+        createdBy: getCurrentUserId(),
+      ),
+    );
+
+    if (originFile == null) return;
+
+    await appService.removeImage(getCurrentUserId(), advertId, iconFileName);
+
+    final response = await appService.saveImageBinary(
+        getCurrentUserId(),
+        advertId,
+        iconFileName,
+        _resizeImageBinary(originFile, maxImageIconWidth));
+
+    final error = response.error;
+    if (response.hasError) {
+      if (!mounted) return;
+      context.showErrorSnackBar(message: error!.message);
+    }
+  }
+
+  Future<void> _saveImageMetaData(
+      AppService appService, String advertId, String fileName) async {
+    final response = await appService.addImageMetaData(ImageMetaData(
+      id: '',
+      advertId: advertId,
+      primary: fileName == mainImageId ? true : false,
+      imageName: fileName,
+      createdBy: getCurrentUserId(),
+    ));
     final error = response.error;
     if (response.hasError) {
       if (!mounted) return;
@@ -269,21 +311,28 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     String? mainLocalImageId = mainImageId;
 
     try {
-      await appService.removeImage(imageData.id);
+      await appService.removeImageMetaData(imageData.id);
+      await appService.removeImage(
+          imageData.createdBy, imageData.advertId, imageData.imageName);
 
       if (imageData.primary == true) {
         final imagesMetaDataItems =
             await appService.getImages(imageData.advertId, getCurrentUserId());
 
         if (imagesMetaDataItems.isNotEmpty) {
-          await appService.setPrimaryImage(
-              ImageMetaData.fromImageData(imagesMetaDataItems.first, true));
+          final nextImage = imagesMetaDataItems.first;
+          await appService
+              .setPrimaryImage(ImageMetaData.fromImageData(nextImage, true));
+          await _savePrimaryIcon(
+              appService, imageData.advertId, nextImage.imageName);
 
-          mainLocalImageId = imagesMetaDataItems.first.imageName;
+          mainLocalImageId = nextImage.imageName;
         } else if (images.isNotEmpty) {
           mainLocalImageId = images.first.name;
         } else {
           mainLocalImageId = null;
+          await appService.removeImage(
+              imageData.createdBy, imageData.advertId, iconFileName);
         }
       }
     } catch (error) {
@@ -316,7 +365,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
       isLoading = true;
     });
 
-    final response = await appService.removeAdvert(id);
+    final response = await appService.removeAdvert(getCurrentUserId(), id);
     final error = response.error;
     if (response.hasError) {
       if (!mounted) return;

@@ -27,7 +27,7 @@ class _MenuItemImageState extends State<MenuItemImage> {
       child: FutureBuilder<Uint8List?>(
           future: context
               .read<AppService>()
-              .getMainImage(widget.menuItem.id, widget.menuItem.createdBy),
+              .getIcon(widget.menuItem.id, widget.menuItem.createdBy),
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
               return Image.memory(

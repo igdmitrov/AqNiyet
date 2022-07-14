@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'components/shared_preferences_provider.dart';
 import 'pages/account_page.dart';
 import 'pages/add_page.dart';
 import 'pages/advert_page.dart';
@@ -39,9 +41,12 @@ Future<void> main() async {
   timeago.setLocaleMessages('ru', timeago.RuMessages());
   timeago.setLocaleMessages('en', timeago.EnMessages());
 
-  runApp(MultiProvider(
+  runApp(provider.MultiProvider(
     providers: [
-      ChangeNotifierProvider<AppService>(
+      provider.Provider<SharedPreferencesProvider>(
+          create: (_) =>
+              SharedPreferencesProvider(SharedPreferences.getInstance())),
+      provider.ChangeNotifierProvider<AppService>(
         create: (_) => AppService(),
       ),
     ],

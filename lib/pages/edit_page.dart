@@ -47,6 +47,10 @@ class _EditPageState extends AdvertState<EditPage> {
         automaticallyImplyLeading: false,
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: const Icon(Icons.arrow_back_ios_new),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -242,7 +246,7 @@ class _EditPageState extends AdvertState<EditPage> {
                         child: Text(appLocalization.back)),
                   ],
                 ),
-                const FormInputDivider(),
+                const SizedBox(height: 150),
               ],
             ),
           ),
