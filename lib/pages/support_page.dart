@@ -74,11 +74,22 @@ class _SupportPageState extends State<SupportPage> {
                 textAlign: TextAlign.center,
               ),
               const FormInputDivider(),
-              OutlinedButton(
-                onPressed: () => _launchEmail(context, appLocalization),
-                child: _showEmail == true
-                    ? const Text(supportEmail)
-                    : Text(appLocalization.support),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => _launchEmail(context, appLocalization),
+                    child: _showEmail == true
+                        ? const Text(supportEmail)
+                        : Text(appLocalization.support),
+                  ),
+                  const SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(MainPage.routeName),
+                    child: Text(appLocalization.back),
+                  ),
+                ],
               ),
               SizedBox(height: 20.h),
               const Footer(),

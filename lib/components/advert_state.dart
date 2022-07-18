@@ -63,7 +63,6 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           description: descriptionController.text,
           cityId: city!.id,
           address: addressController.text,
-          phone: getCurrentUserPhone(),
           enabled: enabled,
           createdBy: getCurrentUserId(),
         );
@@ -121,7 +120,6 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           description: descriptionController.text,
           cityId: city!.id,
           address: addressController.text,
-          phone: getCurrentUserPhone(),
           enabled: enabled,
           createdBy: getCurrentUserId(),
         );

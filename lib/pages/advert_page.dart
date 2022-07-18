@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,7 +24,7 @@ class AdvertPage extends StatefulWidget {
 }
 
 class _AdvertPageState extends State<AdvertPage> {
-  bool _hasCallSupport = false;
+  //bool _hasCallSupport = false;
 
   Future<AdvertPageView?> _getAdvertPageView(
       BuildContext context, AppLocalizations appLocalization, String id) async {
@@ -38,24 +37,24 @@ class _AdvertPageState extends State<AdvertPage> {
     return null;
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    await launchUrl(launchUri);
-  }
+  // Future<void> _makePhoneCall(String phoneNumber) async {
+  //   final Uri launchUri = Uri(
+  //     scheme: 'tel',
+  //     path: phoneNumber,
+  //   );
+  //   await launchUrl(launchUri);
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    // Check for phone call support.
-    canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
-      setState(() {
-        _hasCallSupport = result;
-      });
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Check for phone call support.
+  //   canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
+  //     setState(() {
+  //       _hasCallSupport = result;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,18 +155,18 @@ class _AdvertPageState extends State<AdvertPage> {
                   ),
                   const SizedBox(height: 18),
                   Text('${advert.cityName} \\ ${advert.address}'),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      OutlinedButton(
-                        onPressed: _hasCallSupport
-                            ? () => _makePhoneCall(advert.phone)
-                            : null,
-                        child: Text(advert.phone),
-                      ),
-                    ],
-                  ),
+                  //const SizedBox(height: 5),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     OutlinedButton(
+                  //       onPressed: _hasCallSupport
+                  //           ? () => _makePhoneCall(advert.phone)
+                  //           : null,
+                  //       child: Text(advert.phone),
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 18),
                   FutureBuilder<List<ImageData>>(
                       future: context

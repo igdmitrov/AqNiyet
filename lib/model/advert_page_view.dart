@@ -7,7 +7,6 @@ class AdvertPageView {
   final String cityId;
   final String cityName;
   final String address;
-  final String phone;
   final bool enabled;
   final String createdBy;
   final DateTime createdAt;
@@ -22,7 +21,6 @@ class AdvertPageView {
         cityId: json['city_id'],
         cityName: json['city']['name'],
         address: json['address'],
-        phone: json['phone'],
         enabled: json['enabled'],
         createdBy: json['created_by'],
         createdAt: DateTime.parse(json['created_at']));
@@ -37,7 +35,6 @@ class AdvertPageView {
     required this.cityId,
     required this.cityName,
     required this.address,
-    required this.phone,
     required this.enabled,
     required this.createdAt,
     required this.createdBy,

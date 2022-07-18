@@ -1,2 +1,2 @@
-NSCameraUsageDescription = "Сделать фото для вашего объявления";
-NSPhotoLibraryUsageDescription = "Выбрать фотографии для вашего объявления";
+NSCameraUsageDescription = "Используя камеру вашего телефона Вы можете быстро сделать снимки для вашего объявления";
+NSPhotoLibraryUsageDescription = "Выбрать существующие фотографии из вашей Галереи для вашего объявления";

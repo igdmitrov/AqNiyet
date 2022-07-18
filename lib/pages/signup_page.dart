@@ -45,7 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _form.currentState!.save();
     }
 
-    if (_confirm == false) {
+    if (isValid == true && _confirm == false) {
       context.showErrorSnackBar(message: appLocalizations.unconfirmed_privacy);
     }
 

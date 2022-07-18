@@ -28,6 +28,8 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
         title: Text(
           appLocalization.my_account,
         ),
+        backgroundColor: appBackgroundColor,
+        foregroundColor: appForegroundColor,
       ),
       body: Center(
           child: Column(

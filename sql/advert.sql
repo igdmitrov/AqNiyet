@@ -6,7 +6,6 @@ create table public.advert (
   country_id text references public.country not null,
   city_id text references public.city not null,
   address text check (char_length(address) > 0) not null,
-  phone text check (char_length(phone) > 0) not null,
   enabled boolean default true,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   created_by uuid references auth.users not null
