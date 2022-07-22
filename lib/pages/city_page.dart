@@ -9,6 +9,7 @@ import '../widgets/menuitem_count_by_category_and_city.dart';
 import 'add_page.dart';
 import 'adverts_page.dart';
 import '../utils/constants.dart';
+import 'room_page.dart';
 
 class CityPage extends StatefulWidget {
   static String routeName = '/city';
@@ -19,6 +20,7 @@ class CityPage extends StatefulWidget {
 }
 
 class _CityPageState extends State<CityPage> {
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
   Future<List<City>> _getCities(
       BuildContext context, AppLocalizations appLocalization) async {
     try {
@@ -28,6 +30,16 @@ class _CityPageState extends State<CityPage> {
     }
 
     return [];
+  }
+
+  Future<bool> _getStatusUnReadMessages(BuildContext context) async {
+    try {
+      return await context
+          .read<AppService>()
+          .getStatusUnreadMessages(getCurrentUserId());
+    } on Exception catch (_) {
+      return false;
+    }
   }
 
   @override
@@ -41,6 +53,27 @@ class _CityPageState extends State<CityPage> {
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
         actions: [
+          if (isAuthenticated() && isEmail() == true)
+            FutureBuilder<bool>(
+                future: _getStatusUnReadMessages(context),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(RoomPage.routeName);
+
+                        refreshKey.currentState!.show();
+                      },
+                      icon: const Icon(
+                        Icons.notification_add,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                }),
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
             icon: const Icon(Icons.add),
@@ -52,6 +85,7 @@ class _CityPageState extends State<CityPage> {
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
+              key: refreshKey,
               onRefresh: () async {
                 setState(() {});
               },

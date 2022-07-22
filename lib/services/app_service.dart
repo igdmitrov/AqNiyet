@@ -659,6 +659,7 @@ class AppService extends ChangeNotifier {
         .from('message')
         .select('''id, message_metadata ( mark_as_read )''')
         .eq('room_id', roomId)
+        .eq('user_to', userId)
         .filter('message_metadata.created_by', 'eq', userId);
 
     final PostgrestResponse response = await query.execute();
@@ -685,8 +686,9 @@ class AppService extends ChangeNotifier {
 
     final query = supabase
         .from('message')
-        .select('''id, message_metadata ( mark_as_read )''').filter(
-            'message_metadata.created_by', 'eq', userId);
+        .select('''id, message_metadata ( mark_as_read )''')
+        .eq('user_to', userId)
+        .filter('message_metadata.created_by', 'eq', userId);
 
     final PostgrestResponse response = await query.execute();
     final error = response.error;

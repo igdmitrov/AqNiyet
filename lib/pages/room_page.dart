@@ -17,7 +17,7 @@ class RoomPage extends StatefulWidget {
 }
 
 class _RoomPageState extends State<RoomPage> {
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Future<List<Room>> _getRooms(
       BuildContext context, AppLocalizations appLocalization) async {
@@ -41,6 +41,10 @@ class _RoomPageState extends State<RoomPage> {
     }
   }
 
+  Future<void> _refresh() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
@@ -51,6 +55,9 @@ class _RoomPageState extends State<RoomPage> {
         title: Text(appLocalization.chat),
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
+        actions: [
+          IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
+        ],
       ),
       body: FutureBuilder<List<Room>>(
         future: _getRooms(context, appLocalization),
@@ -58,9 +65,7 @@ class _RoomPageState extends State<RoomPage> {
           if (snapshot.hasData) {
             return RefreshIndicator(
               key: refreshKey,
-              onRefresh: () async {
-                setState(() {});
-              },
+              onRefresh: _refresh,
               child: ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -79,6 +84,7 @@ class _RoomPageState extends State<RoomPage> {
                                   return const Icon(
                                     Icons.circle,
                                     color: Colors.indigo,
+                                    size: 16.0,
                                   );
                                 }
 

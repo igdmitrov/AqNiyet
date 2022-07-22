@@ -18,6 +18,7 @@ import '../widgets/report_button.dart';
 import 'chat_page.dart';
 import 'edit_page.dart';
 import 'login_page.dart';
+import 'room_page.dart';
 import 'verify_email_page.dart';
 
 class AdvertPage extends StatefulWidget {
@@ -43,6 +44,16 @@ class _AdvertPageState extends State<AdvertPage> {
     }
 
     return null;
+  }
+
+  Future<bool> _getStatusUnReadMessages(BuildContext context) async {
+    try {
+      return await context
+          .read<AppService>()
+          .getStatusUnreadMessages(getCurrentUserId());
+    } on Exception catch (_) {
+      return false;
+    }
   }
 
   Future<void> _openChat(BuildContext context, AppLocalizations appLocalization,
@@ -135,6 +146,29 @@ class _AdvertPageState extends State<AdvertPage> {
         title: Text(advertMenuItem.name),
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
+        actions: [
+          if (isAuthenticated() && isEmail() == true)
+            FutureBuilder<bool>(
+                future: _getStatusUnReadMessages(context),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(RoomPage.routeName);
+
+                        setState(() {});
+                      },
+                      icon: const Icon(
+                        Icons.notification_add,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                }),
+        ],
       ),
       body: FutureBuilder<AdvertPageView?>(
           future:

@@ -9,6 +9,7 @@ import '../services/app_service.dart';
 import '../widgets/menuitem_image.dart';
 import 'add_page.dart';
 import 'advert_page.dart';
+import 'room_page.dart';
 
 class MyAdvertsPages extends StatefulWidget {
   static String routeName = '/myadverts';
@@ -19,6 +20,8 @@ class MyAdvertsPages extends StatefulWidget {
 }
 
 class _MyAdvertsPagesState extends State<MyAdvertsPages> {
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+
   Future<List<AdvertMenuItem>> _getMyAdvertMenuItems(BuildContext context,
       AppLocalizations appLocalization, String userId) async {
     try {
@@ -28,6 +31,16 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
     }
 
     return [];
+  }
+
+  Future<bool> _getStatusUnReadMessages(BuildContext context) async {
+    try {
+      return await context
+          .read<AppService>()
+          .getStatusUnreadMessages(getCurrentUserId());
+    } on Exception catch (_) {
+      return false;
+    }
   }
 
   @override
@@ -41,6 +54,27 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
         actions: [
+          if (isAuthenticated() && isEmail() == true)
+            FutureBuilder<bool>(
+                future: _getStatusUnReadMessages(context),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(RoomPage.routeName);
+
+                        refreshKey.currentState!.show();
+                      },
+                      icon: const Icon(
+                        Icons.notification_add,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                }),
           IconButton(
             onPressed: () =>
                 {Navigator.of(context).pushNamed(AddPage.routeName)},
@@ -54,6 +88,7 @@ class _MyAdvertsPagesState extends State<MyAdvertsPages> {
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
+              key: refreshKey,
               onRefresh: () async {
                 setState(() {});
               },

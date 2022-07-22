@@ -25,7 +25,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Future<List<Category>> _getCategories(
       BuildContext context, AppLocalizations appLocalization) async {

@@ -34,10 +34,6 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -47,9 +43,6 @@ class _ChatPageState extends State<ChatPage> {
         if (newRoomResponse.hasError) {
           if (!mounted) return;
           context.showErrorSnackBar(message: newRoomResponse.error!.message);
-          setState(() {
-            _isLoading = false;
-          });
           return;
         }
 
@@ -75,10 +68,10 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     _msgController.text = '';
+  }
 
-    setState(() {
-      _isLoading = false;
-    });
+  Future<void> _refresh() async {
+    setState(() {});
   }
 
   @override
@@ -101,6 +94,7 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
         actions: [
+          IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed(
                 AdvertPage.routeName,
@@ -136,9 +130,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {});
-                      },
+                      onRefresh: _refresh,
                       child: ListView.builder(
                         reverse: true,
                         itemCount: messages.length,
