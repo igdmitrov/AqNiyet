@@ -29,15 +29,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'pages/support_page.dart';
 import 'pages/verify_email_page.dart';
 import 'pages/verify_page.dart';
+import 'secrets.dart';
 import 'services/app_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: 'https://ekafrwzpvnxinsngbpiu.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrYWZyd3pwdm54aW5zbmdicGl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTE1ODMwNjgsImV4cCI6MTk2NzE1OTA2OH0.y0hW774bZKHBFhYDaK_87cmNNNvb1O14tDb769ED5Jg',
+    url: supabase_url,
+    anonKey: supabase_anon_key,
   );
 
   timeago.setLocaleMessages('ru', timeago.RuMessages());
