@@ -36,8 +36,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: supabase_url,
-    anonKey: supabase_anon_key,
+    url: supabaseUrl,
+    anonKey: supabaseAnonKey,
   );
 
   timeago.setLocaleMessages('ru', timeago.RuMessages());
