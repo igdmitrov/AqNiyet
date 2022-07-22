@@ -1,5 +1,5 @@
 create table public.phonecode (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   code text check (char_length(code) > 0) not null,
   country_id text references public.country not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null

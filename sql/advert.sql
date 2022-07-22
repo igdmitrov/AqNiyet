@@ -1,12 +1,12 @@
 create table public.advert (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   category_id uuid references public.category not null,
   name text check (char_length(name) > 0) not null,
   description text check (char_length(description) > 0) not null,
   country_id text references public.country not null,
   city_id text references public.city not null,
   address text check (char_length(address) > 0) not null,
-  enabled boolean default true,
+  enabled boolean default true not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   created_by uuid references auth.users not null
 );

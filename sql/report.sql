@@ -1,6 +1,7 @@
 create table public.report (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   advert_id uuid not null,
+  room_id uuid null,
   email text check (char_length(email) >= 0) not null,
   description text check (char_length(description) >= 0) not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null

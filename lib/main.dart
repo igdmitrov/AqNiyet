@@ -11,6 +11,7 @@ import 'pages/add_page.dart';
 import 'pages/advert_page.dart';
 import 'pages/adverts_page.dart';
 import 'pages/change_password.dart';
+import 'pages/chat_page.dart';
 import 'pages/city_page.dart';
 import 'pages/edit_page.dart';
 import 'pages/login_page.dart';
@@ -21,6 +22,7 @@ import 'pages/policy_page.dart';
 import 'pages/privacy_page.dart';
 import 'pages/remove_account_page.dart';
 import 'pages/report_page.dart';
+import 'pages/room_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/splash_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -98,6 +100,8 @@ class MyApp extends StatelessWidget {
           SupportPage.routeName: (_) => const SupportPage(),
           PolicyPage.routeName: (_) => const PolicyPage(),
           ReportPage.routeName: (_) => const ReportPage(),
+          ChatPage.routeName: (_) => const ChatPage(),
+          RoomPage.routeName: (_) => const RoomPage(),
         },
       );
     });

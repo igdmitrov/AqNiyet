@@ -1,5 +1,5 @@
 create table public.category (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   name text check (char_length(code) > 0) not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

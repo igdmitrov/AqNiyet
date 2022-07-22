@@ -41,7 +41,7 @@ class _AddPageState extends AdvertState<AddPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Form(
             key: formKey,
             child: Column(

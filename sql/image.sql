@@ -1,5 +1,5 @@
 create table public.image (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   image_name text check (char_length(image_name) > 0) not null,
   advert_id uuid references public.advert not null,
   primary boolean default false,

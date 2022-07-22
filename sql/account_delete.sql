@@ -1,5 +1,5 @@
 create table public.account_delete (
-  id uuid default gen_random_uuid() primary key,
+  id uuid default gen_random_uuid() primary key not null,
   created_by uuid references auth.users not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

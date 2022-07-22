@@ -12,6 +12,7 @@ import 'add_page.dart';
 import 'city_page.dart';
 import 'login_page.dart';
 import 'my_adverts_page.dart';
+import 'room_page.dart';
 import 'support_page.dart';
 import 'verify_email_page.dart';
 
@@ -24,6 +25,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   Future<List<Category>> _getCategories(
       BuildContext context, AppLocalizations appLocalization) async {
     try {
@@ -33,6 +36,16 @@ class _MainPageState extends State<MainPage> {
     }
 
     return [];
+  }
+
+  Future<bool> _getStatusUnReadMessages(BuildContext context) async {
+    try {
+      return await context
+          .read<AppService>()
+          .getStatusUnreadMessages(getCurrentUserId());
+    } on Exception catch (_) {
+      return false;
+    }
   }
 
   @override
@@ -48,6 +61,27 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
         actions: [
+          if (isAuthenticated() && isEmail() == true)
+            FutureBuilder<bool>(
+                future: _getStatusUnReadMessages(context),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(RoomPage.routeName);
+
+                        refreshKey.currentState!.show();
+                      },
+                      icon: const Icon(
+                        Icons.notification_add,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                }),
           IconButton(
             onPressed: () {
               if (isAuthenticated() && isEmail() == false) {
@@ -77,6 +111,14 @@ class _MainPageState extends State<MainPage> {
                 onTap: () {
                   Navigator.of(context)
                       .popAndPushNamed(MyAdvertsPages.routeName);
+                },
+              ),
+            if (isAuthenticated())
+              ListTile(
+                leading: const Icon(Icons.chat_bubble),
+                title: Text(appLocalization.chat),
+                onTap: () {
+                  Navigator.of(context).popAndPushNamed(RoomPage.routeName);
                 },
               ),
             if (isAuthenticated())
@@ -123,6 +165,7 @@ class _MainPageState extends State<MainPage> {
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
+              key: refreshKey,
               onRefresh: () async {
                 setState(() {});
               },

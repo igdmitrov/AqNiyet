@@ -9,11 +9,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
 import '../model/image_data.dart';
+import '../model/room.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
+import '../utils/page_not_found_exception.dart';
 import '../widgets/image_dialog.dart';
 import '../widgets/report_button.dart';
+import 'chat_page.dart';
 import 'edit_page.dart';
+import 'login_page.dart';
+import 'verify_email_page.dart';
 
 class AdvertPage extends StatefulWidget {
   static String routeName = '/advert';
@@ -25,16 +30,77 @@ class AdvertPage extends StatefulWidget {
 
 class _AdvertPageState extends State<AdvertPage> {
   //bool _hasCallSupport = false;
+  bool _isLoading = false;
 
   Future<AdvertPageView?> _getAdvertPageView(
       BuildContext context, AppLocalizations appLocalization, String id) async {
     try {
       return await context.read<AppService>().getAdvertPageView(id);
+    } on PageNotFoundException {
+      context.showErrorSnackBar(message: appLocalization.page_not_found);
     } on Exception catch (_) {
       context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }
 
     return null;
+  }
+
+  Future<void> _openChat(BuildContext context, AppLocalizations appLocalization,
+      AdvertMenuItem advert) async {
+    if (isUnauthenticated()) {
+      Navigator.of(context).pushNamed(LoginPage.routeName);
+      return;
+    }
+
+    if (isAuthenticated() && isEmail() == false) {
+      Navigator.of(context).pushNamed(VerifyEmailPage.routeName);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await context
+          .read<AppService>()
+          .getRoomByAdvert(advert.id, getCurrentUserId());
+
+      final error = response.error;
+      if (response.hasError) {
+        if (!mounted) return;
+        context.showErrorSnackBar(message: error!.message);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (response.data == null || (response.data as List<dynamic>).isEmpty) {
+        if (!mounted) return;
+        Navigator.of(context).pushNamed(ChatPage.routeName,
+            arguments: Room(
+                id: '',
+                advertName: advert.name,
+                advertId: advert.id,
+                userFrom: getCurrentUserId(),
+                userTo: advert.createdBy,
+                createdAt: DateTime.now()));
+      } else {
+        if (!mounted) return;
+        Navigator.of(context).pushNamed(ChatPage.routeName,
+            arguments: (response.data as List<dynamic>)
+                .map((json) => Room.fromJson(json))
+                .toList()
+                .first);
+      }
+    } on Exception catch (_) {
+      context.showErrorSnackBar(message: appLocalization.unexpected_error);
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   // Future<void> _makePhoneCall(String phoneNumber) async {
@@ -155,7 +221,7 @@ class _AdvertPageState extends State<AdvertPage> {
                   ),
                   const SizedBox(height: 18),
                   Text('${advert.cityName} \\ ${advert.address}'),
-                  //const SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   //   children: [
@@ -167,6 +233,17 @@ class _AdvertPageState extends State<AdvertPage> {
                   //     ),
                   //   ],
                   // ),
+                  if (advert.createdBy != getCurrentUserId())
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: ElevatedButton(
+                        onPressed: () => _isLoading
+                            ? null
+                            : _openChat(
+                                context, appLocalization, advertMenuItem),
+                        child: Text(appLocalization.write),
+                      ),
+                    ),
                   const SizedBox(height: 18),
                   FutureBuilder<List<ImageData>>(
                       future: context

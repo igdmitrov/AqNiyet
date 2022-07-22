@@ -91,5 +91,9 @@
     "unconfirmed_privacy": "You need to confirm user rule and privacy policy",
     "report": "Report",
     "report_text": "If you find an error, find content that is contrary to our rules or violates accepted norms, please report it immediately, we will make a decision within 24 hours",
-    "report_thanks": "Thank you for your message, we will make a decision within 24 hours and notify you by email"
+    "report_thanks": "Thank you for your message, we will make a decision within 24 hours and notify you by email",
+    "write": "Write",
+    "chat": "Chat",
+    "message": "Message",
+    "page_not_found": "Page not found"
 }

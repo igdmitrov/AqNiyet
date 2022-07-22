@@ -139,6 +139,10 @@ String formatedPhoneNumber(String? phone) {
   return mask.getMaskedString(phone);
 }
 
+String getUserAppName(String userId) {
+  return userId.substring(0, 8).toUpperCase();
+}
+
 extension SharedExtension on SharedPreferences {
   bool checkKey(String key) {
     if (containsKey(key)) {
@@ -162,6 +166,18 @@ extension SharedExtension on SharedPreferences {
     }
 
     setStringList(key, data);
+    setInt(
+        '${key}_expire', DateTime.now().add(duration).millisecondsSinceEpoch);
+  }
+
+  void toCacheBool(String key, bool value,
+      {Duration duration = const Duration(minutes: 10)}) {
+    if (containsKey(key)) {
+      remove(key);
+      remove('${key}_expire');
+    }
+
+    setBool(key, value);
     setInt(
         '${key}_expire', DateTime.now().add(duration).millisecondsSinceEpoch);
   }

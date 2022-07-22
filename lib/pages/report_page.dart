@@ -33,7 +33,7 @@ class _ReportPageState extends State<ReportPage> {
   bool confirm = false;
 
   Future<void> _report(AppLocalizations appLocalizations, AppService appService,
-      String advertId) async {
+      String advertId, String? roomId) async {
     setState(() {
       isLoading = true;
     });
@@ -49,6 +49,7 @@ class _ReportPageState extends State<ReportPage> {
       if (confirm == true) {
         final model = Report(
           advertId: advertId,
+          roomId: roomId,
           email: _emailController.text,
           description: _descriptionController.text,
         );
@@ -80,8 +81,8 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String advertId =
-        ModalRoute.of(context)!.settings.arguments as String;
+    final data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String?>;
 
     final appService = context.read<AppService>();
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
@@ -133,8 +134,8 @@ class _ReportPageState extends State<ReportPage> {
                         ElevatedButton(
                           onPressed: isLoading
                               ? null
-                              : () => _report(
-                                  appLocalization, appService, advertId),
+                              : () => _report(appLocalization, appService,
+                                  data['advert_id'] as String, data['room_id']),
                           child: Text(isLoading
                               ? appLocalization.loading
                               : appLocalization.report),
