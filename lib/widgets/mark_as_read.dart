@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../components/shared_preferences_provider.dart';
-import '../model/message_metadata.dart';
+import '../model/message.dart';
 import '../services/app_service.dart';
-import '../utils/constants.dart';
 
 class MarkAsRead extends StatelessWidget {
-  final String messageId;
+  final Message message;
   final bool isMine;
-  final String receiver;
-  const MarkAsRead(
-      {Key? key,
-      required this.messageId,
-      required this.isMine,
-      required this.receiver})
-      : super(key: key);
+  const MarkAsRead({
+    Key? key,
+    required this.message,
+    required this.isMine,
+  }) : super(key: key);
 
   final markRead = const Icon(
     Icons.mark_chat_read,
@@ -30,32 +25,25 @@ class MarkAsRead extends StatelessWidget {
   );
 
   Future<Widget> _getMark(BuildContext context) async {
-    final String cacheKey = 'message_mark_as_read-$messageId';
     final appService = context.read<AppService>();
-    final sharedProvider = context.read<SharedPreferencesProvider>();
 
-    final sharedPrefs = await sharedProvider.sharedPreferences;
-    if (sharedPrefs.checkKey(cacheKey)) {
-      return markRead;
-    } else {
-      final markedAsRead = await appService.messageIsRead(
-          messageId, isMine ? receiver : getCurrentUserId());
+    if (isMine == false) {
+      if (message.markAsRead == false) {
+        await appService.markAsRead(message.id);
+      }
 
-      if (markedAsRead == true) {
-        sharedPrefs.toCacheBool(cacheKey, true,
-            duration: const Duration(days: 365));
+      return const SizedBox.shrink();
+    }
 
+    if (isMine == true) {
+      if (message.markAsRead == true) {
         return markRead;
       } else {
-        await appService.markAsRead(MessageMetaData(
-          messageId: messageId,
-          markAsRead: true,
-          createdBy: getCurrentUserId(),
-        ));
-
         return markUnRead;
       }
     }
+
+    return markUnRead;
   }
 
   @override

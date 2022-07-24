@@ -22,7 +22,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
   final _msgController = TextEditingController();
   String? _roomId;
 
@@ -155,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
                           textCapitalization: TextCapitalization.sentences,
                           validator: RequiredValidator(
                               errorText: appLocalization.description_required),
-                          enabled: !_isLoading,
+                          //enabled: !_isLoading,
                           maxLines: 5,
                           minLines: 1,
                           keyboardType: TextInputType.multiline,
@@ -163,10 +162,8 @@ class _ChatPageState extends State<ChatPage> {
                           decoration: InputDecoration(
                             labelText: appLocalization.message,
                             suffixIcon: IconButton(
-                              onPressed: _isLoading == false
-                                  ? () =>
-                                      _submit(appLocalization, appService, room)
-                                  : null,
+                              onPressed: () =>
+                                  _submit(appLocalization, appService, room),
                               icon: const Icon(Icons.send_rounded,
                                   color: Colors.grey),
                             ),

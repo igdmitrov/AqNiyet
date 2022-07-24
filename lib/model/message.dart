@@ -5,6 +5,7 @@ class Message implements BaseModel {
   final String id;
   final String roomId;
   final String content;
+  final bool markAsRead;
   final String userFrom;
   final String userTo;
   final DateTime createdAt;
@@ -13,6 +14,7 @@ class Message implements BaseModel {
       : id = json['id'],
         roomId = json['room_id'],
         content = json['content'],
+        markAsRead = json['mark_as_read'],
         userFrom = json['user_from'],
         userTo = json['user_to'],
         createdAt = DateTime.parse(json['created_at']);
@@ -21,6 +23,7 @@ class Message implements BaseModel {
     required this.id,
     required this.roomId,
     required this.content,
+    this.markAsRead = false,
     required this.userFrom,
     required this.userTo,
     required this.createdAt,
@@ -30,6 +33,7 @@ class Message implements BaseModel {
     return {
       'room_id': roomId,
       'content': content,
+      'mark_as_read': markAsRead,
       'user_from': userFrom,
       'user_to': userTo,
     };

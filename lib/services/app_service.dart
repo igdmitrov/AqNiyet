@@ -10,7 +10,6 @@ import '../model/advert.dart';
 import '../model/advert_menu_item.dart';
 import '../model/advert_page_view.dart';
 import '../model/category.dart';
-import '../model/message_metadata.dart';
 import '../model/room.dart';
 import '../model/message.dart';
 import '../model/city.dart';
@@ -621,91 +620,55 @@ class AppService extends ChangeNotifier {
     throw Exception('Failed to load rooms');
   }
 
-  Future<PostgrestResponse> markAsRead(MessageMetaData metaData) async {
+  Future<PostgrestResponse> markAsRead(String id) async {
     await refreshSession();
 
-    final response =
-        supabase.from('message_metadata').insert(metaData.toMap()).execute();
+    final response = supabase
+        .from('message')
+        .update({'mark_as_read': true})
+        .eq('id', id)
+        .execute();
     return response;
   }
 
-  Future<bool> messageIsRead(String messageId, String userId) async {
-    await refreshSession();
-
-    final query = supabase
-        .from('message_metadata')
-        .select('id')
-        .eq('message_id', messageId)
-        .eq('created_by', userId)
-        .eq('mark_as_read', true);
-
-    final PostgrestResponse response = await query.execute();
-    final error = response.error;
-
-    if (error != null && response.status != 406) {
-      return false;
-    }
-
-    return response.data != null && (response.data as List<dynamic>).isNotEmpty
-        ? true
-        : false;
-  }
-
-  Future<bool> getStatusUnreadMessagesByRoom(
-      String roomId, String userId) async {
+  Future<int> getCountUnreadMessagesByRoom(String roomId, String userId) async {
     await refreshSession();
 
     final query = supabase
         .from('message')
-        .select('''id, message_metadata ( mark_as_read )''')
+        .select('id')
         .eq('room_id', roomId)
         .eq('user_to', userId)
-        .filter('message_metadata.created_by', 'eq', userId);
+        .eq('mark_as_read', false);
 
-    final PostgrestResponse response = await query.execute();
+    final PostgrestResponse response =
+        await query.execute(count: CountOption.exact);
     final error = response.error;
 
     if (error != null && response.status != 406) {
       throw Exception(error.message);
     }
 
-    if (response.data != null && (response.data as List<dynamic>).isNotEmpty) {
-      final unreadMessages = (response.data as List<dynamic>)
-          .where((element) =>
-              (element['message_metadata'] as List<dynamic>).isEmpty)
-          .toList();
-
-      return unreadMessages.isNotEmpty;
-    }
-
-    return false;
+    return response.count ?? 0;
   }
 
-  Future<bool> getStatusUnreadMessages(String userId) async {
+  Future<int> getCountUnreadMessages(String userId) async {
     await refreshSession();
 
     final query = supabase
         .from('message')
-        .select('''id, message_metadata ( mark_as_read )''')
+        .select('id')
         .eq('user_to', userId)
-        .filter('message_metadata.created_by', 'eq', userId);
+        .eq('mark_as_read', false);
 
-    final PostgrestResponse response = await query.execute();
+    final PostgrestResponse response =
+        await query.execute(count: CountOption.exact);
     final error = response.error;
 
     if (error != null && response.status != 406) {
       throw Exception(error.message);
     }
 
-    if (response.data != null && (response.data as List<dynamic>).isNotEmpty) {
-      final unreadMessages = (response.data as List<dynamic>)
-          .where((element) =>
-              (element['message_metadata'] as List<dynamic>).isEmpty)
-          .toList();
-
-      return unreadMessages.isNotEmpty;
-    }
-
-    return false;
+    return response.count ?? 0;
   }
 }

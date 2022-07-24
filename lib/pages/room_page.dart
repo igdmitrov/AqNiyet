@@ -34,8 +34,9 @@ class _RoomPageState extends State<RoomPage> {
       BuildContext context, String roomId) async {
     try {
       return await context
-          .read<AppService>()
-          .getStatusUnreadMessagesByRoom(roomId, getCurrentUserId());
+              .read<AppService>()
+              .getCountUnreadMessagesByRoom(roomId, getCurrentUserId()) >
+          0;
     } on Exception catch (_) {
       return false;
     }

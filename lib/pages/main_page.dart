@@ -41,8 +41,9 @@ class _MainPageState extends State<MainPage> {
   Future<bool> _getStatusUnReadMessages(BuildContext context) async {
     try {
       return await context
-          .read<AppService>()
-          .getStatusUnreadMessages(getCurrentUserId());
+              .read<AppService>()
+              .getCountUnreadMessages(getCurrentUserId()) >
+          0;
     } on Exception catch (_) {
       return false;
     }

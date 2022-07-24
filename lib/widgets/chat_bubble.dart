@@ -45,9 +45,8 @@ class ChatBubble extends StatelessWidget {
         style: const TextStyle(color: Colors.grey, fontSize: 12.0),
       ),
       MarkAsRead(
-        messageId: message.id,
+        message: message,
         isMine: isMine,
-        receiver: message.userTo,
       ),
       const SizedBox(width: 60),
     ];

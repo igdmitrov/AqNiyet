@@ -2,6 +2,7 @@ create table public.message (
   id uuid default gen_random_uuid() primary key not null,
   room_id uuid references public.room not null,
   content text check (char_length(content) > 0) not null,
+  mark_as_read boolean default true not null, 
   user_from uuid references auth.users not null,
   user_to uuid references auth.users not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -21,7 +22,7 @@ create policy "Users can view only their messages"
 
 create policy "Users can update their own messages."
   on message for update using (
-    false
+    auth.uid() = message.user_to
   );
 
 create policy "Users can delete their own messages." 
