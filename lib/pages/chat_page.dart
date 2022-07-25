@@ -1,9 +1,9 @@
-import 'package:aqniyet/model/advert_menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
+import '../model/advert_menu_item.dart';
 import '../model/room.dart';
 import '../model/message.dart';
 import '../services/app_service.dart';
