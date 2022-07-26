@@ -52,6 +52,7 @@ dependencies:
   easy_mask: ^2.0.1
   email_launcher: ^1.1.1
   uuid: ^3.0.6
+  flutter_svg: ^1.1.1+1
 
 dev_dependencies:
   flutter_test:

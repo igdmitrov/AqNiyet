@@ -134,8 +134,7 @@ class _MainPageState extends State<MainPage> {
               leading: const Icon(Icons.help_center),
               title: Text(appLocalization.support),
               onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    SupportPage.routeName, (route) => false);
+                Navigator.of(context).popAndPushNamed(SupportPage.routeName);
               },
             ),
             const Divider(),

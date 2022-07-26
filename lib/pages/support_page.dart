@@ -8,7 +8,6 @@ import '../utils/constants.dart';
 import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
-import 'main_page.dart';
 
 class SupportPage extends StatefulWidget {
   static String routeName = '/support';
@@ -56,8 +55,7 @@ class _SupportPageState extends State<SupportPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(MainPage.routeName),
+                    onPressed: () => Navigator.of(context).pop(),
                     child: Text(appLocalization.back),
                   ),
                 ],
@@ -85,8 +83,7 @@ class _SupportPageState extends State<SupportPage> {
                   ),
                   const SizedBox(width: 10),
                   TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(MainPage.routeName),
+                    onPressed: () => Navigator.of(context).pop(),
                     child: Text(appLocalization.back),
                   ),
                 ],

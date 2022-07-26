@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
@@ -87,8 +88,21 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${getUserAppName(room.userFrom)} ${room.advertName.characters.take(10).toString()}',
+        title: Row(
+          children: [
+            SvgPicture.network(
+              'https://avatars.dicebear.com/api/pixel-art/${room.userTo}.svg',
+              width: 40,
+              height: 40,
+              placeholderBuilder: (BuildContext context) => Container(
+                  padding: const EdgeInsets.all(30.0),
+                  child: const CircularProgressIndicator()),
+            ),
+            const SizedBox(width: 5.0),
+            Text(
+              room.advertName.characters.take(10).toString(),
+            ),
+          ],
         ),
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,

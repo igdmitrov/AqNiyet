@@ -6,8 +6,8 @@ import '../utils/constants.dart';
 import '../widgets/footer.dart';
 import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
-import 'add_page.dart';
 import 'main_page.dart';
+import 'support_page.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   static String routeName = '/verify-email';
@@ -29,7 +29,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
 
     if (isAuthenticated() && isEmail() == true) {
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(AddPage.routeName);
+      Navigator.of(context).pop();
       return;
     }
 
@@ -78,6 +78,13 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             onPressed: _isLoading ? null : _refresh,
             child: Text(
                 _isLoading ? appLocalization.loading : appLocalization.refresh),
+          ),
+          const FormInputDivider(),
+          TextButton.icon(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(SupportPage.routeName),
+            icon: const Icon(Icons.help_center),
+            label: Text(appLocalization.support),
           ),
           SizedBox(height: 10.h),
           const Footer(),

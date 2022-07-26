@@ -12,6 +12,7 @@ import '../widgets/form_input_divider.dart';
 import '../widgets/logo.dart';
 import '../widgets/otp_code_input.dart';
 import 'login_page.dart';
+import 'support_page.dart';
 
 class VerifyPage extends StatefulWidget {
   static String routeName = '/verify';
@@ -157,6 +158,13 @@ class _VerifyPageState extends State<VerifyPage> {
                     child: Text(_timeFromLastSend == 0
                         ? appLocalization.resend
                         : '${appLocalization.resend} - $_timeFromLastSend ${appLocalization.sec}')),
+                const FormInputDivider(),
+                TextButton.icon(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(SupportPage.routeName),
+                  icon: const Icon(Icons.help_center),
+                  label: Text(appLocalization.support),
+                ),
                 SizedBox(height: 20.h),
                 const Footer(),
               ],

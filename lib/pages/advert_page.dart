@@ -201,31 +201,40 @@ class _AdvertPageState extends State<AdvertPage> {
                     ],
                   ),
                   FutureBuilder<Uint8List?>(
-                      future: context
-                          .read<AppService>()
-                          .getMainImage(advert.id, advert.createdBy),
-                      builder: (ctx, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text(appLocalization.loading);
-                        }
+                    future: context
+                        .read<AppService>()
+                        .getMainImage(advert.id, advert.createdBy),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          width: 50.w,
+                          height: 50.w,
+                          child: Center(
+                            child: Text(appLocalization.loading),
+                          ),
+                        );
+                      }
 
-                        if (snapshot.hasData) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.memory(
-                                (snapshot.data as Uint8List),
-                                width: 50.w,
-                                height: 50.w,
-                                fit: BoxFit.cover,
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
+                      if (snapshot.hasData) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.memory(
+                              (snapshot.data as Uint8List),
+                              width: 50.w,
+                              height: 50.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return SizedBox(
+                          width: 50.w,
+                          height: 50.w,
+                        );
+                      }
+                    },
+                  ),
                   Text(advert.categoryName),
                   const SizedBox(height: 10),
                   Padding(
