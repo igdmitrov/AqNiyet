@@ -1,4 +1,4 @@
-package com.example.aqniyet
+package com.igdmit.aqniyet
 
 import io.flutter.embedding.android.FlutterActivity
 
