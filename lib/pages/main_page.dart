@@ -8,6 +8,7 @@ import '../services/app_service.dart';
 import '../utils/constants.dart';
 import '../widgets/greeting.dart';
 import '../widgets/menuitem_count_by_category.dart';
+import '../widgets/user_logo.dart';
 import 'account_page.dart';
 import 'add_page.dart';
 import 'city_page.dart';
@@ -70,25 +71,28 @@ class _MainPageState extends State<MainPage> {
         actions: [
           if (isAuthenticated() && isEmail() == true)
             FutureBuilder<bool>(
-                future: _getStatusUnReadMessages(context),
-                builder: (ctx, snapshot) {
-                  if (snapshot.hasData && snapshot.data == true) {
-                    return IconButton(
-                      onPressed: () async {
-                        await navigatorKey.currentState!
-                            .pushNamed(RoomPage.routeName);
+              future: _getStatusUnReadMessages(context),
+              builder: (ctx, snapshot) {
+                if (snapshot.hasData && snapshot.data == true) {
+                  return IconButton(
+                    onPressed: () async {
+                      await navigatorKey.currentState!
+                          .pushNamed(RoomPage.routeName);
 
-                        refreshKey.currentState!.show();
-                      },
-                      icon: const Icon(
-                        Icons.notification_add,
-                        color: Colors.red,
-                      ),
-                    );
-                  }
+                      refreshKey.currentState!.show();
+                    },
+                    icon: const Icon(
+                      Icons.notification_add,
+                      color: Colors.red,
+                    ),
+                  );
+                }
 
-                  return const SizedBox.shrink();
-                }),
+                return const SizedBox.shrink();
+              },
+            ),
+          if (isAuthenticated() && isEmail() == true)
+            UserLogo(userId: getCurrentUserId()),
           IconButton(
             onPressed: () {
               if (isAuthenticated() && isEmail() == false) {

@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -52,6 +54,28 @@ class _LoginPageState extends State<LoginPage> {
         if (isAuthenticated() && isEmail() == false) {
           final email = supabase.auth.currentUser?.userMetadata['email'];
           await supabase.auth.update(UserAttributes(email: email));
+        }
+
+        NotificationSettings settings = await messaging.requestPermission(
+          alert: true,
+          badge: false,
+          provisional: false,
+          sound: true,
+        );
+
+        if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+          if (kDebugMode) {
+            print('User granted permission');
+          }
+          String? token = await messaging.getToken();
+          if (token != null) {
+            await supabase
+                .rpc('update_fcm_key', params: {'key': token}).execute();
+          }
+        } else {
+          if (kDebugMode) {
+            print('User declined or has not accepted permission');
+          }
         }
 
         if (!mounted) return;
