@@ -77,7 +77,7 @@ class _AdvertsPageState extends State<AdvertsPage> {
                   if (snapshot.hasData && snapshot.data == true) {
                     return IconButton(
                       onPressed: () async {
-                        await Navigator.of(context)
+                        await navigatorKey.currentState!
                             .pushNamed(RoomPage.routeName);
 
                         refreshKey.currentState!.show();
@@ -92,7 +92,8 @@ class _AdvertsPageState extends State<AdvertsPage> {
                   return const SizedBox.shrink();
                 }),
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
+            onPressed: () =>
+                navigatorKey.currentState!.pushNamed(AddPage.routeName),
             icon: const Icon(Icons.add),
           )
         ],
@@ -126,7 +127,7 @@ class _AdvertsPageState extends State<AdvertsPage> {
                           subtitle: Text(advert.description.characters
                               .take(50)
                               .toString()),
-                          onTap: () => Navigator.of(context).pushNamed(
+                          onTap: () => navigatorKey.currentState!.pushNamed(
                               AdvertPage.routeName,
                               arguments: advert),
                           trailing: Text(

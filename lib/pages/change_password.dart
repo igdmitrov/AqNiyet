@@ -76,7 +76,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => navigatorKey.currentState!.pop(),
                       child: Text(appLocalization.back),
                     ),
                   ],

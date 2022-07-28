@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
 
         if (error.message == 'Phone not confirmed') {
-          Navigator.of(context).pushNamed(VerifyPage.routeName,
+          navigatorKey.currentState!.pushNamed(VerifyPage.routeName,
               arguments: _phoneController.text);
         }
         context.showErrorSnackBar(message: error.message);
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+        navigatorKey.currentState!.pushReplacementNamed(MainPage.routeName);
       }
     }
 
@@ -92,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(MainPage.routeName),
+                      onPressed: () => navigatorKey.currentState!
+                          .pushNamed(MainPage.routeName),
                       child: Text(appLocalization.back),
                     ),
                   ],
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () => _isLoading
                           ? null
-                          : Navigator.of(context)
+                          : navigatorKey.currentState!
                               .pushNamed(SignUpPage.routeName),
                       child: Text(appLocalization.signup),
                     ),
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const FormInputDivider(),
                 TextButton(
-                  onPressed: () => Navigator.of(context)
+                  onPressed: () => navigatorKey.currentState!
                       .pushNamed(PasswordRecoveryPage.routeName),
                   child: Text(
                     appLocalization.password_recovery,

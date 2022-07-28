@@ -1,3 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart' as provider;
@@ -31,6 +34,7 @@ import 'pages/verify_email_page.dart';
 import 'pages/verify_page.dart';
 import 'secrets.dart';
 import 'services/app_service.dart';
+import 'utils/constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +46,32 @@ Future<void> main() async {
 
   timeago.setLocaleMessages('ru', timeago.RuMessages());
   timeago.setLocaleMessages('en', timeago.EnMessages());
+
+  await Firebase.initializeApp();
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    navigatorKey.currentState!.pushNamed(RoomPage.routeName);
+  });
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    if (kDebugMode) {
+      print('User granted permission');
+    }
+    String? token = await messaging.getToken();
+    if (token != null) {
+      await supabase.rpc('update_fcm_key', params: {'key': token}).execute();
+    }
+  } else {
+    if (kDebugMode) {
+      print('User declined or has not accepted permission');
+    }
+  }
 
   runApp(provider.MultiProvider(
     providers: [
@@ -78,6 +108,7 @@ class MyApp extends StatelessWidget {
           Locale('ru', ''),
           Locale('en', ''),
         ],
+        navigatorKey: navigatorKey,
         initialRoute: SplashPage.routeName,
         routes: <String, WidgetBuilder>{
           SplashPage.routeName: (_) => const SplashPage(),

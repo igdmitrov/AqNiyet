@@ -62,7 +62,7 @@ class _ReportPageState extends State<ReportPage> {
         } else {
           if (!mounted) return;
           context.showSnackBar(message: appLocalizations.report_thanks);
-          Navigator.of(context).pop();
+          navigatorKey.currentState!.pop();
         }
       }
     }

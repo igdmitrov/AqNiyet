@@ -1,3 +1,4 @@
+import 'package:aqniyet/widgets/user_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +90,7 @@ class _RoomPageState extends State<RoomPage> {
                                   );
                                 }
 
-                                return const SizedBox.shrink();
+                                return UserLogo(userId: room.userFrom);
                               }),
                           title: Text(
                             getUserAppName(room.userFrom),
@@ -98,7 +99,7 @@ class _RoomPageState extends State<RoomPage> {
                           subtitle: Text(
                               room.advertName.characters.take(50).toString()),
                           onTap: () async {
-                            await Navigator.of(context)
+                            await navigatorKey.currentState!
                                 .pushNamed(ChatPage.routeName, arguments: room);
 
                             refreshKey.currentState!.show();

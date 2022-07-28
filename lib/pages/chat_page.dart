@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +10,7 @@ import '../services/app_service.dart';
 import '../utils/constants.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/report_button.dart';
+import '../widgets/user_logo.dart';
 import 'advert_page.dart';
 
 class ChatPage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _ChatPageState extends State<ChatPage> {
         createdAt: DateTime.now(),
       );
 
-      final response = await appService.sendMessage(message);
+      final response = await appService.sendMessage(message, room.advertName);
       final error = response.error;
       if (response.hasError) {
         if (!mounted) return;
@@ -90,14 +90,7 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         title: Row(
           children: [
-            SvgPicture.network(
-              'https://avatars.dicebear.com/api/pixel-art/${room.userTo}.svg',
-              width: 40,
-              height: 40,
-              placeholderBuilder: (BuildContext context) => Container(
-                  padding: const EdgeInsets.all(30.0),
-                  child: const CircularProgressIndicator()),
-            ),
+            UserLogo(userId: room.userFrom),
             const SizedBox(width: 5.0),
             Text(
               room.advertName.characters.take(10).toString(),
@@ -109,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(
+            onPressed: () => navigatorKey.currentState!.pushNamed(
                 AdvertPage.routeName,
                 arguments: AdvertMenuItem(
                     id: room.advertId,

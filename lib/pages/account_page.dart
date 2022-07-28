@@ -45,15 +45,15 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
           ),
           const SizedBox(height: 40),
           RemoveImageButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(RemoveAccountPage.routeName),
+            onPressed: () => navigatorKey.currentState!
+                .pushNamed(RemoveAccountPage.routeName),
             isLoading: false,
           ),
           const SizedBox(height: 40),
           OutlinedButton(
             child: Text(appLocalization.change_password),
             onPressed: () =>
-                Navigator.of(context).pushNamed(ChangePassword.routeName),
+                navigatorKey.currentState!.pushNamed(ChangePassword.routeName),
           ),
           const SizedBox(height: 40),
           const PrivacyButton(),

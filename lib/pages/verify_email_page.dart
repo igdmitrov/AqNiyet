@@ -29,7 +29,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
 
     if (isAuthenticated() && isEmail() == true) {
       if (!mounted) return;
-      Navigator.of(context).pop();
+      navigatorKey.currentState!.pop();
       return;
     }
 
@@ -51,7 +51,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             children: [
               TextButton(
                 onPressed: () =>
-                    Navigator.of(context).pushNamed(MainPage.routeName),
+                    navigatorKey.currentState!.pushNamed(MainPage.routeName),
                 child: Text(appLocalization.back),
               ),
             ],
@@ -82,7 +82,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
           const FormInputDivider(),
           TextButton.icon(
             onPressed: () =>
-                Navigator.of(context).pushNamed(SupportPage.routeName),
+                navigatorKey.currentState!.pushNamed(SupportPage.routeName),
             icon: const Icon(Icons.help_center),
             label: Text(appLocalization.support),
           ),

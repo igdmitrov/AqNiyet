@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -53,6 +54,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
+    // For handling the received notifications
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      setState(() {});
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -69,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                   if (snapshot.hasData && snapshot.data == true) {
                     return IconButton(
                       onPressed: () async {
-                        await Navigator.of(context)
+                        await navigatorKey.currentState!
                             .pushNamed(RoomPage.routeName);
 
                         refreshKey.currentState!.show();
@@ -86,11 +92,11 @@ class _MainPageState extends State<MainPage> {
           IconButton(
             onPressed: () {
               if (isAuthenticated() && isEmail() == false) {
-                Navigator.of(context).pushNamed(VerifyEmailPage.routeName);
+                navigatorKey.currentState!.pushNamed(VerifyEmailPage.routeName);
                 return;
               }
 
-              Navigator.of(context).pushNamed(AddPage.routeName);
+              navigatorKey.currentState!.pushNamed(AddPage.routeName);
             },
             icon: const Icon(Icons.add),
           )
@@ -110,7 +116,7 @@ class _MainPageState extends State<MainPage> {
                 leading: const Icon(Icons.my_library_books),
                 title: Text(appLocalization.my_items),
                 onTap: () {
-                  Navigator.of(context)
+                  navigatorKey.currentState!
                       .popAndPushNamed(MyAdvertsPages.routeName);
                 },
               ),
@@ -119,7 +125,8 @@ class _MainPageState extends State<MainPage> {
                 leading: const Icon(Icons.chat_bubble),
                 title: Text(appLocalization.chat),
                 onTap: () {
-                  Navigator.of(context).popAndPushNamed(RoomPage.routeName);
+                  navigatorKey.currentState!
+                      .popAndPushNamed(RoomPage.routeName);
                 },
               ),
             if (isAuthenticated())
@@ -127,14 +134,16 @@ class _MainPageState extends State<MainPage> {
                 leading: const Icon(Icons.account_box),
                 title: Text(appLocalization.my_account),
                 onTap: () {
-                  Navigator.of(context).popAndPushNamed(AccountPage.routeName);
+                  navigatorKey.currentState!
+                      .popAndPushNamed(AccountPage.routeName);
                 },
               ),
             ListTile(
               leading: const Icon(Icons.help_center),
               title: Text(appLocalization.support),
               onTap: () {
-                Navigator.of(context).popAndPushNamed(SupportPage.routeName);
+                navigatorKey.currentState!
+                    .popAndPushNamed(SupportPage.routeName);
               },
             ),
             const Divider(),
@@ -143,7 +152,7 @@ class _MainPageState extends State<MainPage> {
                 leading: const Icon(Icons.input_outlined),
                 title: Text(appLocalization.signin),
                 onTap: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
+                  navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       LoginPage.routeName, (route) => false);
                 },
               ),
@@ -179,7 +188,7 @@ class _MainPageState extends State<MainPage> {
                       child: Card(
                         child: ListTile(
                           title: Text(category.name),
-                          onTap: () => Navigator.of(context).pushNamed(
+                          onTap: () => navigatorKey.currentState!.pushNamed(
                               CityPage.routeName,
                               arguments: category),
                           trailing: MenuItemCountByCategory(category.id),

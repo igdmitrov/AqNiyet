@@ -60,12 +60,12 @@ class _AdvertPageState extends State<AdvertPage> {
   Future<void> _openChat(BuildContext context, AppLocalizations appLocalization,
       AdvertMenuItem advert) async {
     if (isUnauthenticated()) {
-      Navigator.of(context).pushNamed(LoginPage.routeName);
+      navigatorKey.currentState!.pushNamed(LoginPage.routeName);
       return;
     }
 
     if (isAuthenticated() && isEmail() == false) {
-      Navigator.of(context).pushNamed(VerifyEmailPage.routeName);
+      navigatorKey.currentState!.pushNamed(VerifyEmailPage.routeName);
       return;
     }
 
@@ -90,7 +90,7 @@ class _AdvertPageState extends State<AdvertPage> {
 
       if (response.data == null || (response.data as List<dynamic>).isEmpty) {
         if (!mounted) return;
-        Navigator.of(context).pushNamed(ChatPage.routeName,
+        navigatorKey.currentState!.pushNamed(ChatPage.routeName,
             arguments: Room(
                 id: '',
                 advertName: advert.name,
@@ -100,7 +100,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 createdAt: DateTime.now()));
       } else {
         if (!mounted) return;
-        Navigator.of(context).pushNamed(ChatPage.routeName,
+        navigatorKey.currentState!.pushNamed(ChatPage.routeName,
             arguments: (response.data as List<dynamic>)
                 .map((json) => Room.fromJson(json))
                 .toList()
@@ -155,7 +155,7 @@ class _AdvertPageState extends State<AdvertPage> {
                   if (snapshot.hasData && snapshot.data == true) {
                     return IconButton(
                       onPressed: () async {
-                        await Navigator.of(context)
+                        await navigatorKey.currentState!
                             .pushNamed(RoomPage.routeName);
 
                         setState(() {});
@@ -193,7 +193,7 @@ class _AdvertPageState extends State<AdvertPage> {
                           style: OutlinedButton.styleFrom(
                             primary: Colors.red,
                           ),
-                          onPressed: () => Navigator.of(context)
+                          onPressed: () => navigatorKey.currentState!
                               .pushReplacementNamed(EditPage.routeName,
                                   arguments: advert),
                           child: Text(appLocalization.edit),

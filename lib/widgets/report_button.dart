@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../pages/report_page.dart';
+import '../utils/constants.dart';
 
 class ReportButton extends StatelessWidget {
   final String advertId;
@@ -14,7 +15,8 @@ class ReportButton extends StatelessWidget {
     final appLocalization = AppLocalizations.of(context) as AppLocalizations;
 
     return OutlinedButton(
-      onPressed: () => Navigator.of(context).pushNamed(ReportPage.routeName,
+      onPressed: () => navigatorKey.currentState!.pushNamed(
+          ReportPage.routeName,
           arguments: {'advert_id': advertId, 'room_id': roomId}),
       child: Text(
         appLocalization.report,

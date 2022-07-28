@@ -36,6 +36,11 @@
 	<string>Using your phone's camera, you can quickly take pictures for your advert</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select existing photos from your Gallery for your advert</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

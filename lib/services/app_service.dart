@@ -577,10 +577,24 @@ class AppService extends ChangeNotifier {
     return response;
   }
 
-  Future<PostgrestResponse> sendMessage(Message model) async {
+  Future<PostgrestResponse> sendMessage(
+      Message model, String advertName) async {
     await refreshSession();
 
-    final response = supabase.from('message').insert(model.toMap()).execute();
+    final response =
+        await supabase.from('message').insert(model.toMap()).execute();
+
+    // if (response.hasError == false) {
+    //   await supabase.rpc(
+    //     'send_push_notification',
+    //     params: {
+    //       'receiver_user_id': model.userTo,
+    //       'title': advertName,
+    //       'message': model.content,
+    //     },
+    //   ).execute();
+    // }
+
     return response;
   }
 

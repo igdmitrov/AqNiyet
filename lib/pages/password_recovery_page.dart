@@ -41,7 +41,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
       } else {
         if (!mounted) return;
         context.showSnackBar(message: appLocalization.check_your_email);
-        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+        navigatorKey.currentState!.pushReplacementNamed(LoginPage.routeName);
       }
     }
 
@@ -72,8 +72,8 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(LoginPage.routeName),
+                      onPressed: () => navigatorKey.currentState!
+                          .pushNamed(LoginPage.routeName),
                       child: Text(appLocalization.back),
                     ),
                   ],

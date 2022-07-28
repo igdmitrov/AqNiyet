@@ -48,7 +48,7 @@ class _EditPageState extends AdvertState<EditPage> {
         backgroundColor: appBackgroundColor,
         foregroundColor: appForegroundColor,
         leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () => navigatorKey.currentState!.pop(),
           child: const Icon(Icons.arrow_back_ios_new),
         ),
       ),
@@ -242,7 +242,7 @@ class _EditPageState extends AdvertState<EditPage> {
                             : appLocalization.save)),
                     const SizedBox(width: 10),
                     OutlinedButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => navigatorKey.currentState!.pop(),
                         child: Text(appLocalization.back)),
                   ],
                 ),

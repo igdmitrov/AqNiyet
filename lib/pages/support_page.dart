@@ -55,7 +55,7 @@ class _SupportPageState extends State<SupportPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => navigatorKey.currentState!.pop(),
                     child: Text(appLocalization.back),
                   ),
                 ],
@@ -83,7 +83,7 @@ class _SupportPageState extends State<SupportPage> {
                   ),
                   const SizedBox(width: 10),
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => navigatorKey.currentState!.pop(),
                     child: Text(appLocalization.back),
                   ),
                 ],

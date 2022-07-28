@@ -9,7 +9,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
   @override
   void onUnauthenticated() {
     if (mounted) {
-      Navigator.of(context)
+      navigatorKey.currentState!
           .pushNamedAndRemoveUntil(LoginPage.routeName, (route) => false);
     }
   }
@@ -17,7 +17,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
   @override
   void onAuthenticated(Session session) {
     if (mounted) {
-      Navigator.of(context)
+      navigatorKey.currentState!
           .pushNamedAndRemoveUntil(MainPage.routeName, (route) => false);
     }
   }

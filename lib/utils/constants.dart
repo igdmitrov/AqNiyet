@@ -1,4 +1,5 @@
 import 'package:easy_mask/easy_mask.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -11,6 +12,9 @@ const footerText = 'DEVELOPED BY IGOR DMITROV';
 const supportEmail = 'aqniyet.help@gmail.com';
 
 final supabase = Supabase.instance.client;
+final messaging = FirebaseMessaging.instance;
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 const supabaseImageBucket = 'public-images';
 

@@ -86,7 +86,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
 
           if (!mounted) return;
           context.showSnackBar(message: appLocalizations.created_new_item);
-          Navigator.of(context).pop();
+          navigatorKey.currentState!.pop();
         }
       }
     }
@@ -154,7 +154,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
           }
 
           if (!mounted) return;
-          Navigator.of(context).pop();
+          navigatorKey.currentState!.pop();
         }
       }
     }
@@ -285,13 +285,13 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
         actions: [
           CupertinoActionSheetAction(
               onPressed: () {
-                Navigator.of(context).pop();
+                navigatorKey.currentState!.pop();
                 _getImagesFromGallery(appLocalization);
               },
               child: Text(appLocalization.gallery)),
           CupertinoActionSheetAction(
               onPressed: () {
-                Navigator.of(context).pop();
+                navigatorKey.currentState!.pop();
                 _takePicture(appLocalization);
               },
               child: Text(appLocalization.camera)),
@@ -375,7 +375,7 @@ class AdvertState<T extends StatefulWidget> extends AuthRequiredState<T> {
     });
 
     if (!mounted) return;
-    Navigator.of(context)
+    navigatorKey.currentState!
         .pushNamedAndRemoveUntil(MainPage.routeName, (route) => false);
   }
 

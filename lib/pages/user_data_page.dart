@@ -42,7 +42,7 @@ class _UserDataPageState extends State<UserDataPage> {
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed(AddPage.routeName);
+        navigatorKey.currentState!.pushReplacementNamed(AddPage.routeName);
       }
     }
 
@@ -73,8 +73,8 @@ class _UserDataPageState extends State<UserDataPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(MainPage.routeName),
+                      onPressed: () => navigatorKey.currentState!
+                          .pushNamed(MainPage.routeName),
                       child: Text(appLocalization.back),
                     ),
                   ],

@@ -66,7 +66,8 @@ class _VerifyPageState extends State<VerifyPage> {
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
-        Navigator.of(context).pushNamed(LoginPage.routeName, arguments: phone);
+        navigatorKey.currentState!
+            .pushNamed(LoginPage.routeName, arguments: phone);
       }
     }
 
@@ -144,8 +145,8 @@ class _VerifyPageState extends State<VerifyPage> {
                     ),
                     const SizedBox(width: 10),
                     TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(LoginPage.routeName),
+                      onPressed: () => navigatorKey.currentState!
+                          .pushNamed(LoginPage.routeName),
                       child: Text(appLocalization.cancel),
                     ),
                   ],
@@ -160,8 +161,8 @@ class _VerifyPageState extends State<VerifyPage> {
                         : '${appLocalization.resend} - $_timeFromLastSend ${appLocalization.sec}')),
                 const FormInputDivider(),
                 TextButton.icon(
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed(SupportPage.routeName),
+                  onPressed: () => navigatorKey.currentState!
+                      .pushNamed(SupportPage.routeName),
                   icon: const Icon(Icons.help_center),
                   label: Text(appLocalization.support),
                 ),

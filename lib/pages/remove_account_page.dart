@@ -73,7 +73,7 @@ class _RemoveAccountPageState extends State<RemoveAccountPage> {
               const SizedBox(width: 10),
               TextButton(
                 onPressed: () =>
-                    _isLoading ? null : Navigator.of(context).pop(),
+                    _isLoading ? null : navigatorKey.currentState!.pop(),
                 child: Text(appLocalization.cancel),
               ),
             ],

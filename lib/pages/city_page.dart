@@ -61,7 +61,7 @@ class _CityPageState extends State<CityPage> {
                   if (snapshot.hasData && snapshot.data == true) {
                     return IconButton(
                       onPressed: () async {
-                        await Navigator.of(context)
+                        await navigatorKey.currentState!
                             .pushNamed(RoomPage.routeName);
 
                         refreshKey.currentState!.show();
@@ -76,7 +76,8 @@ class _CityPageState extends State<CityPage> {
                   return const SizedBox.shrink();
                 }),
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(AddPage.routeName),
+            onPressed: () =>
+                navigatorKey.currentState!.pushNamed(AddPage.routeName),
             icon: const Icon(Icons.add),
           )
         ],
@@ -100,7 +101,7 @@ class _CityPageState extends State<CityPage> {
                       child: Card(
                         child: ListTile(
                           title: Text(city.name),
-                          onTap: () => Navigator.of(context).pushNamed(
+                          onTap: () => navigatorKey.currentState!.pushNamed(
                               AdvertsPage.routeName,
                               arguments: {'category': category, 'city': city}),
                           trailing: MenuItemCountByCategoryAndCity(

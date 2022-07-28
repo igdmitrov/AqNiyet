@@ -31,11 +31,11 @@ class EmptyList extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             if (isAuthenticated() && isEmail() == false) {
-              Navigator.of(context).pushNamed(VerifyEmailPage.routeName);
+              navigatorKey.currentState!.pushNamed(VerifyEmailPage.routeName);
               return;
             }
 
-            Navigator.of(context).pushNamed(AddPage.routeName);
+            navigatorKey.currentState!.pushNamed(AddPage.routeName);
           },
           child: Text(appLocalization.new_advert),
         ),

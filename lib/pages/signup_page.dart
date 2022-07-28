@@ -60,7 +60,7 @@ class _SignUpPageState extends State<SignUpPage> {
         context.showErrorSnackBar(message: error.message);
       } else {
         if (!mounted) return;
-        Navigator.of(context)
+        navigatorKey.currentState!
             .pushNamed(VerifyPage.routeName, arguments: _phoneController.text);
       }
     }
@@ -137,8 +137,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     const SizedBox(width: 10),
                     TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(LoginPage.routeName),
+                      onPressed: () => navigatorKey.currentState!
+                          .pushNamed(LoginPage.routeName),
                       child: Text(appLocalization.signin),
                     ),
                   ],
