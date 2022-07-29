@@ -46,8 +46,10 @@ class _ChatPageState extends State<ChatPage> {
           return;
         }
 
-        _roomId =
-            (((newRoomResponse.data) as List<dynamic>)[0]['id']) as String;
+        setState(() {
+          _roomId =
+              (((newRoomResponse.data) as List<dynamic>)[0]['id']) as String;
+        });
       }
 
       final message = Message(
@@ -115,12 +117,13 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
       body: StreamBuilder<List<Message>>(
-        stream: room.isSaved()
-            ? appService.getMessages(room.id)
-            : appService.getMessages(_roomId),
+        stream: _roomId == null
+            ? const Stream.empty()
+            : appService.getMessages(_roomId ?? room.id),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final messages = snapshot.data!;
+          if (snapshot.connectionState == ConnectionState.done ||
+              snapshot.hasData) {
+            final messages = snapshot.data;
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -137,17 +140,19 @@ class _ChatPageState extends State<ChatPage> {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: _refresh,
-                      child: ListView.builder(
-                        reverse: true,
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final message = messages[index];
+                      child: messages == null
+                          ? const SizedBox()
+                          : ListView.builder(
+                              reverse: true,
+                              itemCount: messages.length,
+                              itemBuilder: (context, index) {
+                                final message = messages[index];
 
-                          return ChatBubble(
-                            message: message,
-                          );
-                        },
-                      ),
+                                return ChatBubble(
+                                  message: message,
+                                );
+                              },
+                            ),
                     ),
                   ),
                   SafeArea(
@@ -161,7 +166,6 @@ class _ChatPageState extends State<ChatPage> {
                           textCapitalization: TextCapitalization.sentences,
                           validator: RequiredValidator(
                               errorText: appLocalization.description_required),
-                          //enabled: !_isLoading,
                           maxLines: 5,
                           minLines: 1,
                           keyboardType: TextInputType.multiline,

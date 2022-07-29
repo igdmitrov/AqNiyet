@@ -17,6 +17,14 @@ class Footer extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
+        const Text(
+          footerTextTwo,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: Colors.grey,
+          ),
+        ),
         Text(
           DateTime.now().year.toString(),
           style: const TextStyle(
