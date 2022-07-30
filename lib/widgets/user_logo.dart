@@ -13,7 +13,7 @@ class UserLogo extends StatelessWidget {
       height: 40,
       placeholderBuilder: (BuildContext context) => Container(
         padding: const EdgeInsets.all(30.0),
-        child: const CircularProgressIndicator(),
+        child: const Text('...'),
       ),
     );
   }

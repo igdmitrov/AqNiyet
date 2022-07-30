@@ -1,12 +1,12 @@
-import 'package:aqniyet/widgets/user_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../model/room.dart';
+import '../model/room_build.dart';
 import '../services/app_service.dart';
 import '../utils/constants.dart';
+import '../widgets/user_logo.dart';
 import 'chat_page.dart';
 
 class RoomPage extends StatefulWidget {
@@ -20,15 +20,21 @@ class RoomPage extends StatefulWidget {
 class _RoomPageState extends State<RoomPage> {
   final refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  Future<List<Room>> _getRooms(
+  Future<RoomBuild> _getRooms(
       BuildContext context, AppLocalizations appLocalization) async {
+    final userId = getCurrentUserId();
+    final appService = context.read<AppService>();
+
     try {
-      return await context.read<AppService>().getRooms(getCurrentUserId());
+      final roomDetails = await appService.getRoomDetails(userId);
+      final rooms = await appService.getRooms(userId);
+
+      return RoomBuild(rooms, roomDetails);
     } on Exception catch (_) {
       context.showErrorSnackBar(message: appLocalization.unexpected_error);
     }
 
-    return [];
+    return RoomBuild([], []);
   }
 
   Future<bool> _getStatusUnReadMessages(
@@ -61,7 +67,7 @@ class _RoomPageState extends State<RoomPage> {
           IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
         ],
       ),
-      body: FutureBuilder<List<Room>>(
+      body: FutureBuilder<RoomBuild>(
         future: _getRooms(context, appLocalization),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
@@ -69,9 +75,10 @@ class _RoomPageState extends State<RoomPage> {
               key: refreshKey,
               onRefresh: _refresh,
               child: ListView.builder(
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.getCount(),
                   itemBuilder: (BuildContext context, int index) {
-                    final room = snapshot.data![index];
+                    final roomBuild = snapshot.data!;
+                    final room = roomBuild.getActiveRooms()[index];
                     return Padding(
                       key: ValueKey(index),
                       padding: const EdgeInsets.symmetric(
@@ -93,7 +100,7 @@ class _RoomPageState extends State<RoomPage> {
                                 return UserLogo(userId: room.userFrom);
                               }),
                           title: Text(
-                            getUserAppName(room.userFrom),
+                            roomBuild.lastMessage(room.id),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(

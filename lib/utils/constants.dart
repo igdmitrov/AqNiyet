@@ -8,7 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const appName = 'AqNiyet';
-const footerText = 'DEVELOPED BY IGOR DMITROV &';
+const footerText = 'DEVELOPED BY IGOR DMITROV';
 const footerTextTwo = 'INSPIRED BY AIDAR ZHAKUPOV';
 const supportEmail = 'aqniyet.help@gmail.com';
 

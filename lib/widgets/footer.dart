@@ -18,6 +18,14 @@ class Footer extends StatelessWidget {
           ),
         ),
         const Text(
+          "&",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: Colors.grey,
+          ),
+        ),
+        const Text(
           footerTextTwo,
           style: TextStyle(
             fontWeight: FontWeight.bold,

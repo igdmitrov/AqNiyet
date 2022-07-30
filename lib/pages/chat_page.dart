@@ -139,7 +139,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(3.0),
                       child: Form(
                         key: _formKey,
                         child: TextFormField(

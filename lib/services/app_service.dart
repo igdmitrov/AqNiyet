@@ -16,6 +16,7 @@ import '../model/city.dart';
 import '../model/image_data.dart';
 import '../model/image_meta_data.dart';
 import '../model/report.dart';
+import '../model/room_details.dart';
 import '../utils/constants.dart';
 import '../utils/page_not_found_exception.dart';
 
@@ -628,6 +629,32 @@ class AppService extends ChangeNotifier {
     if (response.data != null) {
       return (response.data as List<dynamic>)
           .map((json) => Room.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Failed to load rooms');
+  }
+
+  Future<List<RoomDetails>> getRoomDetails(String userId) async {
+    await refreshSession();
+
+    final query = supabase
+        .from('message')
+        .select('id, room_id, content')
+        .or('user_from.eq.$userId,user_to.eq.$userId')
+        .order('created_at', ascending: false)
+        .limit(1);
+
+    final PostgrestResponse response = await query.execute();
+    final error = response.error;
+
+    if (error != null && response.status != 406) {
+      throw Exception(error.message);
+    }
+
+    if (response.data != null) {
+      return (response.data as List<dynamic>)
+          .map((json) => RoomDetails.fromJson(json))
           .toList();
     }
 
