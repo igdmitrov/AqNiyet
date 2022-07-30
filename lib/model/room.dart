@@ -39,8 +39,4 @@ class Room implements BaseModel {
 
   @override
   String value() => advertName;
-
-  bool isSaved() => id.isNotEmpty;
-
-  bool isNew() => id.isEmpty;
 }

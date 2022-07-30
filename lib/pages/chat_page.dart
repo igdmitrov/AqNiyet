@@ -24,7 +24,6 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _formKey = GlobalKey<FormState>();
   final _msgController = TextEditingController();
-  String? _roomId;
 
   Future<void> _submit(AppLocalizations appLocalizations, AppService appService,
       Room room) async {
@@ -37,24 +36,9 @@ class _ChatPageState extends State<ChatPage> {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      if (room.isNew() && _roomId == null) {
-        final newRoomResponse = await appService.createRoom(room);
-
-        if (newRoomResponse.hasError) {
-          if (!mounted) return;
-          context.showErrorSnackBar(message: newRoomResponse.error!.message);
-          return;
-        }
-
-        setState(() {
-          _roomId =
-              (((newRoomResponse.data) as List<dynamic>)[0]['id']) as String;
-        });
-      }
-
       final message = Message(
         id: '',
-        roomId: room.isSaved() ? room.id : _roomId as String,
+        roomId: room.id,
         content: text,
         userFrom: getCurrentUserId(),
         userTo: getCurrentUserId() == room.userTo ? room.userFrom : room.userTo,
@@ -117,9 +101,7 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
       body: StreamBuilder<List<Message>>(
-        stream: _roomId == null
-            ? const Stream.empty()
-            : appService.getMessages(_roomId ?? room.id),
+        stream: appService.getMessages(room.id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done ||
               snapshot.hasData) {

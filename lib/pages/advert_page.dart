@@ -73,10 +73,11 @@ class _AdvertPageState extends State<AdvertPage> {
       _isLoading = true;
     });
 
+    final appService = context.read<AppService>();
+
     try {
-      final response = await context
-          .read<AppService>()
-          .getRoomByAdvert(advert.id, getCurrentUserId());
+      final response =
+          await appService.getRoomByAdvert(advert.id, getCurrentUserId());
 
       final error = response.error;
       if (response.hasError) {
@@ -89,15 +90,26 @@ class _AdvertPageState extends State<AdvertPage> {
       });
 
       if (response.data == null || (response.data as List<dynamic>).isEmpty) {
+        final newRoomResponse = await appService.createRoom(Room(
+            id: '',
+            advertName: advert.name,
+            advertId: advert.id,
+            userFrom: getCurrentUserId(),
+            userTo: advert.createdBy,
+            createdAt: DateTime.now()));
+
+        if (newRoomResponse.hasError) {
+          if (!mounted) return;
+          context.showErrorSnackBar(message: newRoomResponse.error!.message);
+          return;
+        }
+
         if (!mounted) return;
         navigatorKey.currentState!.pushNamed(ChatPage.routeName,
-            arguments: Room(
-                id: '',
-                advertName: advert.name,
-                advertId: advert.id,
-                userFrom: getCurrentUserId(),
-                userTo: advert.createdBy,
-                createdAt: DateTime.now()));
+            arguments: (newRoomResponse.data as List<dynamic>)
+                .map((json) => Room.fromJson(json))
+                .toList()
+                .first);
       } else {
         if (!mounted) return;
         navigatorKey.currentState!.pushNamed(ChatPage.routeName,
