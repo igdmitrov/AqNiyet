@@ -48,3 +48,4 @@ app.*.map.json
 secrets.dart
 GoogleService-Info.plist
 google-services.json
+firebase_options.dart
